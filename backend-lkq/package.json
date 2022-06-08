@@ -1,0 +1,30 @@
+{
+  "name": "backend-lkq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -w",
+    "start": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.5",
+    "mongoose-unique-validator": "^3.1.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^8.3.2",
+    "wikijs": "^6.3.3"
+  }
+}
