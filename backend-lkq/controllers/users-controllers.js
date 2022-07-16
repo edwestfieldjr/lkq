@@ -20,6 +20,7 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
+    console.log("func call")
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -36,6 +37,7 @@ const signup = async (req, res, next) => {
     try {
         existingUser = await User.findOne({ email });
     } catch (error) {
+        console.log("error triggered")
         return next(new HttpError(error))
     };
     if (existingUser) {
@@ -54,7 +56,6 @@ const signup = async (req, res, next) => {
     const userCreated = new User({
         name,
         email: email.toLowerCase(),
-        image: req.file.path,
         password: hashedPassword,
         quotes: []
     });
@@ -111,19 +112,19 @@ const login = async (req, res, next) => {
                         email: existingUser.email
                     }, 
                 process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
+                { expiresIn: '4h' }
                 );
             } catch (error) {
                 return next(new HttpError(error));
             };
-            return res.status(201).json({ userId: existingUser.id, email: existingUser.email, token: token })
+            return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
+            // return res.status(201).json({ userId: existingUser.id, email: existingUser.email, token: token });
         } else {
             return next(new HttpError("Fail to Authenticate error", 401));
         }
     };
 
 
-    // return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
       
 
 };

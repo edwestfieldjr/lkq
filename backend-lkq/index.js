@@ -9,8 +9,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const HttpError = require('./util/http-error');
-// const quotesRoutes = require('./routes/quotes-routes');
-// const usersRoutes = require('./routes/users-routes');
+const quotesRoutes = require('./routes/quotes-routes');
+const usersRoutes = require('./routes/users-routes');
 
 const dbUrl = process.env.DB_URL;
 const portNumber = 5000;
@@ -33,8 +33,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use('/api/quotes', quotesRoutes);
-// app.use('/api/users', usersRoutes);
+app.use('/api/quotes', quotesRoutes);
+app.use('/api/users', usersRoutes);
 
 app.use((req, res, next) => {
     const error = new HttpError("cannot find route", 404);
@@ -43,7 +43,6 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
     if (req.file) {
-        fs.unlink(req.file.path, error => { console.log(error); });
     }
     if (res.headerSent) {
         return next(error);

@@ -15,7 +15,6 @@ module.exports = (req, res, next) => {
         return next();
 
     } catch (error) {
-        console.log('!!!!!!!!');
         return next(new HttpError(error, 401))
 
     }

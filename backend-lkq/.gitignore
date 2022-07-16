@@ -38,3 +38,9 @@ jspm_packages
 
 #Excluding build directory
 public/
+
+# Excluding Local DotEnv File
+.env
+
+# Excluding Scratch File
+scratch.js

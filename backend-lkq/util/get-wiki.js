@@ -1,4 +1,3 @@
-const axios = require("axios");
 const wiki = require('wikijs').default;
 
 async function getWiki(terms) {
@@ -11,7 +10,6 @@ async function getWiki(terms) {
                 obj.url = await page.url()
                 return await obj;    
             })
-            // .then(console.log)
         )
 
     // return await "result(terms).obj"
@@ -20,7 +18,7 @@ async function getWiki(terms) {
 
 
 
-module.exports = { getWiki };
+module.exports = getWiki;
 
 
 // const wiki = require('wikijs').default;

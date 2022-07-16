@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const quotesSchema = new Schema({
     text: { type: String, required: true },
-    tags: { type: String, required: false },
+    // tags: [{ type: String, required: false }],
     author: { 
         type: mongoose.Types.ObjectId,
         required: true,
@@ -14,7 +14,12 @@ const quotesSchema = new Schema({
         type: mongoose.Types.ObjectId,
         required: true,
         ref: 'User'
-    }
+    },
+    tags: [{ 
+        type: mongoose.Types.ObjectId,
+        required: false,
+        ref: 'Tag'
+    }]
 });
 
-module.exports = mongoose.model('Quote', placesSchema);
+module.exports = mongoose.model('Quote', quotesSchema);

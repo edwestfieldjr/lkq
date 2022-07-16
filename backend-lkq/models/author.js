@@ -4,7 +4,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const authorSchema = new Schema({
     name: { type: String, required: true },
-    ref_url: { type: String, required: true },
+    ref_url: { type: String, required: false },
+    ref_img: { type: String, required: false },
     quotes: [{         
         type: mongoose.Types.ObjectId,
         required: true,
@@ -13,6 +14,6 @@ const authorSchema = new Schema({
     
 });
 
-userSchema.plugin(uniqueValidator);
+authorSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('Author', authorSchema);

@@ -4,7 +4,8 @@ const { check } = require('express-validator');
 
 const { 
     getQuoteById, 
-    getQuotesByUserId, 
+    getQuotesByUserId,
+    getQuotesByAuthorId, 
     createQuote, 
     updateQuote, 
     deleteQuote 
@@ -23,19 +24,19 @@ router.get("/:qid", getQuoteById);
 
 router.get("/user/:uid", getQuotesByUserId);
 
-router.get("/user/:aid", getQuotesByUserId);
+router.get("/author/:aid", getQuotesByAuthorId);
 
 //auth token middlware
-router.use(checkAuth);
+// router.use(checkAuth);
 
 router.post("/",
-    fileUpload.single('image'),
+    // fileUpload.single('image'),
     [
-        check('title')
+        check('quote')
             .not()
             .isEmpty(), 
-        check('description')
-            .isLength({min: 5}), 
+        check('author')
+            .isLength({min: 2}), 
     ], 
 createQuote);
 
