@@ -7,13 +7,13 @@ const Quote = require('../models/quote');
 const User = require('../models/user');
 const Author = require('../models/author');
 const Tag = require('../models/tag');
+const { countDocuments } = require('../models/quote');
 
 // const fs = require('fs');
 
 
 const getQuoteById = async (req, res, next) => {
-    const quoteId = req.params.pid
-
+    const quoteId = req.params.qid
     let quote;
     try {
         quote = await Quote.findById(quoteId);
@@ -30,12 +30,12 @@ const getQuoteById = async (req, res, next) => {
 
 const getQuotesByUserId = async (req, res, next) => {
     const userId = req.params.uid
-    console.log(userId);
+    // console.log(userId);
     // let quotes;
     let userWithQuotes;
     try {
         // quotes = await Quote.find({ creator: userId });
-        userWithQuotes = await User.findById(userId).populate('quotes');
+        userWithQuotes = await User.findById(userId).populate(Quote);
     } catch (error) {
         return next(new HttpError(error, 500));
     }
@@ -50,12 +50,12 @@ const getQuotesByUserId = async (req, res, next) => {
 
 const getQuotesByAuthorId = async (req, res, next) => {
     const authorId = req.params.aid
-    console.log(authorId);
+    // console.log(authorId);
     // let quotes;
     let authorWithQuotes;
     try {
         // quotes = await Quote.find({ creator: authorId });
-        authorWithQuotes = await Author.findById(authorId).populate('quotes');
+        authorWithQuotes = await Author.findById(authorId)/*.populate('name')*/.populate('quotes')
     } catch (error) {
         return next(new HttpError(error, 500));
     }
@@ -64,7 +64,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with author id ‘${authorId}’ `, 404));
     } else {
         // return res.json({ quotes: quotes.map(quote => quote.toObject({ getters: true })) });
-        return res.json({ quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+        return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
     }
 }
 
@@ -80,6 +80,8 @@ const createQuote = async (req, res, next) => {
     // }
     const { text, tags, author } = req.body;
 
+
+
     let authorInfo
     try {
         authorInfo = await getWiki(author);
@@ -89,7 +91,7 @@ const createQuote = async (req, res, next) => {
     
     
 
-    console.log(authorInfo.name)
+    // console.log(authorInfo.name)
 
     
     
@@ -123,46 +125,17 @@ const createQuote = async (req, res, next) => {
         console.log("Author already in db")
     };
 
-    console.log("authorExisting", authorExisting)
+    // console.log("authorExisting", authorExisting)
 
-    for (tag of tags) {
-        let tagExisting;
-        try {
-            tagExisting = await Tag.findOne({ name: tag })
-        } catch (error) {
-            return next(new HttpError(error, 500));
-        };
-        console.log(tagExisting)
-        if (!tagExisting) {
-            console.log("write tagCreated")
-            const tagCreated = new Tag({
-                text: tag,
-                quotes: []
-            });
-            try {
-                // const currentSession = await mongoose.startSession();
-                // currentSession.startTransaction();
-                await tagCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
-                // authorExisiting.quotes.push(quoteCreated);
-                // await user.save({ session: currentSession, validateModifiedOnly: true});
-                // await currentSession.commitTransaction(); 
-            } catch (error) {
-                return next(new HttpError(error, 500));
-            }
-            tagExisting = tagCreated
-        } else {
-            console.log("Tag already in db")
-        };
-    }
-    
+
     
     
     // let currentUser = req.userData.userId
-    let currentUser = '62a0ad936a49efdccea4a488'; /*  INITIAL VALUE TO TO TEST */
+    let currentUser = '62d4756f5019a7d58d2e3f0d'; /*  INITIAL VALUE TO TO TEST */
     
     const quoteCreated = new Quote({
         text,
-        tags: tags.toString(),
+        tags: [],
         author: authorExisting._id,  
         creator: currentUser
     });
@@ -181,7 +154,6 @@ const createQuote = async (req, res, next) => {
     try {
         // const currentSession = await mongoose.startSession();
         // currentSession.startTransaction();
-        await quoteCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
         user.quotes.push(quoteCreated);
         authorExisting.quotes.push(quoteCreated);
         await user.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
@@ -191,7 +163,69 @@ const createQuote = async (req, res, next) => {
         return next(new HttpError(error, 500));
     }
 
-    
+    const quoteCreatedNewTags = [];
+
+    if (tags) {    
+        let tagExisting, tagCreated;
+        for (tag of tags) {
+            tagExisting = tagCreated = await null;
+            try {
+                tagExisting = null
+                console.log("TAAGGGGGG", tag, tagExisting)
+                tagExisting = await Tag.findOne({ name: tag }).exec()
+                console.log("TAAGGGGGG", tag, tagExisting)
+            } catch (error) {
+                return next(new HttpError(error, 500));                   
+            }
+            if (!tagExisting) {
+                console.log("write tagCreated")
+                try {
+                    tagCreated = await new Tag({
+                        name: tag,
+                        quotes: [quoteCreated._id]
+                    });
+                    await tagCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
+                    
+                } catch (error) {
+                    return next(new HttpError(error, 500));
+                }
+                
+                // try {
+                    // const currentSession = await mongoose.startSession();
+                    // currentSession.startTransaction();
+                // await tagCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
+                    // authorExisiting.quotes.push(quoteCreated);
+                    // await user.save({ session: currentSession, validateModifiedOnly: true});
+                    // await currentSession.commitTransaction(); 
+                tagExisting = tagCreated
+            } else {
+                console.log("Tag already in db")
+                // try {
+                    tagExisting.quotes.push(quoteCreated);
+                // } catch (error) {
+                //     return next(new HttpError(error, 500));
+                // }
+            }
+            // } catch (error) {
+            //     return next(new HttpError(error, 500));
+            // };
+            try {
+                quoteCreatedNewTags.push(tagExisting._id)
+                await tagExisting.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
+            } catch (error) {
+                return next(new HttpError(error, 500));
+            }
+        } 
+    }
+
+    try {
+        quoteCreated.tags = quoteCreatedNewTags
+        await quoteCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
+    } catch (error) {
+        return next(new HttpError(error, 500));
+    }
+
+        
 
     return res.status(201).json({ quote: quoteCreated });
 
