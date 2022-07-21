@@ -6,7 +6,7 @@ const {
     getQuoteById, 
     getQuotesByUserId,
     getQuotesByAuthorId, 
-    createQuote, 
+    constructQuote, 
     updateQuote, 
     deleteQuote 
 } = require('../controllers/quotes-controllers')
@@ -32,13 +32,13 @@ router.get("/author/:aid", getQuotesByAuthorId);
 router.post("/",
     // fileUpload.single('image'),
     [
-        check('quote')
+        check('text')
             .not()
             .isEmpty(), 
         check('author')
             .isLength({min: 2}), 
     ], 
-createQuote);
+constructQuote);
 
 router.patch("/:qid", 
     [
@@ -46,9 +46,9 @@ router.patch("/:qid",
             .not()
             .isEmpty(), 
         check('author')
-            .isLength({min: 5}) 
+            .isLength({min: 2}) 
     ],
-updateQuote);
+constructQuote);
 
 router.delete("/:qid", deleteQuote);
 

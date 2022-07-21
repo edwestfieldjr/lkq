@@ -12,11 +12,24 @@ const { countDocuments } = require('../models/quote');
 // const fs = require('fs');
 
 
+const currentUser = '62d4756f5019a7d58d2e3f0d'; /*  INITIAL API TESTING VALUE FROM DB  */
+
+
+
+
 const getQuoteById = async (req, res, next) => {
     const quoteId = req.params.qid
     let quote;
     try {
-        quote = await Quote.findById(quoteId);
+        quote = await Quote.findById(quoteId).populate([{
+            path: 'author',
+            model: 'Author',
+            select: 'name ref_url ref_img'
+        }, {
+            path: 'tags',
+            model: 'Tag',
+            select: 'name'
+        }]);
     } catch (error) {
         return next(new HttpError(error, 500));
     }
@@ -35,7 +48,17 @@ const getQuotesByUserId = async (req, res, next) => {
     let userWithQuotes;
     try {
         // quotes = await Quote.find({ creator: userId });
-        userWithQuotes = await User.findById(userId).populate(Quote);
+        userWithQuotes = await User.findById(userId).select('-password').populate([{
+            path: 'quotes',
+            model: 'Quote',
+            select: 'text',
+            populate: {
+                path: 'tags',
+                model: 'Tag',
+                select: 'name',
+            }
+
+        }]);
     } catch (error) {
         return next(new HttpError(error, 500));
     }
@@ -44,7 +67,7 @@ const getQuotesByUserId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
     } else {
         // return res.json({ quotes: quotes.map(quote => quote.toObject({ getters: true })) });
-        return res.json({ quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+        return res.json({ quotes: userWithQuotes/* })//quotes */.map(quote => quote.toObject({ getters: true })) });
     }
 }
 
@@ -55,7 +78,16 @@ const getQuotesByAuthorId = async (req, res, next) => {
     let authorWithQuotes;
     try {
         // quotes = await Quote.find({ creator: authorId });
-        authorWithQuotes = await Author.findById(authorId)/*.populate('name')*/.populate('quotes')
+        authorWithQuotes = await Author.findById(authorId)/*.populate('name')*/.populate.populate([{
+            path: 'quotes',
+            model: 'Quote',
+            select: 'text',
+            populate: {
+                path: 'tags',
+                model: 'Tag',
+                select: 'name',
+            }
+        }]);
     } catch (error) {
         return next(new HttpError(error, 500));
     }
@@ -68,8 +100,9 @@ const getQuotesByAuthorId = async (req, res, next) => {
     }
 }
 
-const createQuote = async (req, res, next) => {
-    const errors = validationResult(req);
+const constructQuote = async (req, res, next) => {
+    
+    // const errors = validationResult(req);
     // if (!errors.isEmpty()) {
     //     console.log(errors);
     //     return next(new HttpError(
@@ -78,15 +111,16 @@ const createQuote = async (req, res, next) => {
     //         ), 422
     //     ))
     // }
-    const { text, tags, author } = req.body;
+
+    const { text, author, tags } = req.body;
 
 
-
+    // console.log("author: " + author);
     let authorInfo
     try {
         authorInfo = await getWiki(author);
     } catch (error) {
-        return next(error);
+        return next(new HttpError(error, 500));
     }
     
     
@@ -101,9 +135,9 @@ const createQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error, 500));
     };
-    console.log(authorExisting)
+    // console.log(authorExisting)
     if (!authorExisting) {
-        console.log("write authorCreated")
+        // console.log("write authorCreated")
         const authorCreated = new Author({
             name: authorInfo.name,
             ref_url: authorInfo.url,
@@ -122,7 +156,7 @@ const createQuote = async (req, res, next) => {
         }
         authorExisting = authorCreated
     } else {
-        console.log("Author already in db")
+        // console.log("Author already in db")
     };
 
     // console.log("authorExisting", authorExisting)
@@ -131,15 +165,33 @@ const createQuote = async (req, res, next) => {
     
     
     // let currentUser = req.userData.userId
-    let currentUser = '62d4756f5019a7d58d2e3f0d'; /*  INITIAL VALUE TO TO TEST */
+    // let currentUser = '62d4756f5019a7d58d2e3f0d'; /*  INITIAL VALUE TO TO TEST */
     
-    const quoteCreated = new Quote({
-        text,
-        tags: [],
-        author: authorExisting._id,  
-        creator: currentUser
-    });
-    
+    // console.log(req.params.qid)
+
+    let quoteConstructed
+    try {
+        quoteConstructed = await Quote.findById(req.params.qid).populate([{
+            path: 'author',
+            model: 'Author',
+            select: 'name ref_url ref_img quotes'
+        }, {
+            path: 'tags',
+            model: 'Tag',
+            select: 'name quotes'
+        }]) || (req.params.qid === undefined && new Quote({
+            text,
+            tags: [],
+            author: authorExisting._id,  
+            creator: currentUser
+        }));
+    } catch (error) {
+        console.log(error);
+        return next(new HttpError(error, 500));
+    };
+
+    // console.log("quoteCreated", quoteCreated)
+
 
     let user;
     try {
@@ -154,14 +206,27 @@ const createQuote = async (req, res, next) => {
     try {
         // const currentSession = await mongoose.startSession();
         // currentSession.startTransaction();
-        user.quotes.push(quoteCreated);
-        authorExisting.quotes.push(quoteCreated);
+        if (!(user.quotes.includes(quoteConstructed._id))) { user.quotes.push(quoteConstructed); }
+        if (!(authorExisting.quotes.includes(quoteConstructed._id))) { authorExisting.quotes.push(quoteConstructed); }
         await user.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
         await authorExisting.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
         // await currentSession.commitTransaction(); 
     } catch (error) {
         return next(new HttpError(error, 500));
     }
+
+    let previousTags, previousAuthor;
+    try {
+        if (req.params.qid !== undefined) { 
+            previousTags = quoteConstructed.tags; 
+            previousAuthor = quoteConstructed.author; 
+        }
+        // await quoteCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
+    } catch (error) {
+        return next(new HttpError(error, 500));
+    }
+
+    // console.log("previousTags: " + previousTags)
 
     const quoteCreatedNewTags = [];
 
@@ -171,18 +236,18 @@ const createQuote = async (req, res, next) => {
             tagExisting = tagCreated = await null;
             try {
                 tagExisting = null
-                console.log("TAAGGGGGG", tag, tagExisting)
+                // console.log("TAAGGGGGG", tag, tagExisting)
                 tagExisting = await Tag.findOne({ name: tag }).exec()
-                console.log("TAAGGGGGG", tag, tagExisting)
+                // console.log("TAAGGGGGG", tag, tagExisting)
             } catch (error) {
                 return next(new HttpError(error, 500));                   
             }
             if (!tagExisting) {
-                console.log("write tagCreated")
+                // console.log("write tagCreated")
                 try {
                     tagCreated = await new Tag({
                         name: tag,
-                        quotes: [quoteCreated._id]
+                        quotes: [quoteConstructed._id]
                     });
                     await tagCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
                     
@@ -199,9 +264,9 @@ const createQuote = async (req, res, next) => {
                     // await currentSession.commitTransaction(); 
                 tagExisting = tagCreated
             } else {
-                console.log("Tag already in db")
+                // console.log("Tag already in db")
                 // try {
-                    tagExisting.quotes.push(quoteCreated);
+                    if (!(tagExisting.quotes.includes(quoteConstructed._id))) { tagExisting.quotes.push(quoteConstructed); }
                 // } catch (error) {
                 //     return next(new HttpError(error, 500));
                 // }
@@ -218,22 +283,37 @@ const createQuote = async (req, res, next) => {
         } 
     }
 
+    
+    if (req.params.qid !== undefined) { 
+        console.log(previousAuthor)
+        for (prevTag in previousTags) {
+            console.log(previousTags)
+        }   
+    }
+
+
     try {
-        quoteCreated.tags = quoteCreatedNewTags
-        await quoteCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
+        quoteConstructed.tags = quoteCreatedNewTags
+        if (req.params.qid !== undefined) { 
+            quoteConstructed.text = text; 
+            quoteConstructed.author = authorExisting._id; 
+        }
+        await quoteConstructed.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
     } catch (error) {
         return next(new HttpError(error, 500));
     }
 
         
 
-    return res.status(201).json({ quote: quoteCreated });
+    return res.status(201).json({ quote: quoteConstructed });
 
 }
 
 const updateQuote = async (req, res, next) => {
-    const { title, description } = req.body;
-    const quoteId = req.params.pid
+    const { text, tags } = req.body;
+    const quoteId = req.params.qid
+
+    // console.log(text, tags, quoteId, req.userData)
 
     let quote
     try {
@@ -242,22 +322,24 @@ const updateQuote = async (req, res, next) => {
         return next(new HttpError(error, 500));
     }
 
-    if (quote.creator.toString() !== req.userData.userId) {
-        return next(new HttpError("Unauthorized to Edit", 401));
-    }
-    
-    quote.title = title;
-    quote.description = description;
+    // console.log(text, quote)
 
-    try {
-        await quote.save();
-    } catch (error) {
-        return next(new HttpError(error, 500));
-    }
+    // if (quote.creator.toString() !== req.userData.userId) {
+    //     return next(new HttpError("Unauthorized to Edit", 401));
+    // }
+    
+    // quote.title = title;
+    // quote.description = description;
+
+    // try {
+    //     await quote.save();
+    // } catch (error) {
+    //     return next(new HttpError(error, 500));
+    // }
     
 
     
-    return res.status(200).json({ quote: quote.toObject({getters: true}) });
+    // return res.status(200).json({ quote: quote.toObject({getters: true}) });
 
 };
 
@@ -299,7 +381,7 @@ module.exports = {
     getQuoteById,
     getQuotesByUserId,
     getQuotesByAuthorId,
-    createQuote,
+    constructQuote,
     updateQuote,
     deleteQuote
 };

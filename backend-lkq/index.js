@@ -13,7 +13,7 @@ const quotesRoutes = require('./routes/quotes-routes');
 const usersRoutes = require('./routes/users-routes');
 
 const dbUrl = process.env.DB_URL;
-const portNumber = 5000;
+const portNumber = process.env.PORT || 5000;
 
 const app = express();
 
