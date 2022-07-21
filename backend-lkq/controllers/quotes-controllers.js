@@ -283,12 +283,46 @@ const constructQuote = async (req, res, next) => {
         } 
     }
 
-    
+    /* Remove 'quote._id' refernce from the approprate author and tag(s) */
+    console.log("quoteCreatedNewTags: " + quoteCreatedNewTags)
     if (req.params.qid !== undefined) { 
-        console.log(previousAuthor)
-        for (prevTag in previousTags) {
-            console.log(previousTags)
-        }   
+        previousAuthorId = previousAuthor._id.toString() !== authorExisting._id.toString() ? previousAuthor._id : null;
+        previousTagsIds = previousTags.map(e => e._id).filter(f => !(quoteCreatedNewTags.map(g => g.toString()).includes(f.toString())));
+        
+        let previousAuthorSave, previousTagSave
+        try {
+            if (previousAuthorId) {
+                previousAuthorSave = null
+                previousAuthorSave = await Author.updateOne(
+                    { _id: mongoose.Types.ObjectId(previousAuthorId.toString()) }, 
+                    { $pull: { 'quotes': quoteConstructed._id.toString() } }, 
+                    { returnNewDocument: true, returnOriginal: false }
+                );
+                console.log(previousAuthorSave);
+                previousAuthorSave
+            }
+        } catch (error) {
+            return next(new HttpError(error, 500));     
+        }
+
+        for (prevTagId of previousTagsIds) {
+            try {
+                previousTagSave = null
+                previousTagSave = await Tag.updateOne(
+                    { _id: mongoose.Types.ObjectId(prevTagId.toString()) }, 
+                    { $pull: { 'quotes': quoteConstructed._id.toString() } }, 
+                    { returnNewDocument: true, returnOriginal: false }
+                );
+                // previousTagSave.save();
+            } catch (error) {
+                return next(new HttpError(error, 500));     
+            }
+        }
+
+        // console.log(previousAuthor)
+        // for (prevTag of previousTags) {
+        //     console.log(prevTag)
+        // }   
     }
 
 
