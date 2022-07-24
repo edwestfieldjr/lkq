@@ -20,7 +20,6 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-    console.log("func call")
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -53,6 +52,7 @@ const signup = async (req, res, next) => {
     }
 
 
+    
     const userCreated = new User({
         name,
         email: email.toLowerCase(),
@@ -60,27 +60,34 @@ const signup = async (req, res, next) => {
         quotes: []
     });
 
-    try {
-        await userCreated.save();
-    } catch (error) {
-        return next(new HttpError(error));
-    }
-
     let token;
     try {
         token = JSONWebToken.sign(
             {
                 userId: userCreated.id,
                 email: userCreated.email
-            }, 
-            process.env.JWT_SECRET, 
-            { expiresIn: '1h' }
+            },
+            process.env.SECRET,
+            { expiresIn: '4h' }
         );
     } catch (error) {
         return next(new HttpError(error))
     };
 
-    return res.status(201).json({ userId: userCreated.id, email: userCreated.email, token: token })
+    userCreated.confirmationCode = token;
+
+    if (userCreated.email = process.env.ADMIN_EMAIL_ADDR.toLowerCase()) {
+        userCreated.isAdmin = true;
+        userCreated.status ='Active';
+    }
+
+    try {
+        await userCreated.save();
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+    return res.status(201).json({ userId: userCreated.id, email: userCreated.email, token: userCreated.confirmationCode })
 };
 
 const login = async (req, res, next) => {
@@ -102,7 +109,7 @@ const login = async (req, res, next) => {
         } catch (error) {
             return next(new HttpError(error, 422))
         };
-        
+
         if (isValidPassword) {
             let token;
             try {
@@ -110,9 +117,9 @@ const login = async (req, res, next) => {
                     {
                         userId: existingUser.id,
                         email: existingUser.email
-                    }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '4h' }
+                    },
+                    process.env.SECRET,
+                    { expiresIn: '4h' }
                 );
             } catch (error) {
                 return next(new HttpError(error));
@@ -125,7 +132,7 @@ const login = async (req, res, next) => {
     };
 
 
-      
+
 
 };
 

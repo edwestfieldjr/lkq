@@ -13,17 +13,18 @@
   "devDependencies": {
     "dotenv": "^16.0.1",
     "mocha": "^10.0.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.19"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "express": "^4.18.1",
-    "express-validator": "^6.14.1",
+    "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.3.5",
+    "mongoose": "^6.4.6",
     "mongoose-unique-validator": "^3.1.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.7",
     "uuid": "^8.3.2",
     "wikijs": "^6.3.3"
   }

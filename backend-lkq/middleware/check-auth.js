@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
         if (!token) {
             throw new Error("Auth failed", 401);
         };
-        const decodedToken = JSONWebToken.verify(token, process.env.JWT_SECRET);
+        const decodedToken = JSONWebToken.verify(token, process.env.SECRET);
         req.userData = { userId: decodedToken.userId }
         return next();
 
