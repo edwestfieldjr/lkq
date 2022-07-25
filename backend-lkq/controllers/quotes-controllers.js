@@ -172,7 +172,7 @@ const constructQuote = async (req, res, next) => {
 
     let textExisting;
     try {
-        textExisting = await Quote.findOne({ text: authorInfo.name })
+        textExisting = await Quote.findOne({ text: text })
     } catch (error) {
         return next(new HttpError(error));
     };
@@ -192,7 +192,7 @@ const constructQuote = async (req, res, next) => {
             path: 'creator',
             model: 'User',
             select: '_id'
-        }]) || (req.params.qid === undefined && new Quote({
+        }]) || ((req.params.qid === undefined && !textExisting) && new Quote({
             text,
             tags: [],
             author: authorExisting._id,
@@ -209,7 +209,6 @@ const constructQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    console.log(user._id, quoteConstructed.creator._id)
     if (!user) {
         return next(new HttpError("Could not find user with the id provided"));
     } else if (req.params.qid !== undefined && user._id.toString() !== quoteConstructed.creator._id.toString()) {
