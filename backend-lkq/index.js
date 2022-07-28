@@ -23,8 +23,8 @@ const app = express();
 app.use(express.json())
 
 
-app.use('/uploads', express.static(path.join('uploads')))
-app.use('/uploads/test', express.static(path.join('uploads', 'test')))
+// app.use('/uploads', express.static(path.join('uploads')))
+// app.use('/uploads/test', express.static(path.join('uploads', 'test')))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,8 +42,8 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    if (req.file) {
-    }
+    // if (req.file) {
+    // }
     if (res.headerSent) {
         return next(error);
     }

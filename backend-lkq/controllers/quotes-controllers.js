@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const HttpError = require('../util/http-error')
 const getWiki = require('../util/get-wiki')
+const normalizeEmail = require('normalize-email');
 
 const Quote = require('../models/quote');
 const User = require('../models/user');
@@ -17,7 +18,7 @@ const { countDocuments } = require('../models/quote');
 const currentUserIdAdminTest = async () => {
     let currentUser;
     try {
-        currentUser = await User.findOne({ email: process.env.ADMIN_EMAIL_ADDR })
+        currentUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
     } catch (error) {
         return error;
     }
@@ -71,8 +72,13 @@ const getQuoteById = async (req, res, next) => {
 
     if (!quote) {
         return next(new HttpError('couldn’t find this quote', 404))
-    };
-    return res.json({ quote: quote.toObject({ getters: true }) });
+    } else {
+        try {
+            return res.json({ quote: quote.toObject({ getters: true }) });
+        } catch (error) {
+            return next(new HttpError(error));
+        }
+    }
     // };
 };
 
@@ -84,12 +90,18 @@ const getQuotesByUserId = async (req, res, next) => {
             path: 'quotes',
             model: 'Quote',
             select: 'text',
-            populate: {
-                path: 'tags',
-                model: 'Tag',
-                select: 'name',
-            }
-
+            populate: [
+                {
+                    path: 'author',
+                    model: 'Author',
+                    select: 'name ref_url ref_img'
+                },
+                {
+                    path: 'tags',
+                    model: 'Tag',
+                    select: 'name'
+                }
+            ]
         }]);
     } catch (error) {
         return next(new HttpError(error));
@@ -97,7 +109,12 @@ const getQuotesByUserId = async (req, res, next) => {
     if (!userWithQuotes || userWithQuotes.quotes.length <= 0) {
         return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
     } else {
-        return res.json({ quotes: userWithQuotes/* })//quotes */.map(quote => quote.toObject({ getters: true })) });
+        try {
+            console.log(userWithQuotes)
+            return res.json({ quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+        } catch (error) {
+            return next(new HttpError(error));
+        }
     }
 }
 
@@ -121,7 +138,11 @@ const getQuotesByAuthorId = async (req, res, next) => {
     if (!authorWithQuotes || authorWithQuotes.quotes.length <= 0) {
         return next(new HttpError(`No documents associated with author id ‘${authorId}’ `, 404));
     } else {
-        return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
+        try {
+            return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
+        } catch (error) {
+            return next(new HttpError(error));
+        }
     }
 }
 

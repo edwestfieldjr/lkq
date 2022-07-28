@@ -17,7 +17,7 @@ const UserQuotes = () => {
     useEffect(() => {
         const fetchQuotes = async () => {
             try {
-                const responseData = await sendRequest(`http://localhost:5000/api/quotes/user/${userId}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/user/${userId}`);
 
                 setLoadedQuotes(responseData.quotes);
             } catch (error) {};

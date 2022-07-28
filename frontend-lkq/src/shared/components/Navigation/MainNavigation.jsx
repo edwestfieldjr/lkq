@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { NavLink } from "react-router-dom";
 
 import MainHeader from "./MainHeader";
 import NavLinks from "./NavLinks";
@@ -27,7 +28,7 @@ const MainNavigation = props => {
                 </SideDrawer>
                 <MainHeader>
                     <h2 className="main-navigation__title">
-                        LKQ: Your Favorite Quotes
+                        <NavLink exact="true" to="/">LKQ: Your Favorite Quotes</NavLink>
                     </h2>
                     <nav className="main-navigation__header-nav">
                         <NavLinks/>

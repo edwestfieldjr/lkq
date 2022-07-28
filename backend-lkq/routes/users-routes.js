@@ -25,11 +25,14 @@ router.post(
     signup
 );
 
-router.post("/login", [
-    check('email')
-        .isEmail()
-        .normalizeEmail(),
-], login);
+router.post("/login", 
+    [
+        check('email')
+            .isEmail()
+            .normalizeEmail(),
+    ], 
+    login
+);
 
 
 module.exports = router;

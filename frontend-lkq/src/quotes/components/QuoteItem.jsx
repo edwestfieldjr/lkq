@@ -27,9 +27,10 @@ const QuoteItem = props => {
 
     const confirmDeleteHandler =  async () => { 
         setShowConfirmModal(false);
+        const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${props.id}`
         try {
             await sendRequest(
-                `http://localhost:5000/api/quotes/${props.id}`,
+                url,
                 'DELETE',
                 null,
                 {

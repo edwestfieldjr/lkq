@@ -10,9 +10,14 @@ import AllQuotes from './quotes/pages/AllQuotes';
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
 
+
+
+
 const App = () => {
 
     const { token, login, logout, userId } = useAuth();
+
+    console.log("token: " + token);
 
     let routes;
 
@@ -46,8 +51,9 @@ const App = () => {
                 {/* REDIRECT ROUTE */}
                 <Route
                     path="*"
-                    element={<Navigate replace to="/auth"
-                    />}
+                    element={
+                        <Navigate replace to="/auth" />
+                    }
                 />
             </Fragment>
 

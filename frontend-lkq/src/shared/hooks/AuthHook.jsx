@@ -45,6 +45,6 @@ export const useAuth = () => {
         }
     }, [login]);
 
-    return { token, login, logout, userId};
+    return { token, login, logout, userId };
 
 }

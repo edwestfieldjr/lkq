@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const HttpError = require('../util/http-error')
 const User = require('../models/user')
-const { check } = require('express-validator');
+const normalizeEmail = require('normalize-email');
 const bcryptjs = require('bcryptjs')
 const JSONWebToken = require('jsonwebtoken')
 
@@ -76,7 +76,7 @@ const signup = async (req, res, next) => {
 
     userCreated.confirmationCode = token;
 
-    if (userCreated.email = process.env.ADMIN_EMAIL_ADDR.toLowerCase()) {
+    if (userCreated.email == normalizeEmail(process.env.ADMIN_EMAIL_ADDR)) {
         userCreated.isAdmin = true;
         userCreated.status ='Active';
     }
@@ -91,7 +91,8 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
+
 
     let existingUser;
     try {
@@ -99,6 +100,7 @@ const login = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error))
     };
+
 
     if (!existingUser) {
         return next(new HttpError("invalid credentials...", 422))
@@ -112,6 +114,7 @@ const login = async (req, res, next) => {
 
         if (isValidPassword) {
             let token;
+            console.log(`token b4: ${token}`);
             try {
                 token = JSONWebToken.sign(
                     {
@@ -120,10 +123,11 @@ const login = async (req, res, next) => {
                     },
                     process.env.SECRET,
                     { expiresIn: '4h' }
-                );
-            } catch (error) {
-                return next(new HttpError(error));
-            };
+                    );
+                } catch (error) {
+                    return next(new HttpError(error));
+                };
+                console.log(`token aft: ${token}`);
             return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
             // return res.status(201).json({ userId: existingUser.id, email: existingUser.email, token: token });
         } else {
