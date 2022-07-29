@@ -147,6 +147,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
 }
 
 const constructQuote = async (req, res, next) => {
+    console.log(req.userData.userId) //currentUserId from react IF I CAN GE IT TO WORK!!!
     currentUserId = await currentUserIdAdminTest(); /* FOR TESTING !!!  */
     console.log(req.headers.authorization);
 

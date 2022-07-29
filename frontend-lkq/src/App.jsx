@@ -17,8 +17,6 @@ const App = () => {
 
     const { token, login, logout, userId } = useAuth();
 
-    console.log("token: " + token);
-
     let routes;
 
     if (token) {

@@ -11,7 +11,6 @@ const {
     deleteQuote 
 } = require('../controllers/quotes-controllers')
 
-const fileUpload = require('../middleware/file-upload')
 const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
@@ -30,11 +29,9 @@ router.get("/user/:uid", getQuotesByUserId);
 
 router.get("/author/:aid", getQuotesByAuthorId);
 
-//auth token middlware
-// router.use(checkAuth);
+router.use(checkAuth); /* auth token middleware */
 
 router.post("/",
-    // fileUpload.single('image'),
     [
         check('text')
             .not()

@@ -50,36 +50,6 @@ const Auth = () => {
         setIsLoginMode(prev => !prev)
     };
 
-
-    // const authSubmitHandler = async event => {
-    //     event.preventDefault();
-    //     try {
-    //         let api_url; 
-    //         let formData = new FormData();
-    //         formData.append("email", formState.inputs.email.value);
-    //         formData.append("password", formState.inputs.password.value);
-    //         if (isLoginMode) {
-    //             api_url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/login`;
-    //         } else {
-    //             api_url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`;
-    //             formData.append("name", formState.inputs.name.value);
-    //             formData.append("image", formState.inputs.image.value);
-    //         };
-    //         console.log(formState.inputs.email.value)
-    //         console.log(formData.values());
-    //         console.log(formData);
-    //         const responseData = await sendRequest(
-    //             api_url, 
-    //             'POST',
-    //             formData
-    //         );
-    //         console.log(responseData);
-    //         auth.login(responseData.existingUser.id);
-    //     } catch (error) {
-    //         console.log(error)
-    //     };
-    // };
-
     const authSubmitHandler = async event => {
         event.preventDefault();
 
@@ -104,7 +74,6 @@ const Auth = () => {
                 formData.append('email', formState.inputs.email.value);
                 formData.append('name', formState.inputs.name.value);
                 formData.append('password', formState.inputs.password.value);
-                formData.append('image', formState.inputs.image.value);
                 const responseData = await sendRequest(
                     `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`,
                     'POST',
@@ -137,7 +106,7 @@ const Auth = () => {
                             noResize
                         />
                     )}
-                    {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} errorText="Please select an image." center />}
+                    {/* {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} errorText="Please select an image." center />} */}
                     <Input
                         id="email"
                         type="email"

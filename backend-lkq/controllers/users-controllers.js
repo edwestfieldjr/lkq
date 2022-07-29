@@ -93,6 +93,13 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
     const { email, password } = req.body;
 
+    /* TESTING BLOCK */
+    // try {
+    //     console.log("req.userData.userID ::: " + req.userData.userID)
+    // } catch (error) {
+    //     return next(new HttpError(error))
+    // };
+    /* * * * * * * * */
 
     let existingUser;
     try {

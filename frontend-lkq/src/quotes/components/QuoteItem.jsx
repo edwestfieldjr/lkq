@@ -6,7 +6,7 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import Card from '../../shared/components/UIElements/Card';
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/FormElements/Button';
-import Map from '../../shared/components/UIElements/Map';
+// import Map from '../../shared/components/UIElements/Map';
 import "./QuoteItem.css"
 
 const QuoteItem = props => {
@@ -15,11 +15,11 @@ const QuoteItem = props => {
 
     const currentAuth = useContext(AuthContext);
 
-    const [showMap, setShowMap] = useState(false);
+    // const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-    const openMapHandler = () => setShowMap(true);
-    const closeMapHandler = () => setShowMap(false);
+    // const openMapHandler = () => setShowMap(true);
+    // const closeMapHandler = () => setShowMap(false);
     
     const showDeleteWarningHandler = () => setShowConfirmModal(true);
 
@@ -48,7 +48,7 @@ const QuoteItem = props => {
     return (
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError} />
-            <Modal 
+            {/* <Modal 
                 show={showMap} 
                 onCancel={closeMapHandler} 
                 header={props.address} 
@@ -59,7 +59,7 @@ const QuoteItem = props => {
                 <div className='map-container'>
                     <Map center={props.coordinates} zoom={16} />
                 </div>
-            </Modal>
+            </Modal> */}
             <Modal header="yes" footerClass="quote-item__modal-actions" show={showConfirmModal} onCancel={cancelDeleteHandler} footer={
                 <Fragment>
                     <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
@@ -78,7 +78,7 @@ const QuoteItem = props => {
                         <h2>“{props.text}”</h2>
                         <h3><a target='new' href={props.author_ref_url}>{props.author_name}</a></h3>
                         <p>{props.address}</p>
-                        {(props.tags).map(e => <span>{e.name}, </span>)} 
+                        {(props.tags).map(e => <span key={e.id}>{e.name}, </span>)} 
                     </div>
                     <div className="quote-item__actions">
                         {/* <Button inverse onClick={openMapHandler}>view map</Button> */}

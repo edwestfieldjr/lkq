@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-
 export const useHttpClient = (initialInputs, initialFormValidity) => {
 
     const [isLoading, setIsLoading] = useState(false);
