@@ -44,8 +44,8 @@ export const useAuth = () => {
             login(storedData.userID, storedData.token, new Date(storedData.expiration));
         }
     }, [login]);
-    console.log("userData::: "+ localStorage.getItem('userData'));
-    console.log("token::: "+ localStorage.token );
+    // console.log("userData::: "+ localStorage.getItem('userData'));
+    // console.log("token::: "+ localStorage.token );
     return { token, login, logout, userId };
 
 }

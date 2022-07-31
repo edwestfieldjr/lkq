@@ -19,21 +19,3 @@ async function getWiki(terms) {
 
 
 module.exports = getWiki;
-
-
-// const wiki = require('wikijs').default;
-
-// const { getWiki } = require("../wikijs-test");
-// const ver1 = "hitler"
-
-// const result = async () => {
-//     const res = await getWiki(ver1);
-//     console.log(res)
-//     return res
-    
-// }
-
-
-//     result()
-
-// // wiki().page('batman').then(page => page.mainImage()).then(console.log);rs

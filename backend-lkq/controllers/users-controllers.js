@@ -20,16 +20,20 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
+    
+    // for (let v of Object.entries(req.body)) {
+        console.log(Object.entries(req.body));  
+        // }
+        
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
-
         return next(new HttpError(
             errors.errors.map(
                 (e, i) => `${i === 0 ? "Validation error(s): " : " "}(${i + 1}) ${e.msg} for '${e.param}'`
             ), 422
         ))
     }
+    
     const { name, email, password } = req.body;
 
     let existingUser;
@@ -74,11 +78,9 @@ const signup = async (req, res, next) => {
         return next(new HttpError(error))
     };
 
-    userCreated.confirmationCode = token;
 
-    if (userCreated.email == normalizeEmail(process.env.ADMIN_EMAIL_ADDR)) {
+    if (userCreated.email == normalizeEmail(process.env.ADMIN_EMAIL_ADDR.toLowerCase())) {
         userCreated.isAdmin = true;
-        userCreated.status ='Active';
     }
 
     try {
@@ -87,7 +89,7 @@ const signup = async (req, res, next) => {
         return next(new HttpError(error));
     }
 
-    return res.status(201).json({ userId: userCreated.id, email: userCreated.email, token: userCreated.confirmationCode })
+    return res.status(201).json({ userId: userCreated.id, email: userCreated.email, token: token })
 };
 
 const login = async (req, res, next) => {
@@ -114,14 +116,13 @@ const login = async (req, res, next) => {
     } else {
         let isValidPassword = false;
         try {
-            isValidPassword = await bcryptjs.compare(password, existingUser.password);
+            isValidPassword = await bcryptjs.compare(password.toLowerCase(), existingUser.password);
         } catch (error) {
             return next(new HttpError(error, 422))
         };
 
         if (isValidPassword) {
             let token;
-            console.log(`token b4: ${token}`);
             try {
                 token = JSONWebToken.sign(
                     {
@@ -134,7 +135,6 @@ const login = async (req, res, next) => {
                 } catch (error) {
                     return next(new HttpError(error));
                 };
-                console.log(`token aft: ${token}`);
             return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
             // return res.status(201).json({ userId: existingUser.id, email: existingUser.email, token: token });
         } else {

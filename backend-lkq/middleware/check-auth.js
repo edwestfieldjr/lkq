@@ -2,7 +2,6 @@ const JSONWebToken = require('jsonwebtoken')
 const HttpError = require('../util/http-error')
 
 module.exports = (req, res, next) => {
-    console.log("req.method ::: "+req.method)
     if (req.method === 'OPTIONS') {
         return next(); 
     }
@@ -13,7 +12,6 @@ module.exports = (req, res, next) => {
         };
         const decodedToken = JSONWebToken.verify(token, process.env.SECRET);
         req.userData = { userId: decodedToken.userId }
-        console.log("req.userData inside check-auth ::: " + req.userData);
         return next();
 
     } catch (error) {

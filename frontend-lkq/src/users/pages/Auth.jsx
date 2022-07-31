@@ -5,14 +5,14 @@ import Button from '../../shared/components/FormElements/Button';
 import Card from '../../shared/components/UIElements/Card';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
+import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_PASSWORD_MATCH } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/FormHook';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
 import { AuthContext } from '../../shared/context/AuthContext';
 import './Auth.css';
 
 const Auth = () => {
+    const PW_MIN_LENGTH = 8;
     const auth = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
     const { isLoading, clientError, sendRequest, clearClientError } = useHttpClient();
@@ -27,12 +27,13 @@ const Auth = () => {
         },
     }, false);
 
+
     const switchModeHandler = () => {
         if (!isLoginMode) {
             setFormData({
                 ...formState.inputs,
                 name: undefined,
-                image: undefined
+                confirmPassword: undefined
             }, formState.inputs.email.isValid && formState.inputs.password.isValid);
         } else {
             setFormData({
@@ -41,9 +42,9 @@ const Auth = () => {
                     value: '',
                     isValid: false
                 },
-                image: {
-                    value: null,
-                    isValid: false,
+                confirmPassword: {
+                    value: '',
+                    isValid: false
                 }
             }, false);
         };
@@ -51,11 +52,13 @@ const Auth = () => {
     };
 
     const authSubmitHandler = async event => {
+        console.log('Auth submissions triggered');
         event.preventDefault();
 
         if (isLoginMode) {
             try {
                 const responseData = await sendRequest(
+                    // 'http://localhost:5000/api/users/login',
                     `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/login`,
                     'POST',
                     JSON.stringify({
@@ -74,12 +77,22 @@ const Auth = () => {
                 formData.append('email', formState.inputs.email.value);
                 formData.append('name', formState.inputs.name.value);
                 formData.append('password', formState.inputs.password.value);
+                
+                // console.log(formState.inputs.email.value, formState.inputs.name.value, formState.inputs.password.value);
+                
+                
                 const responseData = await sendRequest(
+                    // 'http://localhost:5000/api/users/signup',
                     `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`,
                     'POST',
-                    formData
+                    JSON.stringify({
+                        name: formState.inputs.name.value,
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value
+                    }),
+                    {"Content-Type": "application/json"}
                 );
-
+                await console.log(`auth.login(userId: ${responseData.userId}, token: ${responseData.token});`)
                 auth.login(responseData.userId, responseData.token);
             } catch (err) { }
         }
@@ -99,7 +112,7 @@ const Auth = () => {
                         <Input
                             id="name"
                             type="name"
-                            label="name"
+                            label="Name"
                             placeholder="type here..."
                             validators={[VALIDATOR_REQUIRE()]}
                             onInput={inputHandler}
@@ -110,8 +123,9 @@ const Auth = () => {
                     <Input
                         id="email"
                         type="email"
-                        label="Email"
+                        label="Email Address"
                         placeholder="type here..."
+                        autoComplete="new-password"
                         validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
                         onInput={inputHandler}
                         noResize
@@ -119,13 +133,26 @@ const Auth = () => {
                     <Input
                         id="password"
                         type="password"
-                        label="password"
+                        label="Password"
                         placeholder="type here..."
-                        validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8, `PW must be at least 8 characters `)]}
+                        autoComplete="off"
+                        validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(PW_MIN_LENGTH)]}
                         onInput={inputHandler}
-                        rows={5}
+                        // rows={5}
                         noResize
-                    />
+                    />{!isLoginMode && (
+                        <Input
+                            id="confirmPassword"
+                            type="password"
+                            label="Re-enter Password"
+                            placeholder="type here..."
+                            autoComplete="off"
+                            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(PW_MIN_LENGTH), VALIDATOR_PASSWORD_MATCH(formState.inputs.password.value/* reEnteredPassword *//* checkMatchedPassword.toString() */)]}
+                            onInput={inputHandler}
+                            // rows={5}
+                            noResize
+                        />
+                    )}
 
 
                     <Button type="submit" disabled={!formState.isValid}>{!isLoginMode ? "Sign-Up" : "Login"}</Button>
