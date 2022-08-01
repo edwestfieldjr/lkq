@@ -110,7 +110,6 @@ const getQuotesByUserId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
     } else {
         try {
-            console.log(userWithQuotes)
             return res.json({ quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {
             return next(new HttpError(error));
@@ -147,14 +146,12 @@ const getQuotesByAuthorId = async (req, res, next) => {
 }
 
 const constructQuote = async (req, res, next) => {
-    console.log(req.userData.userId) //currentUserId from react IF I CAN GE IT TO WORK!!!
-    currentUserId = await currentUserIdAdminTest(); /* FOR TESTING !!!  */
-    console.log(req.headers.authorization);
+    currentUserId = req.userData.userId; /* FOR TESTING !!!  */
+
 
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors);
         return next(new HttpError(
             errors.errors.map(
                 (e, i) => `${i === 0 ? "Validation error(s): " : " "}(${i + 1}) ${e.msg} for '${e.param}'`
@@ -162,7 +159,13 @@ const constructQuote = async (req, res, next) => {
         ))
     }
 
-    const { text, author, tags } = req.body;
+    const { text, author } = req.body;
+    let tags = req.body.tags;
+
+    if (tags && typeof tags === 'string') {
+        tags.replace("\"", "\'")
+        tags = eval(tags);
+    }
 
     let authorInfo
     try {
@@ -221,7 +224,6 @@ const constructQuote = async (req, res, next) => {
             creator: currentUserId
         }));
     } catch (error) {
-        console.log(error);
         return next(new HttpError(error));
     };
 
@@ -294,7 +296,6 @@ const constructQuote = async (req, res, next) => {
     }
 
     /* Remove 'quote._id' references from the appropriate author and tag records */
-    console.log("quoteCreatedNewTags: " + quoteConstructedNewTags)
     if (req.params.qid !== undefined) {
         previousAuthorId = previousAuthor._id.toString() !== authorExisting._id.toString() ? previousAuthor._id : null;
         previousTagsIds = previousTags.map(e => e._id).filter(f => !(quoteConstructedNewTags.map(g => g.toString()).includes(f.toString())));
@@ -352,8 +353,6 @@ const deleteQuote = async (req, res, next) => {
     }
 
     [author, tags, creator] = [quote.author, quote.tags, quote.creator];
-
-    console.log("Delete quote: " + quote);
 
     if (!quote) {
         return next(new HttpError("Could not find quote with the id provided", 404));

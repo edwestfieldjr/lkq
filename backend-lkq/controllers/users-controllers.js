@@ -21,10 +21,6 @@ const getUsers = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
     
-    // for (let v of Object.entries(req.body)) {
-        console.log(Object.entries(req.body));  
-        // }
-        
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new HttpError(
@@ -64,10 +60,24 @@ const signup = async (req, res, next) => {
         quotes: []
     });
 
+
+
+
+    if (normalizeEmail(userCreated.email.toLowerCase()) === normalizeEmail(process.env.ADMIN_EMAIL_ADDR.toLowerCase())) {
+        userCreated.isAdmin = true;
+    }
+
+    try {
+        await userCreated.save();
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
     let token;
     try {
         token = JSONWebToken.sign(
             {
+                name: userCreated.name,
                 userId: userCreated.id,
                 email: userCreated.email
             },
@@ -78,22 +88,13 @@ const signup = async (req, res, next) => {
         return next(new HttpError(error))
     };
 
-
-    if (userCreated.email == normalizeEmail(process.env.ADMIN_EMAIL_ADDR.toLowerCase())) {
-        userCreated.isAdmin = true;
-    }
-
-    try {
-        await userCreated.save();
-    } catch (error) {
-        return next(new HttpError(error));
-    }
-
-    return res.status(201).json({ userId: userCreated.id, email: userCreated.email, token: token })
+    return res.status(201).json({ userId: userCreated.id, name: userCreated.name, email: userCreated.email, token: token })
 };
 
 const login = async (req, res, next) => {
-    const { email, password } = req.body;
+
+    const email = normalizeEmail(req.body.email), password = req.body.password;
+
 
     /* TESTING BLOCK */
     // try {
@@ -110,16 +111,16 @@ const login = async (req, res, next) => {
         return next(new HttpError(error))
     };
 
-
     if (!existingUser) {
-        return next(new HttpError("invalid credentials...", 422))
+        return next(new HttpError("The user account does not exists: Press 'Switch to Sign UP' to create an account. ", 404))
     } else {
         let isValidPassword = false;
         try {
-            isValidPassword = await bcryptjs.compare(password.toLowerCase(), existingUser.password);
+            isValidPassword = await bcryptjs.compare(password, existingUser.password);
         } catch (error) {
             return next(new HttpError(error, 422))
         };
+
 
         if (isValidPassword) {
             let token;
@@ -135,8 +136,8 @@ const login = async (req, res, next) => {
                 } catch (error) {
                     return next(new HttpError(error));
                 };
-            return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
-            // return res.status(201).json({ userId: existingUser.id, email: existingUser.email, token: token });
+            //return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
+            return res.status(201).json({ userId: existingUser.id, name: existingUser.name, email: existingUser.email, token: token })
         } else {
             return next(new HttpError("Fail to Authenticate error", 401));
         }

@@ -15,11 +15,7 @@ const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
-
-// router.get("/666", (req, res, next) => {
-//     res.status(666).json({ message: "Not found: " + process.env.ADMIN_EMAIL_ADDR });
-// });
-
+// 'GET' route(s)
 
 router.get("/", getAllQuotes);
 
@@ -29,27 +25,26 @@ router.get("/user/:uid", getQuotesByUserId);
 
 router.get("/author/:aid", getQuotesByAuthorId);
 
-router.use(checkAuth); /* auth token middleware */
+router.use(checkAuth); 
 
-router.post("/",
-    [
-        check('text')
-            .not()
-            .isEmpty(), 
-        check('author')
-            .isLength({min: 2}), 
-    ], 
-constructQuote);
+const userAuth = [
+    check('text')
+        .not()
+        .isEmpty(), 
+    check('author')
+        .not()
+        .isEmpty()
+];
 
-router.patch("/:qid", 
-    [
-        check('text')
-            .not()
-            .isEmpty(), 
-        check('author')
-            .isLength({min: 2}) 
-    ],
-constructQuote);
+// 'POST' route(s)
+
+router.post("/", userAuth, constructQuote);
+
+// 'PATCH' route(s)
+
+router.patch("/:qid", userAuth, constructQuote);
+
+// 'DELETE' route(s)
 
 router.delete("/:qid", deleteQuote);
 

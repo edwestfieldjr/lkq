@@ -39,7 +39,7 @@ const QuoteItem = props => {
             );
             props.onDelete(props.id);
         } catch (error) {
-            console.log(error);
+            throw (error);
         }
     };
 
@@ -48,25 +48,13 @@ const QuoteItem = props => {
     return (
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError} />
-            {/* <Modal 
-                show={showMap} 
-                onCancel={closeMapHandler} 
-                header={props.address} 
-                contentClass="quote-item__modal-content" 
-                footerClass="quote-item__modal-actions" 
-                footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
-            >
-                <div className='map-container'>
-                    <Map center={props.coordinates} zoom={16} />
-                </div>
-            </Modal> */}
             <Modal header="yes" footerClass="quote-item__modal-actions" show={showConfirmModal} onCancel={cancelDeleteHandler} footer={
-                <Fragment>
-                    <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
-                    <Button danger onClick={confirmDeleteHandler} >DELETE</Button>
-                </Fragment>
+                    <Fragment>
+                        <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
+                        <Button danger onClick={confirmDeleteHandler} >DELETE</Button>
+                    </Fragment>
             }>
-                <p>Do you want to delete? No Backsies... </p>
+                <p>Do you want to delete this quote? </p>
             </Modal>
             <li className="quote-item">
                 <Card className="quote-item__content">

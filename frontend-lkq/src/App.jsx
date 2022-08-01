@@ -15,13 +15,14 @@ import { useAuth } from './shared/hooks/AuthHook';
 
 const App = () => {
 
-    const { token, login, logout, userId } = useAuth();
+    const { token, login, logout, userId, name, email  } = useAuth();
 
     let routes;
 
     if (token) {
         routes = (
             <Fragment>
+            
                 <Route exact path="/" element={<Navigate replace to="/users" />} />
                 <Route exact path="/users" element={<Users />} />
                 <Route exact path="/:userId/quotes" element={<UserQuotes />} />
@@ -62,6 +63,8 @@ const App = () => {
         <AuthContext.Provider value={{
             isLoggedIn: !!token,
             userId: userId,
+            name: name,
+            email: email,
             token: token,
             login: login,
             logout: logout,

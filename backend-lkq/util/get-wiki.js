@@ -16,6 +16,4 @@ async function getWiki(terms) {
     return await result(terms)
 }
 
-
-
 module.exports = getWiki;

@@ -58,7 +58,7 @@ const UpdateQuote = () => {
                 }              
                 )
             } catch (error) {
-                console.log(error)
+                throw(error)
             }
         };
         fetchQuote();

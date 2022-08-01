@@ -24,21 +24,17 @@ const NewQuote = () => {
     const { isLoading, clientError, sendRequest, clearClientError } = useHttpClient();
 
     const [formState, inputHandler] = useForm({
-        title: {
+        text: {
             value: '',
             isValid: false
         },
-        description: {
+        author: {
             value: '',
             isValid: false
         },
-        address: {
+        tags: {
             value: '',
-            isValid: false
-        },
-        image: {
-            value: null,
-            isValid: false
+            isValid: true
         }
     }, false);
 
@@ -48,16 +44,23 @@ const NewQuote = () => {
         event.preventDefault();
         try {
             const formData = new FormData();
-            formData.append('title', formState.inputs.title.value);
-            formData.append('description', formState.inputs.description.value);
-            formData.append('address', formState.inputs.address.value);
-            formData.append('image', formState.inputs.image.value);
-            await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes`, 'POST', formData, {
+            formData.append('text', formState.inputs.text.value);
+            formData.append('author', formState.inputs.author.value);
+            formData.append('tags', formState.inputs.tags.value);
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes`, 'POST', (
+                JSON.stringify({
+                    text: formState.inputs.text.value,
+                    author: formState.inputs.author.value,
+                    tags: formState.inputs.tags.value
+                })
+            ),
+            {   "Content-Type": "application/json",
                 Authorization: `Bearer ${currentAuth.token}` 
             });
-            navigate('/');
+            navigate('/allquotes');
+            // navigate('/');
         } catch (error) {
-            console.log(error);
+            throw (error);
         }
     };
 
@@ -70,18 +73,9 @@ const NewQuote = () => {
             <form className="quote-form" onSubmit={quoteSubmitHandler}>
                 {isLoading && <LoadingSpinner asOverlay />}
                 <Input
-                    id="title"
-                    type="text"
-                    label="Title"
-                    placeholder="type here..."
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onInput={inputHandler}
-                    noResize
-                />
-                <Input
-                    id="description"
+                    id="text"
                     type="textarea"
-                    label="Description"
+                    label="Quotation"
                     placeholder="type here..."
                     validators={[VALIDATOR_REQUIRE()]}
                     onInput={inputHandler}
@@ -89,14 +83,22 @@ const NewQuote = () => {
                     noResize
                 />
                 <Input
-                    id="address"
+                    id="author"
                     type="text"
-                    label="Address"
-                    validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5, "please enter a valid street address.")]}
+                    label="Author"
+                    placeholder="type here..."
+                    validators={[VALIDATOR_REQUIRE()]}
                     onInput={inputHandler}
                     noResize
                 />
-                <ImageUpload id="image" onInput={inputHandler} errorText="Please select an image." />
+                <Input
+                    id="tags"
+                    type="text"
+                    label="Categories/Tags"
+                    validators={[]}
+                    onInput={inputHandler}
+                    noResize
+                />
                 <Button type="submit" disabled={!formState.isValid}>+ (quote)</Button>
             </form>
         </Fragment>

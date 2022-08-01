@@ -69,18 +69,10 @@ const Auth = () => {
                         'Content-Type': 'application/json'
                     }
                 );
-                auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.name, responseData.email, responseData.userId, responseData.token);
             } catch (err) { }
         } else {
             try {
-                const formData = new FormData();
-                formData.append('email', formState.inputs.email.value);
-                formData.append('name', formState.inputs.name.value);
-                formData.append('password', formState.inputs.password.value);
-                
-                // console.log(formState.inputs.email.value, formState.inputs.name.value, formState.inputs.password.value);
-                
-                
                 const responseData = await sendRequest(
                     // 'http://localhost:5000/api/users/signup',
                     `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`,
@@ -92,8 +84,7 @@ const Auth = () => {
                     }),
                     {"Content-Type": "application/json"}
                 );
-                await console.log(`auth.login(userId: ${responseData.userId}, token: ${responseData.token});`)
-                auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.name, responseData.email, responseData.userId, responseData.token);
             } catch (err) { }
         }
     };
