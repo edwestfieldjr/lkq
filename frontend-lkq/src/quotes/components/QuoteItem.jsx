@@ -27,7 +27,7 @@ const QuoteItem = props => {
 
     const confirmDeleteHandler =  async () => { 
         setShowConfirmModal(false);
-        const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${props.id}`
+        const url = `http://${window.location.hostname}:5000/api/quotes/${props.id}`
         try {
             await sendRequest(
                 url,
@@ -69,11 +69,12 @@ const QuoteItem = props => {
                         {(props.tags).map(e => <span key={e.id}>{e.name}, </span>)} 
                     </div>
                     <div className="quote-item__actions">
-                        {/* <Button inverse onClick={openMapHandler}>view map</Button> */}
-                        { currentAuth.userId === props.creatorId &&  <Fragment>
-                            <Button to={`/quotes/${props.id}`}>edit</Button>
-                            <Button danger onClick={showDeleteWarningHandler}>delete</Button>
-                        </Fragment> }
+                        { (currentAuth.userId === props.creatorId || currentAuth.isAdmin) && 
+                            <Fragment>
+                                <Button to={`/quotes/${props.id}`}>edit</Button>
+                                <Button danger onClick={showDeleteWarningHandler}>delete</Button>
+                            </Fragment> 
+                        }
                     </div>
                 </Card>
             </li>

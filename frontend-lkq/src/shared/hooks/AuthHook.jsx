@@ -8,12 +8,14 @@ export const useAuth = () => {
     const [userId, setUserId] = useState(null);
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    const login = useCallback((username, emailAddr, uid, token, expirationDate) => {
+    const login = useCallback((username, emailAddr, uid, adminStatus, token, expirationDate) => {
         setToken(token);
         setUserId(uid);
         setName(username);
         setEmail(emailAddr);
+        setIsAdmin(adminStatus)
         const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 4);
         setTokenExpirationDateState(tokenExpirationDate)
         localStorage.setItem(
@@ -24,6 +26,7 @@ export const useAuth = () => {
                     email: emailAddr,
                     userID: uid,
                     token: token,
+                    isAdmin: adminStatus,
                     expiration: tokenExpirationDate.toISOString()
                 }
             )
@@ -36,11 +39,11 @@ export const useAuth = () => {
         setName(null);
         setEmail(null);
         setTokenExpirationDateState(null);
+        setIsAdmin(false)
         localStorage.removeItem('userData');
     }, [],)
 
     useEffect(() => {
-        console.log("first useEffect called");
         if (token && tokenExpirationDateState) {
             const remainingTime = tokenExpirationDateState.getTime() - new Date().getTime();
             logoutTimer = setTimeout(logout, remainingTime);
@@ -48,13 +51,11 @@ export const useAuth = () => {
     }, [token, logout, tokenExpirationDateState]);
 
     useEffect(() => {
-        console.log("secind useEffect called");
-
         const storedData = JSON.parse(localStorage.getItem('userData'));
         if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
-            login(storedData.name, storedData.email, storedData.userID, storedData.token, new Date(storedData.expiration));
+            login(storedData.name, storedData.email, storedData.userID, storedData.isAdmin, storedData.token, new Date(storedData.expiration));
         }
     }, [login]);
-    return { token, login, logout, userId, name, email };
+    return { token, login, logout, userId, name, email, isAdmin };
 
 }

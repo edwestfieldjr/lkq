@@ -15,7 +15,7 @@ const { countDocuments } = require('../models/quote');
 /* production 'currentUserId' id will be: req.userData.userId */
 /* *  *   *    *     *      *       *        *        *         *          *          */
 
-const currentUserIdAdminTest = async () => {
+const getAdminId = async () => {
     let currentUser;
     try {
         currentUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
@@ -146,9 +146,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
 }
 
 const constructQuote = async (req, res, next) => {
-    currentUserId = req.userData.userId; /* FOR TESTING !!!  */
-
-
+    currentUserId = req.userData.userId;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -201,7 +199,7 @@ const constructQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     };
-   
+
 
     let quoteConstructed
     try {
@@ -235,7 +233,8 @@ const constructQuote = async (req, res, next) => {
     }
     if (!user) {
         return next(new HttpError("Could not find user with the id provided"));
-    } else if (req.params.qid !== undefined && user._id.toString() !== quoteConstructed.creator._id.toString()) {
+    } else if (req.params.qid !== undefined &&
+        [currentUserId.toString(), String(getAdminId())].includes(quoteConstructed.creator._id.toString())) {
         return next(new HttpError("Unauthorized to edit this quote", 401));
     }
 
@@ -342,7 +341,7 @@ const constructQuote = async (req, res, next) => {
 
 
 const deleteQuote = async (req, res, next) => {
-    currentUserId = await currentUserIdAdminTest() /* FOR TESTING !!!  */
+    currentUserId = req.userData.userId;
     const quoteId = req.params.qid
     let quote, author, tags, creator;
 
@@ -357,7 +356,7 @@ const deleteQuote = async (req, res, next) => {
     if (!quote) {
         return next(new HttpError("Could not find quote with the id provided", 404));
     }
-    if (creator && creator.toString() !== /* req.userData.userId */currentUserId.toString()) {
+    if (creator && [currentUserId.toString(), String(getAdminId())].includes(creator.id.toString())) {
         return next(new HttpError("Unauthorized to Delete", 401));
     }
 

@@ -42,7 +42,7 @@ const UpdateQuote = () => {
 
         const fetchQuote = async () => {
             try {
-                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${quoteId}`);
+                const responseData = await sendRequest(`http://${window.location.hostname}:5000/api/quotes/${quoteId}`);
                 
                 setLoadedQuote(responseData.quote);
                 setFormData(
@@ -72,7 +72,7 @@ const UpdateQuote = () => {
         event.preventDefault();
         try {
             await sendRequest(
-                `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${quoteId}`,
+                `http://${window.location.hostname}:5000/api/quotes/${quoteId}`,
                 'PATCH',
                 JSON.stringify({
                     title: formState.inputs.title.value,

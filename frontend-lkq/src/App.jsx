@@ -15,7 +15,7 @@ import { useAuth } from './shared/hooks/AuthHook';
 
 const App = () => {
 
-    const { token, login, logout, userId, name, email  } = useAuth();
+    const { token, login, logout, userId, name, email, isAdmin } = useAuth();
 
     let routes;
 
@@ -62,6 +62,7 @@ const App = () => {
     return (
         <AuthContext.Provider value={{
             isLoggedIn: !!token,
+            isAdmin: isAdmin,
             userId: userId,
             name: name,
             email: email,
@@ -81,5 +82,4 @@ const App = () => {
         </AuthContext.Provider>
     );
 }
-
 export default App;

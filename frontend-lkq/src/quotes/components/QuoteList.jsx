@@ -33,7 +33,7 @@ const QuoteList = props => {
                             // address={quote.address} 
                             creatorId={quote.creator} 
                             // coordinates={quote.location} 
-                            // onDelete={props.onDeleteQuote}
+                            onDelete={props.onDeleteQuote}
                         />
                     )
                 )}

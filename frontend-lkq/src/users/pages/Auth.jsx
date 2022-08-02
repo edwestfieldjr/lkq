@@ -52,14 +52,13 @@ const Auth = () => {
     };
 
     const authSubmitHandler = async event => {
-        console.log('Auth submissions triggered');
         event.preventDefault();
 
         if (isLoginMode) {
             try {
                 const responseData = await sendRequest(
                     // 'http://localhost:5000/api/users/login',
-                    `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/login`,
+                    `http://${window.location.hostname}:5000/api/users/login`,
                     'POST',
                     JSON.stringify({
                         email: formState.inputs.email.value,
@@ -69,13 +68,13 @@ const Auth = () => {
                         'Content-Type': 'application/json'
                     }
                 );
-                auth.login(responseData.name, responseData.email, responseData.userId, responseData.token);
+                auth.login(responseData.name, responseData.email, responseData.userId, responseData.isAdmin, responseData.token);
             } catch (err) { }
         } else {
             try {
                 const responseData = await sendRequest(
                     // 'http://localhost:5000/api/users/signup',
-                    `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`,
+                    `http://${window.location.hostname}:5000/api/users/signup`,
                     'POST',
                     JSON.stringify({
                         name: formState.inputs.name.value,
@@ -84,7 +83,7 @@ const Auth = () => {
                     }),
                     {"Content-Type": "application/json"}
                 );
-                auth.login(responseData.name, responseData.email, responseData.userId, responseData.token);
+                auth.login(responseData.name, responseData.email, responseData.userId, responseData.isAdmin, responseData.token);
             } catch (err) { }
         }
     };

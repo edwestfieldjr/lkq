@@ -79,7 +79,7 @@ const signup = async (req, res, next) => {
             {
                 name: userCreated.name,
                 userId: userCreated.id,
-                email: userCreated.email
+                email: userCreated.email,
             },
             process.env.SECRET,
             { expiresIn: '4h' }
@@ -88,7 +88,7 @@ const signup = async (req, res, next) => {
         return next(new HttpError(error))
     };
 
-    return res.status(201).json({ userId: userCreated.id, name: userCreated.name, email: userCreated.email, token: token })
+    return res.status(201).json({ userId: userCreated.id, name: userCreated.name, email: userCreated.email, isAdmin: userCreated.isAdmin, token: token })
 };
 
 const login = async (req, res, next) => {
@@ -137,7 +137,7 @@ const login = async (req, res, next) => {
                     return next(new HttpError(error));
                 };
             //return res.json({ message: `Logged in as: ${email}`, existingUser: existingUser.toObject({ getters: true }) });
-            return res.status(201).json({ userId: existingUser.id, name: existingUser.name, email: existingUser.email, token: token })
+            return res.status(201).json({ userId: existingUser.id, name: existingUser.name, email: existingUser.email, isAdmin: existingUser.isAdmin, token: token })
         } else {
             return next(new HttpError("Fail to Authenticate error", 401));
         }

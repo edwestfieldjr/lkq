@@ -47,7 +47,7 @@ const NewQuote = () => {
             formData.append('text', formState.inputs.text.value);
             formData.append('author', formState.inputs.author.value);
             formData.append('tags', formState.inputs.tags.value);
-            await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes`, 'POST', (
+            await sendRequest(`http://${window.location.hostname}:5000/api/quotes`, 'POST', (
                 JSON.stringify({
                     text: formState.inputs.text.value,
                     author: formState.inputs.author.value,
