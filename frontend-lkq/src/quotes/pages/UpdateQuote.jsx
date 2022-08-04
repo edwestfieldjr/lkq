@@ -25,17 +25,22 @@ const UpdateQuote = () => {
 
     const quoteId = useParams().quoteId;
 
+    console.log(`Quote id ${quoteId}`);
 
     const [formState ,inputHandler, setFormData] = useForm({
-        title: {
+        text: {
             value: '',
-            isValid: false
+            isValid: true
         },
-        description: {
+        author: {
             value: '',
-            isValid: false
-        }
-    }, false);
+            isValid: true
+        },      
+        tags: {
+            value: '',
+            isValid: true
+        }      
+    }, true);
     
     
     useEffect(() => {
@@ -44,20 +49,31 @@ const UpdateQuote = () => {
             try {
                 const responseData = await sendRequest(`http://${window.location.hostname}:5000/api/quotes/${quoteId}`);
                 
-                setLoadedQuote(responseData.quote);
+                setLoadedQuote({
+                    userId: responseData.quote.creator,
+                    text: responseData.quote.text,
+                    author: responseData.quote.author.name,
+                    tags: responseData.quote.tags.map((e,i,r) => e.name).toString(),
+                });
+
                 setFormData(
                     {
-                        title: {
-                            value: responseData.quote.title,
+                        text: {
+                            value: loadedQuote.text.toString(),
                             isValid: true
                         },
-                        description: {
-                            value: responseData.quote.description,
+                        author: {
+                            value: loadedQuote.author.toString(),
+                            isValid: true
+                        },      
+                        tags: {
+                            value: loadedQuote.tags.toString(),
                             isValid: true
                         }      
-                }              
-                )
+                    }, 
+                true);
             } catch (error) {
+                console.error(error);
                 throw(error)
             }
         };
@@ -70,21 +86,28 @@ const UpdateQuote = () => {
 
     const submitHandler = async event => {
         event.preventDefault();
+        console.log("formState.inputs.tags.value", formState.inputs.tags.value, typeof(formState.inputs.tags.value))
+        console.log("formState.inputs.tags.value.length", formState.inputs.tags.value.length)
+        let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
             await sendRequest(
                 `http://${window.location.hostname}:5000/api/quotes/${quoteId}`,
                 'PATCH',
                 JSON.stringify({
-                    title: formState.inputs.title.value,
-                    description: formState.inputs.description.value
+                    text: formState.inputs.text.value,
+                    author: formState.inputs.author.value,
+                    tags: tagsString
                 }),
                 { 
                     'Content-Type': 'application/json', 
                     Authorization: `Bearer ${currentAuth.token}` 
                 }
             );
-            navigate(`/${currentAuth.userId}/quotes`)
-        } catch (error) {};
+            navigate(`/${loadedQuote.userId}/quotes`)
+        } catch (error) {
+            console.error(error);
+            throw(error);
+        };
 
     };
 
@@ -96,33 +119,79 @@ const UpdateQuote = () => {
     return (
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError}/>
+            {isLoading && <LoadingSpinner asOverlay />}
             { !isLoading && loadedQuote && <form className="quote-form" onSubmit={submitHandler}>
-                <Input 
-                    id="title"
-                    type="text" 
-                    label="Title" 
-                    validators={[VALIDATOR_REQUIRE()]} 
-                    onInput={inputHandler}
-                    noResize
-                    value={loadedQuote.title}
-                    valid={true}
-                />
-                <Input 
-                    id="description"
-                    type="textarea" 
-                    label="Description" 
-                    validators={[VALIDATOR_REQUIRE()]} 
+                <Input
+                    id="text"
+                    type="textarea"
+                    label="Quotation"
+                    placeholder="type here..."
+                    validators={[VALIDATOR_REQUIRE()]}
+                    value={loadedQuote.text}
                     onInput={inputHandler}
                     rows={5}
                     noResize
-                    value={loadedQuote.title}
-                    valid={true}
                 />
-                <Button type="submit" disabled={!formState.isValid}>Update</Button>
+                <Input
+                    id="author"
+                    type="text"
+                    label="Author"
+                    placeholder="type here..."
+                    validators={[]}
+                    value={loadedQuote.author}
+                    onInput={inputHandler}
+                    noResize
+                />
+                <Input
+                    id="tags"
+                    type="text"
+                    label="Categories/Tags"
+                    validators={[]}
+                    onInput={inputHandler}
+                    value={loadedQuote.tags}
+                    noResize
+                />
+                <Button type="submit" disabled={!loadedQuote}>Update</Button>
             </form>}
         </Fragment>
 
     );
+        {/* <Fragment>
+            <ErrorModal error={clientError} onClear={clearClientError} />
+            <form className="quote-form" onSubmit={quoteSubmitHandler}>
+                {isLoading && <LoadingSpinner asOverlay />}
+                <Input
+                    id="text"
+                    type="textarea"
+                    label="Quotation"
+                    placeholder="type here..."
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onInput={inputHandler}
+                    rows={5}
+                    noResize
+                />
+                <Input
+                    id="author"
+                    type="text"
+                    label="Author"
+                    placeholder="type here..."
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onInput={inputHandler}
+                    noResize
+                />
+                <Input
+                    id="tags"
+                    type="text"
+                    label="Categories/Tags"
+                    validators={[]}
+                    onInput={inputHandler}
+                    noResize
+                />
+                <Button type="submit" disabled={!formState.isValid}>+ (quote)</Button>
+            </form>
+            </Fragment> */}
+
+
 }
 
 export default UpdateQuote;

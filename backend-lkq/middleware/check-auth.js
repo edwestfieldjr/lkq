@@ -16,6 +16,5 @@ module.exports = (req, res, next) => {
 
     } catch (error) {
         return next(new HttpError(error, 401))
-
     }
 };

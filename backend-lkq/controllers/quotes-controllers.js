@@ -10,27 +10,20 @@ const Author = require('../models/author');
 const Tag = require('../models/tag');
 const { countDocuments } = require('../models/quote');
 
-/* *  *   *    *     *      *       *        *        *         *          *          */
-/* GETTING USER ID FROM ENV FILE FOR TESTING */
-/* production 'currentUserId' id will be: req.userData.userId */
-/* *  *   *    *     *      *       *        *        *         *          *          */
 
 const getAdminId = async () => {
-    let currentUser;
+    let adminUser;
     try {
-        currentUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
+        adminUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
     } catch (error) {
         return error;
     }
-    return await currentUser._id;
+    return await adminUser._id;
 }
-
-/* *  *   *    *     *      *       *        *        *         *          *          */
 
 
 
 const getAllQuotes = async (req, res, next) => {
-    // const quoteId = req.params.qid
     let allQuotes;
     try {
         allQuotes = await Quote.find().populate([{
@@ -49,8 +42,7 @@ const getAllQuotes = async (req, res, next) => {
     if (!allQuotes) {
         return next(new HttpError("No quotes found", 404))
     };
-    return res.json({ quotes: allQuotes/* })//quotes */.map(quote => quote.toObject({ getters: true })) });
-    // };
+    return res.json({ quotes: allQuotes.map(quote => quote.toObject({ getters: true })) });
 };
 
 const getQuoteById = async (req, res, next) => {
@@ -148,6 +140,8 @@ const getQuotesByAuthorId = async (req, res, next) => {
 const constructQuote = async (req, res, next) => {
     currentUserId = req.userData.userId;
 
+    console.log("req : "+ req.body.text +" "+ req.body.author +" ["+ req.body.tags+"] (" + typeof(req.body.tags)+")"); 
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new HttpError(
@@ -157,34 +151,56 @@ const constructQuote = async (req, res, next) => {
         ))
     }
 
-    const { text, author } = req.body;
-    let tags = req.body.tags;
+    let { text, author } = req.body;
+    
+    let tags = [...new Set(req.body.tags.toString().split(',').map(e=>e.trim().toLowerCase()))].sort() || [];
 
-    if (tags && typeof tags === 'string') {
-        tags.replace("\"", "\'")
-        tags = eval(tags);
-    }
+    console.log("tags : "+ tags)
+
+    // console.log(tags);
+    // if (tags && typeof tags === 'string') {
+    //     tags.replace("\"", "\'")
+    //     tags = eval(tags);
+    // }
+    // console.log(tags);
+    
+    // if (tags && typeof tags === 'object' && typeof tags.length === 'number') {
+    //     tags = tags.map(e => e.toLowerCase());
+    // } else {
+    //     return next(new HttpError("Data sent in the request does not contain valid fields/values.", 422));
+    // }
 
     let authorInfo
-    try {
-        authorInfo = await getWiki(author);
-    } catch (error) {
-        return next(new HttpError(error));
+    if (author && author.length > 0) {
+        try {
+            authorInfo = await getWiki(author);
+        } catch (error) {
+            return next(new HttpError(error));
+        }
+    }
+
+    if (authorInfo) {
+        author = authorInfo.name
     }
 
     let authorExisting;
     try {
-        authorExisting = await Author.findOne({ name: authorInfo.name })
+        authorExisting = await Author.findOne({ name: author })
     } catch (error) {
         return next(new HttpError(error));
     };
     if (!authorExisting) {
         const authorCreated = new Author({
-            name: authorInfo.name,
-            ref_url: authorInfo.url,
-            ref_img: authorInfo.img,
+            name: author || "Anonymous",
             quotes: []
         });
+
+        if (authorInfo) {
+            authorCreated.name = authorInfo.name;
+            authorCreated.ref_url = authorInfo.url;
+            authorCreated.ref_img = authorInfo.img;
+        }   
+
         try {
             await authorCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
         } catch (error) {
@@ -231,10 +247,22 @@ const constructQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
+
+    let adminId;
+    try {
+        adminId = await getAdminId();
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+
+    console.log([currentUserId.toString(), adminId.toString(), quoteConstructed.creator._id.toString()])
+    
+    
     if (!user) {
         return next(new HttpError("Could not find user with the id provided"));
     } else if (req.params.qid !== undefined &&
-        [currentUserId.toString(), String(getAdminId())].includes(quoteConstructed.creator._id.toString())) {
+        ![currentUserId.toString(), adminId.toString()].includes(quoteConstructed.creator._id.toString())) {
         return next(new HttpError("Unauthorized to edit this quote", 401));
     }
 
@@ -356,7 +384,15 @@ const deleteQuote = async (req, res, next) => {
     if (!quote) {
         return next(new HttpError("Could not find quote with the id provided", 404));
     }
-    if (creator && [currentUserId.toString(), String(getAdminId())].includes(creator.id.toString())) {
+
+    let adminId;
+    try {
+        adminId = await User.findById(currentUserId)
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+    if (creator && [currentUserId.toString(), adminId.toString()].includes(creator.id.toString())) {
         return next(new HttpError("Unauthorized to Delete", 401));
     }
 
@@ -366,6 +402,16 @@ const deleteQuote = async (req, res, next) => {
         return next(new HttpError(error));
     }
 
+
+    try {
+        await User.updateOne(
+            { _id: currentUserId.toString() },
+            { $pull: { 'quotes': quoteId.toString() } },
+            { returnNewDocument: true, returnOriginal: false }
+        );
+    } catch (error) {
+        return next(new HttpError(error));
+    }
 
     try {
         await Author.updateOne(
@@ -390,7 +436,7 @@ const deleteQuote = async (req, res, next) => {
     }
 
 
-    return res.status(200).json({ message: `deleted quote “${quote.title}” (id: ${quoteId}) ` });
+    return res.status(200).json({ message: `deleted quote “${quote.text}” (id: ${quoteId}) ` });
 
 };
 

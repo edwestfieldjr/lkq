@@ -48,6 +48,7 @@ const QuoteItem = props => {
     return (
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError} />
+
             <Modal header="yes" footerClass="quote-item__modal-actions" show={showConfirmModal} onCancel={cancelDeleteHandler} footer={
                     <Fragment>
                         <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
@@ -56,11 +57,12 @@ const QuoteItem = props => {
             }>
                 <p>Do you want to delete this quote? </p>
             </Modal>
+            
             <li className="quote-item">
                 <Card className="quote-item__content">
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="quote-item__image">
-                        <img src={`${props.author_ref_img}`} alt={props.title} />
+                        <img src={`${props.author_ref_img}`} alt={props.author_name} />
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>

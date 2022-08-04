@@ -31,9 +31,6 @@ const userAuth = [
     check('text')
         .not()
         .isEmpty(), 
-    check('author')
-        .not()
-        .isEmpty()
 ];
 
 // 'POST' route(s)

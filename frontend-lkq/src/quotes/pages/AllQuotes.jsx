@@ -30,8 +30,8 @@ const AllQuotes = () => {
 
     return (
         <Fragment>
-            {/* <ErrorModal error={clientError} onClear={clearClientError} /> */}
-            {/* {isLoading && <LoadingSpinner asOverlay />} */}
+            <ErrorModal error={clientError} onClear={clearClientError} />
+            {isLoading && <LoadingSpinner asOverlay />}
 
             {!isLoading && loadedQuotes && <QuoteList items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
         </Fragment>

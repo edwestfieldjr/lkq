@@ -12,7 +12,7 @@ const userSchema = new Schema({
     }, 
     quotes: [{
         type: mongoose.Types.ObjectId,
-        required: true,
+        required: false,
         ref: 'Quote'
     }],
 

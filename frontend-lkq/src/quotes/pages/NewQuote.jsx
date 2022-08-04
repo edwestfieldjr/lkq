@@ -42,21 +42,21 @@ const NewQuote = () => {
 
     const quoteSubmitHandler = async event => {
         event.preventDefault();
+        let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
-            const formData = new FormData();
-            formData.append('text', formState.inputs.text.value);
-            formData.append('author', formState.inputs.author.value);
-            formData.append('tags', formState.inputs.tags.value);
-            await sendRequest(`http://${window.location.hostname}:5000/api/quotes`, 'POST', (
+            await sendRequest(
+                `http://${window.location.hostname}:5000/api/quotes`, 
+                'POST',
                 JSON.stringify({
                     text: formState.inputs.text.value,
                     author: formState.inputs.author.value,
-                    tags: formState.inputs.tags.value
-                })
-            ),
-            {   "Content-Type": "application/json",
-                Authorization: `Bearer ${currentAuth.token}` 
-            });
+                    tags: tagsString
+                }),
+                {   
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${currentAuth.token}` 
+                }
+            );
             navigate('/allquotes');
             // navigate('/');
         } catch (error) {
@@ -87,7 +87,7 @@ const NewQuote = () => {
                     type="text"
                     label="Author"
                     placeholder="type here..."
-                    validators={[VALIDATOR_REQUIRE()]}
+                    validators={[]}
                     onInput={inputHandler}
                     noResize
                 />
@@ -99,7 +99,7 @@ const NewQuote = () => {
                     onInput={inputHandler}
                     noResize
                 />
-                <Button type="submit" disabled={!formState.isValid}>+ (quote)</Button>
+                <Button type="submit" disabled={!formState.isValid}> Add new quote </Button>
             </form>
         </Fragment>
     );

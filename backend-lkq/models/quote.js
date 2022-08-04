@@ -6,12 +6,12 @@ const quotesSchema = new Schema({
     text: { type: String, required: true },
     author: { 
         type: mongoose.Types.ObjectId,
-        required: true,
+        required: false,
         ref: 'Author'
     },
     creator: { 
         type: mongoose.Types.ObjectId,
-        required: true,
+        required: false,
         ref: 'User'
     },
     tags: [{ 

@@ -11,9 +11,6 @@ const UserItem = props => {
             <div className="user-item">
                 <Card className="user-item__content">
                     <Link to={`/${props.id}/quotes`}>
-                        <div className="user-item__image">
-                            <Avatar image={`http://${window.location.hostname}:5000/${props.image}`} alt={props.name}/>
-                        </div>
                         <div className="user-item__info">
                             <h2>{props.name}</h2>
                             <h3>{props.quoteCount > 0 ? props.quoteCount : 'No' } {props.quoteCount === 1 ? "quote" : "quotes"}</h3>

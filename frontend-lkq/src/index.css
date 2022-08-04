@@ -4,13 +4,11 @@
   box-sizing: border-box;
 }
 
-html {
-  font-family: 'Open Sans', sans-serif;
-}
 
 body {
+  font-family: 'Open Sans', sans-serif !important;
   margin: 0;
-  background: #4d4d4d; 
+  background: #4d4d4d !important; 
 }
 
 .slide-in-right-enter {
