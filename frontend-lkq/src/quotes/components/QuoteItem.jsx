@@ -49,7 +49,7 @@ const QuoteItem = props => {
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError} />
 
-            <Modal header="yes" footerClass="quote-item__modal-actions" show={showConfirmModal} onCancel={cancelDeleteHandler} footer={
+            <Modal header="Delete Item..." footerClass="quote-item__modal-actions" show={showConfirmModal} onCancel={cancelDeleteHandler} footer={
                     <Fragment>
                         <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
                         <Button danger onClick={confirmDeleteHandler} >DELETE</Button>
@@ -67,13 +67,13 @@ const QuoteItem = props => {
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
                         <h3><a target='new' href={props.author_ref_url}>{props.author_name}</a></h3>
-                        <p>{props.address}</p>
-                        {(props.tags).map(e => <span key={e.id}>{e.name}, </span>)} 
+                        <p><a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
+                        {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)} 
                     </div>
                     <div className="quote-item__actions">
                         { (currentAuth.userId === props.creatorId || currentAuth.isAdmin) && 
                             <Fragment>
-                                <Button to={`/quotes/${props.id}`}>edit</Button>
+                                <Button to={`/quotes/edit/${props.id}`}>edit</Button>
                                 <Button danger onClick={showDeleteWarningHandler}>delete</Button>
                             </Fragment> 
                         }

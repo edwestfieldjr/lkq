@@ -12,7 +12,7 @@ const UserQuotes = () => {
 
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
 
-    const userId = useParams().userId;
+    const userId = useParams().userId || null;
 
     useEffect(() => {
         const fetchQuotes = async () => {

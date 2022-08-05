@@ -48,12 +48,11 @@ const UpdateQuote = () => {
         const fetchQuote = async () => {
             try {
                 const responseData = await sendRequest(`http://${window.location.hostname}:5000/api/quotes/${quoteId}`);
-                
                 setLoadedQuote({
-                    userId: responseData.quote.creator,
+                    userId: responseData.quote.creator.id,
                     text: responseData.quote.text,
                     author: responseData.quote.author.name,
-                    tags: responseData.quote.tags.map((e,i,r) => e.name).toString(),
+                    tags: responseData.quote.tags.map((e,i) => (i > 0 ? ' ' : '') + e.name).toString(),
                 });
 
                 setFormData(

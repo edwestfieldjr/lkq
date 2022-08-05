@@ -25,10 +25,13 @@ const App = () => {
             
                 <Route exact path="/" element={<Navigate replace to="/users" />} />
                 <Route exact path="/users" element={<Users />} />
-                <Route exact path="/:userId/quotes" element={<UserQuotes />} />
-                <Route exact path="/allquotes" element={<AllQuotes />} />
+                <Route exact path="/quotes" element={<AllQuotes />} />
+                <Route exact path="/quotes/:quoteId" element={<AllQuotes />} />
+                <Route exact path="/quotes/user/:userId" element={<AllQuotes />} />
+                <Route exact path="/quotes/author/:authorId" element={<AllQuotes />} />
+                <Route exact path="/quotes/tag/:tagId" element={<AllQuotes />} />
                 <Route exact path="/quotes/new" element={<NewQuote />} />
-                <Route exact path="/quotes/:quoteId" element={<UpdateQuote />} />
+                <Route exact path="/quotes/edit/:quoteId" element={<UpdateQuote />} />
 
                 {/* REDIRECT ROUTE */}
                 <Route
@@ -43,8 +46,12 @@ const App = () => {
             <Fragment>
                 <Route exact path="/" element={<Navigate replace to="/users" />} />
                 <Route exact path="/users" element={<Users />} />
-                <Route exact path="/allquotes" element={<AllQuotes />} />
-                <Route exact path="/:userId/quotes" element={<UserQuotes />} />
+                <Route exact path="/quotes" element={<AllQuotes />} />
+                <Route exact path="/quotes/:quoteId" element={<AllQuotes />} />
+                <Route exact path="/quotes/user/:userId" element={<AllQuotes />} />
+                <Route exact path="/quotes/author/:authorId" element={<AllQuotes />} />
+                <Route exact path="/quotes/tag/:tagId" element={<AllQuotes />} />
+                {/* <Route exact path="/:userId/quotes" element={<UserQuotes />} /> */}
                 <Route exact path="/auth" element={<Auth />} />
 
                 {/* REDIRECT ROUTE */}

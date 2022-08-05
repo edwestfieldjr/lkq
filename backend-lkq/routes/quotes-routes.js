@@ -6,6 +6,7 @@ const {
     getAllQuotes,
     getQuoteById, 
     getQuotesByUserId,
+    getQuotesByTagId,
     getQuotesByAuthorId, 
     constructQuote, 
     deleteQuote 
@@ -22,6 +23,8 @@ router.get("/", getAllQuotes);
 router.get("/:qid", getQuoteById);
 
 router.get("/user/:uid", getQuotesByUserId);
+
+router.get("/tag/:tid", getQuotesByTagId);
 
 router.get("/author/:aid", getQuotesByAuthorId);
 

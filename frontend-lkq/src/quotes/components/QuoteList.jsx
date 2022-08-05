@@ -27,11 +27,13 @@ const QuoteList = props => {
                             author_name={quote.author.name}
                             author_ref_url={quote.author.ref_url}
                             author_ref_img={quote.author.ref_img}
+                            author_id={quote.author.id}
                             tags={quote.tags} 
                             // title={quote.title} 
                             // description={quote.description} 
                             // address={quote.address} 
-                            creatorId={quote.creator} 
+                            creatorId={quote.creator.id} 
+                            creatorName={quote.creator.name} 
                             // coordinates={quote.location} 
                             onDelete={props.onDeleteQuote}
                         />
