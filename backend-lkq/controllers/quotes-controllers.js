@@ -208,8 +208,6 @@ const getQuotesByAuthorId = async (req, res, next) => {
 const constructQuote = async (req, res, next) => {
     currentUserId = req.userData.userId;
 
-    console.log("req : "+ req.body.text +" "+ req.body.author +" ["+ req.body.tags+"] (" + typeof(req.body.tags)+")"); 
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new HttpError(
@@ -220,10 +218,9 @@ const constructQuote = async (req, res, next) => {
     }
 
     let { text, author } = req.body;
-    
     let tags = [...new Set(req.body.tags.toString().split(',').map(e=>e.trim().toLowerCase()))].sort() || [];
+    let isPublic = req.body.isPublic;
 
-    console.log("tags : "+ tags)
 
     // console.log(tags);
     // if (tags && typeof tags === 'string') {
@@ -332,7 +329,9 @@ const constructQuote = async (req, res, next) => {
     }
 
     try {
-        if (!(user.quotes.includes(quoteConstructed._id)) && !adminIds.includes(currentUserId.toString())) { user.quotes.push(quoteConstructed); }
+        if (req.params.qid === undefined)  { 
+            user.quotes.push(quoteConstructed); 
+        }
         if (!(authorExisting.quotes.includes(quoteConstructed._id))) { authorExisting.quotes.push(quoteConstructed); }
         await user.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
         await authorExisting.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
@@ -420,7 +419,9 @@ const constructQuote = async (req, res, next) => {
 
     try {
         quoteConstructed.tags = quoteConstructedNewTags
+        
         if (req.params.qid !== undefined) {
+            quoteConstructed.isPublic = eval(isPublic)
             quoteConstructed.text = text;
             quoteConstructed.author = authorExisting._id;
         }

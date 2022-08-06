@@ -35,6 +35,10 @@ const NewQuote = () => {
         tags: {
             value: '',
             isValid: true
+        },
+        isPublic: {
+            value: '',
+            isValid: true
         }
     }, false);
 
@@ -50,7 +54,8 @@ const NewQuote = () => {
                 JSON.stringify({
                     text: formState.inputs.text.value,
                     author: formState.inputs.author.value,
-                    tags: tagsString
+                    tags: tagsString,
+                    isPublic: formState.inputs.isPublic
                 }),
                 {   
                     "Content-Type": "application/json",

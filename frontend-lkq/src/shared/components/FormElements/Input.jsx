@@ -23,7 +23,7 @@ const inputReducer = (state, action) => {
 const Input = props => {
 
     const [inputState, dispatchInputState] = useReducer(inputReducer, {
-        value: props.value || '', 
+        value: props.value || (typeof(props.value) === 'boolean' ? false : ''), 
         isValid: props.valid || false, 
         isTouched: false, 
         errorMsgs: [] });
@@ -38,9 +38,10 @@ const Input = props => {
     const changeHandler = event => {
         dispatchInputState({
             type: 'CHANGE', 
-            val: event.target.value,
+            val: event.target.type === "checkbox" ? event.target.checked : event.target.value,
             validators: props.validators
         })
+        console.log(inputState)
     };
 
     const touchHandler = event => {
@@ -61,7 +62,8 @@ const Input = props => {
                 rows={props.rows || (Element === "textarea" ? 3 : null)}
                 onChange={changeHandler}
                 onBlur={touchHandler}
-                value={inputState.value}
+                value={/* props.value.type !== "checkbox" ?  */inputState.value/*  : (!!props.defaultChecked || null)  */}
+                defaultChecked={props.defaultChecked}
                 style={props.noResize && {resize: 'none'}}
             />
             {(inputState.errorMsgs && inputState.isTouched) && <ul style={{textAlign: 'left'}}>{errorMsgs.map((errMsg, idx) => <li key={idx}className='form-control--invalid'>{errMsg}</li>)}</ul>}

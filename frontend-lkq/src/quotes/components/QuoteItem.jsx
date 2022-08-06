@@ -1,8 +1,9 @@
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, useEffect, useContext, Fragment } from 'react';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
 import { AuthContext } from '../../shared/context/AuthContext';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import Avatar from '../../shared/components/UIElements/Avatar';
 import Card from '../../shared/components/UIElements/Card';
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/FormElements/Button';
@@ -10,10 +11,26 @@ import Button from '../../shared/components/FormElements/Button';
 import "./QuoteItem.css"
 
 const QuoteItem = props => {
-    
-    const { isLoading, clientError, sendRequest, clearClientError } = useHttpClient();
 
+    const { isLoading, clientError, sendRequest, clearClientError } = useHttpClient();
+    
     const currentAuth = useContext(AuthContext);
+    
+    const [unplashAPIResponse, setUnplashAPIResponse] = useState(undefined);
+
+    
+    useEffect(() => {
+        const unplashReqest = async () => {
+            const response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${process.env.REACT_APP_UNSPLASH_API_ACCESS_KEY}&orientation=landscape&content_filter=high&query=backgrounds+inspiration+${(props.tags).map(e => e.name).join('+')}`);
+            const jsonRes = await response.json();
+            setUnplashAPIResponse(jsonRes)
+        }
+        unplashReqest().catch(console.error);
+    }, [props.tags])
+
+    console.log(unplashAPIResponse);
+
+
 
     // const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -62,7 +79,7 @@ const QuoteItem = props => {
                 <Card className="quote-item__content">
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="quote-item__image">
-                        <img src={`${props.author_ref_img}`} alt={props.author_name} />
+                        <img src={`${unplashAPIResponse ? unplashAPIResponse.urls.full : null}`} />
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
@@ -70,6 +87,8 @@ const QuoteItem = props => {
                         <p><a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
                         {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)} 
                     </div>
+                    <Avatar image={props.author_ref_img} alt={props.author_name} width="100px"/>
+
                     <div className="quote-item__actions">
                         { (currentAuth.userId === props.creatorId || currentAuth.isAdmin) && 
                             <Fragment>

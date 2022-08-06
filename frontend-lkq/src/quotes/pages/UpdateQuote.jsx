@@ -16,7 +16,6 @@ import './QuoteForm.css'
 
 
 const UpdateQuote = () => {
-
     const currentAuth = useContext(AuthContext);
 
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
@@ -24,8 +23,6 @@ const UpdateQuote = () => {
     const [loadedQuote, setLoadedQuote] = useState(undefined);
 
     const quoteId = useParams().quoteId;
-
-    console.log(`Quote id ${quoteId}`);
 
     const [formState ,inputHandler, setFormData] = useForm({
         text: {
@@ -39,11 +36,16 @@ const UpdateQuote = () => {
         tags: {
             value: '',
             isValid: true
+        },
+        isPublic: {
+            value: Boolean(false),
+            isValid: true
         }      
     }, true);
     
     
     useEffect(() => {
+        console.log('useEffect--TRIGGERED');
 
         const fetchQuote = async () => {
             try {
@@ -53,8 +55,8 @@ const UpdateQuote = () => {
                     text: responseData.quote.text,
                     author: responseData.quote.author.name,
                     tags: responseData.quote.tags.map((e,i) => (i > 0 ? ' ' : '') + e.name).toString(),
+                    isPublic: responseData.quote.isPublic
                 });
-
                 setFormData(
                     {
                         text: {
@@ -68,7 +70,11 @@ const UpdateQuote = () => {
                         tags: {
                             value: loadedQuote.tags.toString(),
                             isValid: true
-                        }      
+                        },
+                        isPublic: {
+                            value: loadedQuote.isPublic,
+                            isValid: true
+                        }  
                     }, 
                 true);
             } catch (error) {
@@ -83,26 +89,40 @@ const UpdateQuote = () => {
 
     const navigate = useNavigate();
 
+
+
     const submitHandler = async event => {
         event.preventDefault();
-        console.log("formState.inputs.tags.value", formState.inputs.tags.value, typeof(formState.inputs.tags.value))
-        console.log("formState.inputs.tags.value.length", formState.inputs.tags.value.length)
         let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
+            console.log(JSON.stringify({
+                text: formState.inputs.text.value,
+                author: formState.inputs.author.value,
+                tags: tagsString,
+                isPublic: formState.inputs.isPublic.value.toString()
+            }))
             await sendRequest(
                 `http://${window.location.hostname}:5000/api/quotes/${quoteId}`,
                 'PATCH',
                 JSON.stringify({
                     text: formState.inputs.text.value,
                     author: formState.inputs.author.value,
-                    tags: tagsString
+                    tags: tagsString,
+                    isPublic: formState.inputs.isPublic.value.toString()
                 }),
+                
+
+                
+
+                
                 { 
                     'Content-Type': 'application/json', 
                     Authorization: `Bearer ${currentAuth.token}` 
                 }
             );
-            navigate(`/${loadedQuote.userId}/quotes`)
+            console.log(quoteId.toString())
+            console.log("loadedQuote.isPublic: " + loadedQuote.isPublic + " - " + typeof(loadedQuote.isPublic))
+            navigate(`/quotes/${quoteId.toString()}`)
         } catch (error) {
             console.error(error);
             throw(error);
@@ -115,6 +135,7 @@ const UpdateQuote = () => {
 
     if (!loadedQuote && !clientError) { return <Card><h2>NO PLACE</h2></Card> }
     
+
     return (
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError}/>
@@ -148,6 +169,27 @@ const UpdateQuote = () => {
                     validators={[]}
                     onInput={inputHandler}
                     value={loadedQuote.tags}
+                    noResize
+                />
+
+                {/* <label>
+                    <input type="checkbox"
+                        defaultChecked={publicCheck}
+                        onChange={() => checkHandler(!publicCheck)}
+                    />
+                    PUBLIC!
+                </label>
+                 */}
+
+                <Input
+                    id="isPublic"
+                    type="checkbox"
+                    label="Public"
+                    validators={[]}
+                    onInput={inputHandler}
+                    // onChange={checkHandler}
+                    value={loadedQuote.isPublic}
+                    defaultChecked={loadedQuote.isPublic}
                     noResize
                 />
                 <Button type="submit" disabled={!loadedQuote}>Update</Button>

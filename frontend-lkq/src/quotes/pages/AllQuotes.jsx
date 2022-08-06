@@ -19,20 +19,17 @@ const AllQuotes = () => {
     try {
         paramElements = Object.entries(allParamElements).filter(e => !e.includes(null))[0]
         paramType = paramElements[0]
-        paramElements = paramElements.filter(f=>f != 'quote').join('/');
+        paramElements = paramElements.filter(f=>f !== 'quote').join('/');
         paramElements = '/' + paramElements;
     } catch (error) {
         paramElements = ''
         paramType = null
 
-    } finally {
-        console.log(paramElements, paramType)
-    }
+    } finally { }
     // paramElements = Object.entries(allParamElements).filter(e => !e.includes(null))[0].filter(f=>f != 'quote').join('/') || '';
     // // .reduce((p,c,i,r) => {
 
     // // }, '') || ''
-    console.log(paramElements)
 
     const [loadedQuotes, setLoadedQuotes] = useState(undefined);
 
@@ -44,10 +41,8 @@ const AllQuotes = () => {
     useEffect(() => {
         const fetchQuotes = async () => {
             const url = `http://${window.location.hostname}:${process.env.PORT||5000}/api/quotes${paramElements||''}`
-            console.log(url)
             try {
                 const responseData = await sendRequest(url);
-                console.log(typeof(responseData))
                 setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
             } catch (error) {};
         };

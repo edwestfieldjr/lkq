@@ -14,9 +14,6 @@ export const useHttpClient = (/* initialInputs, initialFormValidity */) => {
             activeHttpRequests.current.push(httpAbortController);
 
             try {
-                /**/
-                // [body, url, method, headers, httpAbortController.signal].forEach(e => {console.log(e)});
-                /**/
                 const response = await fetch(url, {
                     method,
                     body,
