@@ -7,7 +7,6 @@ import Avatar from '../../shared/components/UIElements/Avatar';
 import Card from '../../shared/components/UIElements/Card';
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/FormElements/Button';
-// import Map from '../../shared/components/UIElements/Map';
 import "./QuoteItem.css"
 
 const QuoteItem = props => {
@@ -16,27 +15,7 @@ const QuoteItem = props => {
     
     const currentAuth = useContext(AuthContext);
     
-    const [unplashAPIResponse, setUnplashAPIResponse] = useState(undefined);
-
-    
-    useEffect(() => {
-        const unplashReqest = async () => {
-            const response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${process.env.REACT_APP_UNSPLASH_API_ACCESS_KEY}&orientation=landscape&content_filter=high&query=backgrounds+inspiration+${(props.tags).map(e => e.name).join('+')}`);
-            const jsonRes = await response.json();
-            setUnplashAPIResponse(jsonRes)
-        }
-        unplashReqest().catch(console.error);
-    }, [props.tags])
-
-    console.log(unplashAPIResponse);
-
-
-
-    // const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-    // const openMapHandler = () => setShowMap(true);
-    // const closeMapHandler = () => setShowMap(false);
     
     const showDeleteWarningHandler = () => setShowConfirmModal(true);
 
@@ -79,17 +58,20 @@ const QuoteItem = props => {
                 <Card className="quote-item__content">
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="quote-item__image">
-                        <img src={`${unplashAPIResponse ? unplashAPIResponse.urls.full : null}`} />
+                        <img src={`https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${(props.tags).map(e => e.name).join(',')}`} alt="Courtesy: unsplash.com" />
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
-                        <h3><a target='new' href={props.author_ref_url}>{props.author_name}</a></h3>
-                        <p><a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
-                        {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)} 
+                        <h3><a target='new' href={`/quotes/user/${props.userId}`}>{props.author_name}</a></h3>
+                        {props.author_ref_img && <Avatar image={props.author_ref_img} alt={props.author_name} width="100px"/>}
+                        {props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
+                        <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)}</p> 
+                        <p>posted by: <a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
                     </div>
-                    <Avatar image={props.author_ref_img} alt={props.author_name} width="100px"/>
+
 
                     <div className="quote-item__actions">
+                        <div><p>Visible to {props.isPublic ? <span> Everyone </span> : <span> User and Admin </span>}</p></div>
                         { (currentAuth.userId === props.creatorId || currentAuth.isAdmin) && 
                             <Fragment>
                                 <Button to={`/quotes/edit/${props.id}`}>edit</Button>

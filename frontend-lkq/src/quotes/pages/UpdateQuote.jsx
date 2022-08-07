@@ -171,68 +171,22 @@ const UpdateQuote = () => {
                     value={loadedQuote.tags}
                     noResize
                 />
-
-                {/* <label>
-                    <input type="checkbox"
-                        defaultChecked={publicCheck}
-                        onChange={() => checkHandler(!publicCheck)}
-                    />
-                    PUBLIC!
-                </label>
-                 */}
-
                 <Input
                     id="isPublic"
                     type="checkbox"
                     label="Public"
                     validators={[]}
                     onInput={inputHandler}
-                    // onChange={checkHandler}
                     value={loadedQuote.isPublic}
                     defaultChecked={loadedQuote.isPublic}
                     noResize
                 />
                 <Button type="submit" disabled={!loadedQuote}>Update</Button>
+                <Button inverse type="button" onClick={() => { navigate(`/quotes/${quoteId.toString()}`) }} >Cancel</Button>
             </form>}
         </Fragment>
 
     );
-        {/* <Fragment>
-            <ErrorModal error={clientError} onClear={clearClientError} />
-            <form className="quote-form" onSubmit={quoteSubmitHandler}>
-                {isLoading && <LoadingSpinner asOverlay />}
-                <Input
-                    id="text"
-                    type="textarea"
-                    label="Quotation"
-                    placeholder="type here..."
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onInput={inputHandler}
-                    rows={5}
-                    noResize
-                />
-                <Input
-                    id="author"
-                    type="text"
-                    label="Author"
-                    placeholder="type here..."
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onInput={inputHandler}
-                    noResize
-                />
-                <Input
-                    id="tags"
-                    type="text"
-                    label="Categories/Tags"
-                    validators={[]}
-                    onInput={inputHandler}
-                    noResize
-                />
-                <Button type="submit" disabled={!formState.isValid}>+ (quote)</Button>
-            </form>
-            </Fragment> */}
-
-
 }
 
 export default UpdateQuote;

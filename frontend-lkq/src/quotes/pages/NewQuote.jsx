@@ -30,14 +30,14 @@ const NewQuote = () => {
         },
         author: {
             value: '',
-            isValid: false
+            isValid: true
         },
         tags: {
             value: '',
             isValid: true
         },
         isPublic: {
-            value: '',
+            value: Boolean(false),
             isValid: true
         }
     }, false);
@@ -48,22 +48,31 @@ const NewQuote = () => {
         event.preventDefault();
         let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
-            await sendRequest(
+            const response = await sendRequest(
                 `http://${window.location.hostname}:5000/api/quotes`, 
                 'POST',
                 JSON.stringify({
                     text: formState.inputs.text.value,
                     author: formState.inputs.author.value,
                     tags: tagsString,
-                    isPublic: formState.inputs.isPublic
+                    isPublic: formState.inputs.isPublic.value.toString()
                 }),
                 {   
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${currentAuth.token}` 
                 }
             );
-            navigate('/allquotes');
-            // navigate('/');
+            let exitRoute, exitId;
+            console.log(response.quote._id)
+            try {
+                exitId = response.quote._id;
+                exitRoute =`/quotes/${exitId}`;
+            } catch (error) {
+                exitRoute = `/quotes/user/${currentAuth.userId}` || `/quotes`;
+                throw (error);
+            } finally {
+                navigate(exitRoute);;
+            }
         } catch (error) {
             throw (error);
         }
@@ -104,7 +113,19 @@ const NewQuote = () => {
                     onInput={inputHandler}
                     noResize
                 />
-                <Button type="submit" disabled={!formState.isValid}> Add new quote </Button>
+                <Input
+                    id="isPublic"
+                    type="checkbox"
+                    label="Public"
+                    validators={[]}
+                    onInput={inputHandler}
+                    value={false}
+                    defaultChecked={false}
+                    noResize
+                />
+                <Button type="submit" disabled={!formState.inputs.text.isValid}> Add new quote </Button>
+                <Button inverse type="button" onClick={() => { navigate(`/quotes/user/${currentAuth.userId}` || `/quotes`) }} >Cancel</Button>
+
             </form>
         </Fragment>
     );

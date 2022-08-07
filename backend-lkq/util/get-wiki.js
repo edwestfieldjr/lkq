@@ -1,7 +1,6 @@
 const wiki = require('wikijs').default;
 
 async function getWiki(terms) {
-    console.log('terms:', terms, typeof(terms));
     try {    
         if (terms && terms.length > 0) {
             const result = async (terms) => await wiki().search(terms, 1, true)

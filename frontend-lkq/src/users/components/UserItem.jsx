@@ -10,7 +10,7 @@ const UserItem = props => {
         <li>
             <div className="user-item">
                 <Card className="user-item__content">
-                    <Link to={`/${props.id}/quotes`}>
+                    <Link to={`/quotes/user/${props.id}`}>
                         <div className="user-item__info">
                             <h2>{props.name}</h2>
                             <h3>{props.quoteCount > 0 ? props.quoteCount : 'No' } {props.quoteCount === 1 ? "quote" : "quotes"}</h3>

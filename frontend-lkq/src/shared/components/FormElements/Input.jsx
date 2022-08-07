@@ -41,7 +41,6 @@ const Input = props => {
             val: event.target.type === "checkbox" ? event.target.checked : event.target.value,
             validators: props.validators
         })
-        console.log(inputState)
     };
 
     const touchHandler = event => {

@@ -1,5 +1,7 @@
 .quote-item {
   margin: 1rem 0;
+  min-width: 100%;
+
 }
 
 .quote-item__content {

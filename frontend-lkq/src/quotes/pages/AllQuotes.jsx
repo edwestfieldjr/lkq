@@ -6,37 +6,13 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 
-const AllQuotes = () => {
+const AllQuotes = props => {
 
-    const allParamElements = {
-        quote: useParams().quoteId || null,
-        user: useParams().userId || null,
-        author: useParams().authorId || null,
-        tag: useParams().tagId || null
-    }
-
-    let paramElements, paramType;
-    try {
-        paramElements = Object.entries(allParamElements).filter(e => !e.includes(null))[0]
-        paramType = paramElements[0]
-        paramElements = paramElements.filter(f=>f !== 'quote').join('/');
-        paramElements = '/' + paramElements;
-    } catch (error) {
-        paramElements = ''
-        paramType = null
-
-    } finally { }
-    // paramElements = Object.entries(allParamElements).filter(e => !e.includes(null))[0].filter(f=>f != 'quote').join('/') || '';
-    // // .reduce((p,c,i,r) => {
-
-    // // }, '') || ''
-
+    const paramType = props.paramType;
+    const paramId = useParams().paramId;
+    const paramElements = (paramType ? ((paramType !== 'quote' ? '/'+paramType : '') + ('/'+paramId) ) : '')
     const [loadedQuotes, setLoadedQuotes] = useState(undefined);
-
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
-
- 
-    
 
     useEffect(() => {
         const fetchQuotes = async () => {
@@ -44,10 +20,10 @@ const AllQuotes = () => {
             try {
                 const responseData = await sendRequest(url);
                 setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
-            } catch (error) {};
+            } catch (error) { };
         };
         fetchQuotes();
-    }, [sendRequest]);
+    }, [sendRequest, paramType, paramElements]);
 
     const quoteDeletedHandler = deletedQuoteId => {
         setLoadedQuotes(prev => prev.filter(quote => quote.id !== deletedQuoteId))
@@ -60,7 +36,6 @@ const AllQuotes = () => {
 
             {!isLoading && loadedQuotes && <QuoteList items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
         </Fragment>
-
     );
 }
 

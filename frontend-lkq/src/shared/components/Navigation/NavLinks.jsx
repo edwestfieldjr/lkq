@@ -11,7 +11,7 @@ const NavLinks = props => {
                 {!currentAuth.isLoggedIn ? <span>Not l</span> : <span>L</span>}ogged in {currentAuth.isLoggedIn && <span>as <strong>{currentAuth.name}</strong> ({!currentAuth.isAdmin ? 'Non-a' : 'A'}dmin)</span> } 
 
             </li>
-            {currentAuth.isAdmin && <li onClick={props.onClick}><NavLink exact="true" to="/">ALL USERS</NavLink></li>}
+            {currentAuth.isAdmin && <li onClick={props.onClick}><NavLink exact="true" to="/users">ALL USERS</NavLink></li>}
             {currentAuth.isLoggedIn && <li onClick={props.onClick}><NavLink to={`/quotes/user/${currentAuth.userId}`}>MY QUOTES</NavLink></li>}
             {currentAuth.isLoggedIn && <li onClick={props.onClick}><NavLink to={`/quotes`}>ALL QUOTES</NavLink></li>}
             {currentAuth.isLoggedIn && <li onClick={props.onClick}><NavLink to="/quotes/new">ADD A QUOTE</NavLink></li>}

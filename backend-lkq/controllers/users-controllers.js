@@ -34,7 +34,6 @@ const signup = async (req, res, next) => {
     try {
         existingUser = await User.findOne({ email });
     } catch (error) {
-        console.log("error triggered")
         return next(new HttpError(error))
     };
     if (existingUser) {
@@ -94,13 +93,6 @@ const login = async (req, res, next) => {
     const email = normalizeEmail(req.body.email), password = req.body.password;
 
 
-    /* TESTING BLOCK */
-    // try {
-    //     console.log("req.userData.userID ::: " + req.userData.userID)
-    // } catch (error) {
-    //     return next(new HttpError(error))
-    // };
-    /* * * * * * * * */
 
     let existingUser;
     try {

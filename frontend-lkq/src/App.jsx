@@ -5,7 +5,6 @@ import Auth from './users/pages/Auth';
 import NewQuote from './quotes/pages/NewQuote';
 import UpdateQuote from './quotes/pages/UpdateQuote';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-import UserQuotes from './quotes/pages/UserQuotes';
 import AllQuotes from './quotes/pages/AllQuotes';
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
@@ -23,13 +22,13 @@ const App = () => {
         routes = (
             <Fragment>
             
-                <Route exact path="/" element={<Navigate replace to="/users" />} />
+                <Route exact path="/" element={<Navigate replace to="/quotes" />} />
                 <Route exact path="/users" element={<Users />} />
                 <Route exact path="/quotes" element={<AllQuotes />} />
-                <Route exact path="/quotes/:quoteId" element={<AllQuotes />} />
-                <Route exact path="/quotes/user/:userId" element={<AllQuotes />} />
-                <Route exact path="/quotes/author/:authorId" element={<AllQuotes />} />
-                <Route exact path="/quotes/tag/:tagId" element={<AllQuotes />} />
+                <Route exact path="/quotes/:paramId" element={<AllQuotes paramType="quote" />} />
+                <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
+                <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
+                <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
                 <Route exact path="/quotes/new" element={<NewQuote />} />
                 <Route exact path="/quotes/edit/:quoteId" element={<UpdateQuote />} />
 
@@ -44,14 +43,13 @@ const App = () => {
     } else {
         routes = (
             <Fragment>
-                <Route exact path="/" element={<Navigate replace to="/users" />} />
+                <Route exact path="/" element={<Navigate replace to="/quotes" />} />
                 <Route exact path="/users" element={<Users />} />
                 <Route exact path="/quotes" element={<AllQuotes />} />
-                <Route exact path="/quotes/:quoteId" element={<AllQuotes />} />
-                <Route exact path="/quotes/user/:userId" element={<AllQuotes />} />
-                <Route exact path="/quotes/author/:authorId" element={<AllQuotes />} />
-                <Route exact path="/quotes/tag/:tagId" element={<AllQuotes />} />
-                {/* <Route exact path="/:userId/quotes" element={<UserQuotes />} /> */}
+                <Route exact path="/quotes/:paramId" element={<AllQuotes paramType="quote" />} />
+                <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
+                <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
+                <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
                 <Route exact path="/auth" element={<Auth />} />
 
                 {/* REDIRECT ROUTE */}

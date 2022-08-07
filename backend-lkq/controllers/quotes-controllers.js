@@ -85,7 +85,6 @@ const getQuoteById = async (req, res, next) => {
 
 const getQuotesByUserId = async (req, res, next) => {
     const userId = req.params.uid
-    console.log('getQuotesByUserId', userId);
     let userWithQuotes;
     try {
         userWithQuotes = await User.findById(userId).select('-password').populate([{
@@ -222,18 +221,6 @@ const constructQuote = async (req, res, next) => {
     let isPublic = req.body.isPublic;
 
 
-    // console.log(tags);
-    // if (tags && typeof tags === 'string') {
-    //     tags.replace("\"", "\'")
-    //     tags = eval(tags);
-    // }
-    // console.log(tags);
-    
-    // if (tags && typeof tags === 'object' && typeof tags.length === 'number') {
-    //     tags = tags.map(e => e.toLowerCase());
-    // } else {
-    //     return next(new HttpError("Data sent in the request does not contain valid fields/values.", 422));
-    // }
 
     let authorInfo
     if (author && author.length > 0) {
@@ -419,9 +406,8 @@ const constructQuote = async (req, res, next) => {
 
     try {
         quoteConstructed.tags = quoteConstructedNewTags
-        
+        quoteConstructed.isPublic = eval(isPublic)
         if (req.params.qid !== undefined) {
-            quoteConstructed.isPublic = eval(isPublic)
             quoteConstructed.text = text;
             quoteConstructed.author = authorExisting._id;
         }
@@ -439,7 +425,6 @@ const deleteQuote = async (req, res, next) => {
     const quoteId = req.params.qid
     let quote, author, tags, creator;
     
-    console.log('quoteId: ' + quoteId)
 
     try {
         quote = await Quote.findById(quoteId)/*.populate('creator').populate('author').populate('tags')*/;
@@ -459,7 +444,6 @@ const deleteQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    console.log([creator._id.toString(), ...adminIds], currentUserId.toString())
     if (creator && ![creator._id.toString(), ...adminIds].includes(currentUserId.toString()) ) {
         return next(new HttpError("Unauthorized to Delete", 401));
     }
