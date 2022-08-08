@@ -110,11 +110,6 @@ const UpdateQuote = () => {
                     tags: tagsString,
                     isPublic: formState.inputs.isPublic.value.toString()
                 }),
-                
-
-                
-
-                
                 { 
                     'Content-Type': 'application/json', 
                     Authorization: `Bearer ${currentAuth.token}` 

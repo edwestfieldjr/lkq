@@ -220,7 +220,8 @@ const constructQuote = async (req, res, next) => {
     let tags = [...new Set(req.body.tags.toString().split(',').map(e=>e.trim().toLowerCase()))].sort() || [];
     let isPublic = req.body.isPublic;
 
-
+    if (author.trim().length <= 0) { author = "Anonymous"; }
+    if (tags.length === 1 && String(tags[0]).trim().length <= 0) { tags = []; }
 
     let authorInfo
     if (author && author.length > 0) {
@@ -249,8 +250,10 @@ const constructQuote = async (req, res, next) => {
 
         if (authorInfo) {
             authorCreated.name = authorInfo.name;
-            authorCreated.ref_url = authorInfo.url;
-            authorCreated.ref_img = authorInfo.img;
+            if (authorCreated.name !== "Anonymous") {
+                authorCreated.ref_url = authorInfo.url;
+                authorCreated.ref_img = authorInfo.img;
+            }
         }   
 
         try {
@@ -432,11 +435,16 @@ const deleteQuote = async (req, res, next) => {
         return next(new HttpError(error));
     }
 
-    [author, tags, creator] = [quote.author, quote.tags, quote.creator];
-
     if (!quote) {
         return next(new HttpError("Could not find quote with the id provided", 404));
     }
+
+    try {
+        [author, tags, creator] = [quote.author, quote.tags, quote.creator];
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+    
 
     let adminIds;
     try {
@@ -449,7 +457,8 @@ const deleteQuote = async (req, res, next) => {
     }
 
     try {
-        await Quote.findOneAndDelete({ id: quoteId })
+        console.log(quoteId, typeof(quoteId))
+        await Quote.findByIdAndDelete(quoteId);
     } catch (error) {
         return next(new HttpError(error));
     }
@@ -458,7 +467,7 @@ const deleteQuote = async (req, res, next) => {
     try {
         await User.updateOne(
             { _id: currentUserId.toString() },
-            { $pull: { 'quotes': quoteId.toString() } },
+            { $pull: { 'quotes': quoteId } },
             { returnNewDocument: true, returnOriginal: false }
         );
     } catch (error) {
@@ -468,7 +477,7 @@ const deleteQuote = async (req, res, next) => {
     try {
         await Author.updateOne(
             { _id: mongoose.Types.ObjectId(author.toString()) },
-            { $pull: { 'quotes': quoteId.toString() } },
+            { $pull: { 'quotes': quoteId } },
             { returnNewDocument: true, returnOriginal: false }
         );
     } catch (error) {
@@ -479,7 +488,7 @@ const deleteQuote = async (req, res, next) => {
         try {
             await Tag.updateOne(
                 { _id: mongoose.Types.ObjectId(tag.toString()) },
-                { $pull: { 'quotes': quoteId.toString() } },
+                { $pull: { 'quotes': quoteId } },
                 { returnNewDocument: true, returnOriginal: false }
             );
         } catch (error) {

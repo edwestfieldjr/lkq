@@ -51,7 +51,7 @@ const QuoteItem = props => {
                         <Button danger onClick={confirmDeleteHandler} >DELETE</Button>
                     </Fragment>
             }>
-                <p>Do you want to delete this quote? </p>
+                <p>Do you want to delete this quote? by {props.author_name} (quote: {props.text}).</p>
             </Modal>
             
             <li className="quote-item">

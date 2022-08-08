@@ -1,6 +1,6 @@
 # LKQ: Your Favorite Quotes
 #### CS50x Final Project, ©2022 
-#### **Edward Francis Westfield Jr.**<br/>East Lansing, MI &#127482;&#127480; USA<br/>ed.westfield.jr@gmail.com
+#### **Edward Francis Westfield Jr.**<br/>East Lansing, Michigan &#127482;&#127480; USA<br/>ed.westfield.jr@gmail.com
 ---
 #### Video Demo:  <URL HERE>
 #### Live Test Site:  <URL HERE>
@@ -32,19 +32,11 @@ The user has the ability to edit and delete the quotes they have posted, and als
 
 After sitting through the CS50x course earluer this yeet, I knew that I wanted to build a full stack website from the ground up. MERN full-stacks developer skills seem to be very popular and currenly in-demand. so researched and studied how to do it. 
 
-This meant brushing up on both “vanilla” JavaScript as wella s the 'jsx" sytanx of React. I learned more about MongoDB, which unlike SQL is non-relational, and thus, is more scalable and malleable database, and I learned more about Mongoose, the JavaScript library that creates an relational-like connection between MongoDB and the node backend. 
-
-I studied how to build and Express.js server and how it intereacts with thea react front end in how to route and authenticate information,  I also brushed up on my html and css.
-
-
-If working with one or two classmates, who will do what?
-In the world of software, most everything takes longer to implement than you expect. And so it’s not uncommon to accomplish less in a fixed amount of time than you hope. What might you consider to be a good outcome for your project? A better outcome? The best outcome?
-
-The implementation is fairly simple, to keep the project scope in check. I wanted to make a project like this to expand my knowledge of Node JS and of techniques like buffer piping from database to client, role based authentications, etc.
+This meant brushing up on both “vanilla” JavaScript as wella s the 'jsx" sytanx of React. I studied how to build and Express.js server and how it intereacts with the react front-end in how to route and authenticate information. I brushed up on my html and css. For the database end, I learned more about MongoDB, which unlike SQL is non-relational, and thus, is more scalable and malleable database. I learned more about Mongoose, the JavaScript library that creates an relational-like connection between MongoDB and the node backend, and I learned more about the difference between one-to-one and one-to-many relationships, and how to set them up in proper database schemas. 
 
 ###  How is this  it be executed?
 
-A full-stack MERN application is essentially two Node.js servers running side-by-side, with the backend API running Express.js and communicating with the database server. The "frontend" sends requests and receives the from the backend and constructs the web content as requested by the user 
+A full-stack MERN application is essentially two Node.js servers running side-by-side, with the backend API running Express.js and communicating with the database server. The "frontend" sends requests and receives the from the backend and constructs the web content as inputted and requested by the user.  
 
 #### Software Packages, Dependencies & API's Installed, Employed or Deployed in this App (selected list):
 
@@ -56,21 +48,13 @@ A full-stack MERN application is essentially two Node.js servers running side-by
 - create-react-app
 - wikijs
 - bCrypt
-- unsplash.com (for backgruong imafge )
+- unsplash.com API 
 
 #### Languages:
 
-- JavaScript/JSX
-- HTML/CSS
-Sofware Packages Installed or Deplyed used:
-
-- Node.js 
-- Express.js
-- React
-- MongoDB
-- sqlite3
-- ejs
-- other libraries or packages via npm
+- JavaScript
+- HTML
+- CSS
 
 ### What I have learend... 
 
