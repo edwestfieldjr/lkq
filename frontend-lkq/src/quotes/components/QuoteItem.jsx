@@ -39,7 +39,14 @@ const QuoteItem = props => {
         }
     };
 
-
+    const photoSearchSynonyms = [
+        ["inspiring", "encouraging", "exciting", "exhilarating", "heartening", "inspirational", "uplifting"],
+        ["landscape", "panoramic", "scenery", "exhilarating", "vista", "pastoral", "uplifting"],
+        ["tranquil", "calm", "restful", "pleasant", "quiet", "still", "relaxing", "soothing", "undisturbed"]
+    ]; // three indexes
+    let photoSearchSynonymsString = photoSearchSynonyms.map(e => e[Math.floor(Math.random()*e.length)]).join(',');
+    console.log(photoSearchSynonyms.map(e => e[Math.floor(Math.random()*e.length)]).join(','));
+    console.log("====")
 
     return (
         <Fragment>
@@ -54,11 +61,16 @@ const QuoteItem = props => {
                 <p>Do you want to delete this quote? by {props.author_name} (quote: {props.text}).</p>
             </Modal>
             
-            <li className="quote-item">
-                <Card className="quote-item__content">
+            <li className="quote-item" >
+                <Card className="quote-item__content" /* style={{  
+                    backgroundImage: `url("https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${(props.tags).map(e => e.name).join(',')}")`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat'
+                }} */>
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="quote-item__image">
-                        <img src={`https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${(props.tags).map(e => e.name).join(',')}`} alt="Courtesy: unsplash.com" />
+                        <img src={`https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${photoSearchSynonyms.map(e => e[Math.floor(Math.random()*e.length)]).join(',')}${props.tags.length &&','}${props.tags.map(e => e.name).join(',')}`} alt="Courtesy: unsplash.com" />
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
@@ -74,8 +86,8 @@ const QuoteItem = props => {
                         <div><p>Visible to {props.isPublic ? <span> Everyone </span> : <span> User and Admin </span>}</p></div>
                         { (currentAuth.userId === props.creatorId || currentAuth.isAdmin) && 
                             <Fragment>
-                                <Button to={`/quotes/edit/${props.id}`}>edit</Button>
-                                <Button danger onClick={showDeleteWarningHandler}>delete</Button>
+                                <Button to={`/quotes/edit/${props.id}`}>Edit</Button>
+                                <Button danger onClick={showDeleteWarningHandler}>Delete</Button>
                             </Fragment> 
                         }
                     </div>

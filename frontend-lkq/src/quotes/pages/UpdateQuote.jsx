@@ -177,7 +177,7 @@ const UpdateQuote = () => {
                     noResize
                 />
                 <Button type="submit" disabled={!loadedQuote}>Update</Button>
-                <Button inverse type="button" onClick={() => { navigate(`/quotes/${quoteId.toString()}`) }} >Cancel</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(`/quotes/${quoteId.toString()}`) }} >Cancel</Button>
             </form>}
         </Fragment>
 

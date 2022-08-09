@@ -17,8 +17,9 @@
 
 .button:hover,
 .button:active {
-  background: #7A9EB1 ;
+  background: white ;
   border-color: #7A9EB1 ;
+  color: #7A9EB1 ;
 }
 
 .button--inverse {
@@ -40,6 +41,20 @@
 .button--danger:hover,
 .button--danger:active {
   background: #f34343;
+  border-color: #f34343;
+}
+
+
+.button--danger--inverse {
+  color: #830000;
+  background: white;
+  border-color: #830000;
+}
+
+.button--danger--inverse:hover,
+.button--danger--inverse:active {
+  background: #f34343;
+  color: white;
   border-color: #f34343;
 }
 

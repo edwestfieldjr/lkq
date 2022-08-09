@@ -124,7 +124,7 @@ const NewQuote = () => {
                     noResize
                 />
                 <Button type="submit" disabled={!formState.inputs.text.isValid}> Add new quote </Button>
-                <Button inverse type="button" onClick={() => { navigate(`/quotes/user/${currentAuth.userId}` || `/quotes`) }} >Cancel</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(`/quotes/user/${currentAuth.userId}` || `/quotes`) }} >Cancel</Button>
 
             </form>
         </Fragment>
