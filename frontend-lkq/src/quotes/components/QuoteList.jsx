@@ -28,6 +28,7 @@ const QuoteList = props => {
                             key={quote.id} 
                             id={quote.id} 
                             text={quote.text} 
+                            authorId={quote.author.id}
                             author_name={quote.author.name}
                             author_ref_url={quote.author.ref_url}
                             author_ref_img={quote.author.ref_img}
