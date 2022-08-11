@@ -14,12 +14,12 @@ const { countDocuments } = require('../models/quote');
 const getAdminIds = async () => {
     let adminUser;
     try {
-        adminUser = await User.find({ 'isAdmin' : 'true' })
+        adminUser = await User.find({ 'isAdmin': 'true' })
         // adminUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
     } catch (error) {
         return error;
     }
-    return await adminUser.map(e=>e._id.toString());
+    return await adminUser.map(e => e._id.toString());
 }
 
 
@@ -151,15 +151,17 @@ const getQuotesByTagId = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    if (!tagWithQuotes || tagWithQuotes.quotes.length <= 0) {
-        return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
-    } else {
-        try {
+
+    try {
+        if (!tagWithQuotes || tagWithQuotes.quotes.length <= 0) {
+            return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
+        } else {
             return res.json({ quotes: tagWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
-        } catch (error) {
-            return next(new HttpError(error));
         }
+    } catch (error) {
+        return next(new HttpError(error));
     }
+
 }
 
 const getQuotesByAuthorId = async (req, res, next) => {
@@ -180,7 +182,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
                     path: 'tags',
                     model: 'Tag',
                     select: '_id name',
-                }, 
+                },
                 {
                     path: 'creator',
                     model: 'User',
@@ -204,6 +206,124 @@ const getQuotesByAuthorId = async (req, res, next) => {
     }
 }
 
+const getQuotesBySearchTerm = async (req, res, next) => {
+    // console.log("trigger")
+    // return res.json(req.params.term});
+
+    let searchResults = []
+    try {
+        searchResults = await Quote.find(
+            { "text": { "$regex": req.params.term, "$options": "i" } }
+        ).populate([{
+            path: 'author',
+            model: 'Author',
+            select: 'name ref_url ref_img'
+        }, {
+            path: 'tags',
+            model: 'Tag',
+            select: 'name'
+        }, {
+            path: 'creator',
+            model: 'User',
+            select: 'name'
+        }]);
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+    let authorAndTagSearchResults = [];
+    for (schema of [Author, Tag])
+        try {
+            authorAndTagSearchResults.push(await schema.find(
+                { "name": { "$regex": req.params.term, "$options": "i" } }
+            ).populate({
+                path: 'quotes',
+                model: 'Quote',
+                select: '_id text',
+                populate: [
+                    {
+                        path: 'author',
+                        model: 'Author',
+                        select: 'name ref_url ref_img'
+                    },
+                    {
+                        path: 'tags',
+                        model: 'Tag',
+                        select: 'name'
+                    },
+                    {
+                        path: 'creator',
+                        model: 'User',
+                        select: 'name'
+                    }
+                ]
+            }));
+        } catch (error) {
+            return next(new HttpError(error));
+        }
+
+    let tagSearchResults;
+    try {
+        tagSearchResults = await Tag.find(
+            { "name": { "$regex": req.params.term, "$options": "i" } }
+        ).populate([{
+            path: 'quotes',
+            model: 'Quote',
+            select: '_id text',
+            populate: [
+                {
+                    path: 'author',
+                    model: 'Author',
+                    select: '_id name ref_url ref_img'
+                },
+                {
+                    path: 'tags',
+                    model: 'Tag',
+                    select: '_id name'
+                },
+                {
+                    path: 'creator',
+                    model: 'User',
+                    select: '_id name'
+                }
+            ]
+        }]);
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+    // // searchResults = searchResults
+    //     .concat(authorSearchResults ? Array(authorSearchResults.quotes)
+    //         // .map(quote => quote.toObject({ getters: true }))
+    //          : []) 
+    //     .concat(authorSearchResults ? Array(tagSearchResults.quotes)
+    //         // .map(quote => quote.toObject({ getters: true })) 
+    //         : [])
+
+    console.log(searchResults)
+    try { 
+        console.log("313", authorAndTagSearchResults.flat().map(records => records.quotes) )
+    } catch (error) { 
+        console.log(error.message) 
+    }
+
+    try {
+        if (!searchResults.length && !authorAndTagSearchResults.length) {
+            return next(new HttpError("No quotes found", 404))
+        } else {
+            return res.json({
+                quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : [])
+                    .concat((authorAndTagSearchResults.length)
+                        ? authorAndTagSearchResults.flat().map(records => records.quotes.toObject({ getters: true })).flat() : []).flat()
+            })
+        };
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+};
+
+
 const constructQuote = async (req, res, next) => {
     currentUserId = req.userData.userId;
 
@@ -217,7 +337,7 @@ const constructQuote = async (req, res, next) => {
     }
 
     let { text, author } = req.body;
-    let tags = [...new Set(req.body.tags.toString().split(',').map(e=>e.trim().toLowerCase()))].sort() || [];
+    let tags = [...new Set(req.body.tags.toString().split(',').map(e => e.trim().toLowerCase()))].sort() || [];
     let isPublic = req.body.isPublic;
 
     if (author.trim().length <= 0) { author = "Anonymous"; }
@@ -254,7 +374,7 @@ const constructQuote = async (req, res, next) => {
                 authorCreated.ref_url = authorInfo.url;
                 authorCreated.ref_img = authorInfo.img;
             }
-        }   
+        }
 
         try {
             await authorCreated.save(/*{ session: currentSession,  validateModifiedOnly: true}*/);
@@ -309,18 +429,18 @@ const constructQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    
-    
+
+
     if (!user) {
         return next(new HttpError("Could not find user with the id provided"));
     } else if (req.params.qid !== undefined &&
-        ![quoteConstructed.creator._id.toString(), ...adminIds].includes(currentUserId.toString() )) {
+        ![quoteConstructed.creator._id.toString(), ...adminIds].includes(currentUserId.toString())) {
         return next(new HttpError("Unauthorized to construct this quote", 401));
     }
 
     try {
-        if (req.params.qid === undefined)  { 
-            user.quotes.push(quoteConstructed); 
+        if (req.params.qid === undefined) {
+            user.quotes.push(quoteConstructed);
         }
         if (!(authorExisting.quotes.includes(quoteConstructed._id))) { authorExisting.quotes.push(quoteConstructed); }
         await user.save(/*{ session: currentSession, validateModifiedOnly: true}*/);
@@ -427,7 +547,7 @@ const deleteQuote = async (req, res, next) => {
     currentUserId = req.userData.userId;
     const quoteId = req.params.qid
     let quote, author, tags, creator;
-    
+
 
     try {
         quote = await Quote.findById(quoteId)/*.populate('creator').populate('author').populate('tags')*/;
@@ -444,7 +564,7 @@ const deleteQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    
+
 
     let adminIds;
     try {
@@ -452,12 +572,12 @@ const deleteQuote = async (req, res, next) => {
     } catch (error) {
         return next(new HttpError(error));
     }
-    if (creator && ![creator._id.toString(), ...adminIds].includes(currentUserId.toString()) ) {
+    if (creator && ![creator._id.toString(), ...adminIds].includes(currentUserId.toString())) {
         return next(new HttpError("Unauthorized to Delete", 401));
     }
 
     try {
-        console.log(quoteId, typeof(quoteId))
+        console.log(quoteId, typeof (quoteId))
         await Quote.findByIdAndDelete(quoteId);
     } catch (error) {
         return next(new HttpError(error));
@@ -508,6 +628,7 @@ module.exports = {
     getQuotesByUserId,
     getQuotesByTagId,
     getQuotesByAuthorId,
+    getQuotesBySearchTerm,
     constructQuote,
     deleteQuote
 };

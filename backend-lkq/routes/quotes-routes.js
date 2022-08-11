@@ -1,13 +1,13 @@
 const express = require("express");
 const { check } = require('express-validator');
 
-
 const { 
     getAllQuotes,
     getQuoteById, 
     getQuotesByUserId,
     getQuotesByTagId,
     getQuotesByAuthorId, 
+    getQuotesBySearchTerm, 
     constructQuote, 
     deleteQuote 
 } = require('../controllers/quotes-controllers')
@@ -28,6 +28,8 @@ router.get("/tag/:tid", getQuotesByTagId);
 
 router.get("/author/:aid", getQuotesByAuthorId);
 
+router.get("/search/:term", getQuotesBySearchTerm);
+
 router.use(checkAuth); 
 
 const userAuth = [
@@ -47,5 +49,7 @@ router.patch("/:qid", userAuth, constructQuote);
 // 'DELETE' route(s)
 
 router.delete("/:qid", deleteQuote);
+
+
 
 module.exports = router;

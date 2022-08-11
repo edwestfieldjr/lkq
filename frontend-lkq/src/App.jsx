@@ -4,6 +4,7 @@ import Users from './users/pages/Users';
 import Auth from './users/pages/Auth';
 import NewQuote from './quotes/pages/NewQuote';
 import UpdateQuote from './quotes/pages/UpdateQuote';
+import SearchQuote from './quotes/pages/SearchQuote';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import AllQuotes from './quotes/pages/AllQuotes';
 import { AuthContext } from './shared/context/AuthContext';
@@ -29,6 +30,8 @@ const App = () => {
                 <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
                 <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
                 <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
+                <Route exact path="/quotes/search/:paramId" element={<AllQuotes paramType="search" />} />
+                <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/quotes/new" element={<NewQuote />} />
                 <Route exact path="/quotes/edit/:quoteId" element={<UpdateQuote />} />
 
@@ -50,6 +53,8 @@ const App = () => {
                 <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
                 <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
                 <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
+                <Route exact path="/quotes/search/:term" element={<AllQuotes paramType="search" />} />
+                <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/auth" element={<Auth />} />
 
                 {/* REDIRECT ROUTE */}
@@ -60,7 +65,6 @@ const App = () => {
                     }
                 />
             </Fragment>
-
         )
     };
 
