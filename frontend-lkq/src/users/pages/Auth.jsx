@@ -53,6 +53,7 @@ const Auth = () => {
 
     const authSubmitHandler = async event => {
         event.preventDefault();
+        console.log(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`)
 
         if (isLoginMode) {
             try {

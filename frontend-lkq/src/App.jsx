@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
 
+import Users from './users/pages/Users';
+import Auth from './users/pages/Auth';
+
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
-const Users = React.lazy(() => import('./users/pages/Users'));
-const Auth = React.lazy(() => import('./users/pages/Auth'));
 const NewQuote = React.lazy(() => import('./quotes/pages/NewQuote'));
 const UpdateQuote = React.lazy(() => import('./quotes/pages/UpdateQuote'));
 const SearchQuote = React.lazy(() => import('./quotes/pages/SearchQuote'));
