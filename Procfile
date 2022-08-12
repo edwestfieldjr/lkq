@@ -1,2 +1,2 @@
-web: cd frontend_lkq && npm start
-worker: cd backend_lkq && npm start
+web: cd frontend-lkq && npm start
+worker: cd backend-lkq && npm start
