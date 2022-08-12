@@ -49,7 +49,7 @@ const UpdateQuote = () => {
 
         const fetchQuote = async () => {
             try {
-                const responseData = await sendRequest(`http://${window.location.hostname}:5000/api/quotes/${quoteId}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${quoteId}`);
                 setLoadedQuote({
                     userId: responseData.quote.creator.id,
                     text: responseData.quote.text,

@@ -61,7 +61,7 @@ const Input = props => {
                 rows={props.rows || (Element === "textarea" ? 3 : null)}
                 onChange={changeHandler}
                 onBlur={touchHandler}
-                value={/* props.value.type !== "checkbox" ?  */inputState.value/*  : (!!props.defaultChecked || null)  */}
+                value={inputState.value}
                 defaultChecked={props.defaultChecked}
                 style={props.noResize && {resize: 'none'}}
             />

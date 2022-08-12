@@ -21,7 +21,7 @@ const QuoteList = props => {
     useEffect(() => {
         if (["author","tag","user"].includes(paramType)) {
         const fetchParam = async () => {
-            const url = `http://${window.location.hostname}:${process.env.PORT||5000}/api/quotes/getparam/${paramType}/${paramId}`
+            const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/getparam/${paramType}/${paramId}`
             try {
                 const responseData = await sendRequest(url);
                 setTitleParam(responseData.result);

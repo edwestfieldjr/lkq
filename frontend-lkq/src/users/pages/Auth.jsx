@@ -57,8 +57,7 @@ const Auth = () => {
         if (isLoginMode) {
             try {
                 const responseData = await sendRequest(
-                    // 'http://localhost:5000/api/users/login',
-                    `http://${window.location.hostname}:5000/api/users/login`,
+                    `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/login`,
                     'POST',
                     JSON.stringify({
                         email: formState.inputs.email.value,
@@ -73,8 +72,7 @@ const Auth = () => {
         } else {
             try {
                 const responseData = await sendRequest(
-                    // 'http://localhost:5000/api/users/signup',
-                    `http://${window.location.hostname}:5000/api/users/signup`,
+                    `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/users/signup`,
                     'POST',
                     JSON.stringify({
                         name: formState.inputs.name.value,
@@ -109,7 +107,7 @@ const Auth = () => {
                             noResize
                         />
                     )}
-                    {/* {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} errorText="Please select an image." center />} */}
+
                     <Input
                         id="email"
                         type="email"
@@ -128,7 +126,6 @@ const Auth = () => {
                         autoComplete="off"
                         validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(PW_MIN_LENGTH)]}
                         onInput={inputHandler}
-                        // rows={5}
                         noResize
                     />{!isLoginMode && (
                         <Input
@@ -137,9 +134,8 @@ const Auth = () => {
                             label="Re-enter Password"
                             placeholder="type here..."
                             autoComplete="off"
-                            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(PW_MIN_LENGTH), VALIDATOR_PASSWORD_MATCH(formState.inputs.password.value/* reEnteredPassword *//* checkMatchedPassword.toString() */)]}
+                            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(PW_MIN_LENGTH), VALIDATOR_PASSWORD_MATCH(formState.inputs.password.value)]}
                             onInput={inputHandler}
-                            // rows={5}
                             noResize
                         />
                     )}

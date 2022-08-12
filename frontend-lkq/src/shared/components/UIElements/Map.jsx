@@ -30,6 +30,3 @@ const Map = props => {
 };
 
 export default Map;
-
-
-// Google Maps api key = AIzaSyDTW3Hs0bu83zJ-MLNs1MXwSFkr4DlkfWc

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, /* useEffect,  */useContext, Fragment } from 'react';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
 import { AuthContext } from '../../shared/context/AuthContext';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -23,7 +23,7 @@ const QuoteItem = props => {
 
     const confirmDeleteHandler = async () => {
         setShowConfirmModal(false);
-        const url = `http://${window.location.hostname}:5000/api/quotes/${props.id}`
+        const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${props.id}`
         try {
             await sendRequest(
                 url,
@@ -43,8 +43,7 @@ const QuoteItem = props => {
         ["inspiring", "encouraging", "exciting", "exhilarating", "heartening", "inspirational", "uplifting"],
         ["landscape", "panoramic", "scenery", "exhilarating", "vista", "pastoral", "uplifting"],
         ["tranquil", "calm", "restful", "pleasant", "quiet", "still", "relaxing", "soothing", "undisturbed"]
-    ]; // three indexes
-    let photoSearchSynonymsString = photoSearchSynonyms.map(e => e[Math.floor(Math.random() * e.length)]).join(',');
+    ]; 
 
     return (
         <Fragment>
@@ -60,15 +59,12 @@ const QuoteItem = props => {
             </Modal>
 
             <li className="quote-item" >
-            <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/quotes/quote/${props.id}`}><Card className="quote-item__content" /* style={{  
-                    backgroundImage: `url("https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${(props.tags).map(e => e.name).join(',')}")`,
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat'
-                }} */>
+            <Card className="quote-item__content">
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="quote-item__image">
-                        <img src={`https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${photoSearchSynonyms.map(e => e[Math.floor(Math.random() * e.length)]).join(',')}${props.tags.length && ','}${props.tags.map(e => e.name).join(',')}`} alt="Courtesy: unsplash.com" />
+                        <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/quotes/quote/${props.id}`}>
+                            <img src={`https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${photoSearchSynonyms.map(e => e[Math.floor(Math.random() * e.length)]).join(',')}${props.tags.length && ','}${props.tags.map(e => e.name).join(',')}`} alt="Courtesy: unsplash.com" />
+                        </a>
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
@@ -89,7 +85,7 @@ const QuoteItem = props => {
                             </Fragment>
                         }
                     </div>
-                </Card></a>
+                </Card>
             </li>
 
         </Fragment>

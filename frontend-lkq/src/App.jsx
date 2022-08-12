@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
-// import { LoadingSpinner } from './shared/components/UIElements/LoadingSpinner'
 
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';

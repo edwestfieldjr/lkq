@@ -16,7 +16,6 @@ const UsersList = props => {
                                 name={user.name} 
                                 isAdmin={user.isAdmin} 
                                 id={user.id} 
-                                // image={user.image}
                                 quoteCount={user.quotes.length}
                             />
                         )

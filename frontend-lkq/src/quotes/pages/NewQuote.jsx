@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../shared/hooks/FormHook';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
 import { AuthContext } from '../../shared/context/AuthContext';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import {
     VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH,
-    VALIDATOR_MAXLENGTH,
+    // VALIDATOR_MINLENGTH,
+    // VALIDATOR_MAXLENGTH,
 } from '../../shared/util/validators';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -49,7 +48,7 @@ const NewQuote = () => {
         let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
             const response = await sendRequest(
-                `http://${window.location.hostname}:5000/api/quotes`, 
+                `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes`, 
                 'POST',
                 JSON.stringify({
                     text: formState.inputs.text.value,
@@ -78,8 +77,6 @@ const NewQuote = () => {
         }
     };
 
-
-    // const
 
     return (
         <Fragment>

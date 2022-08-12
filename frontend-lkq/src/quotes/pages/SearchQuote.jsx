@@ -1,13 +1,11 @@
-import React, { useContext, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../shared/hooks/FormHook';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
-import { AuthContext } from '../../shared/context/AuthContext';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import {
     VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH,
-    VALIDATOR_MAXLENGTH,
+    // VALIDATOR_MINLENGTH,
+    // VALIDATOR_MAXLENGTH,
 } from '../../shared/util/validators';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -20,8 +18,7 @@ import "./QuoteForm.css"
 
 
 const SearchQuote = () => {
-    const currentAuth = useContext(AuthContext);
-    const { isLoading, clientError, sendRequest, clearClientError } = useHttpClient();
+    const { isLoading, clientError, /* sendRequest,  */clearClientError } = useHttpClient();
 
     const [formState, inputHandler] = useForm({
         text: {
@@ -34,38 +31,16 @@ const SearchQuote = () => {
 
     const searchSubmitHandler = async event => {
         event.preventDefault();
-        // // let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
-        //     const response = await sendRequest(
-        //         `http://${window.location.hostname}:5000/api/quotes/search/${searchterm}`, 
-        //         'GET',
-        //         JSON.stringify({
-        //             text: formState.inputs.text.value,
-        //         }),
-        //         {   
-        //             "Content-Type": "application/json",
-        //             // Authorization: `Bearer ${currentAuth.token}` 
-        //         }
-        //     );
-        //     let exitRoute, exitId;
-        //     console.log(response.quote._id)
-        //     try {
-        //         exitId = response.quote._id;
-        //         exitRoute =`/quotes/terms/${exitId}`;
-            // } catch (error) {
             const searchRoute = `/quotes/search/${formState.inputs.text.value}` || `/quotes`;
             console.log(searchRoute)
-            //     throw (error);
-            // } finally {
             navigate(searchRoute);;
-            // }
         } catch (error) {
             throw (error);
         }
     };
 
 
-    // const
 
     return (
         <Fragment>            
