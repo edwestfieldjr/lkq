@@ -1,15 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { Suspense, Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Users from './users/pages/Users';
-import Auth from './users/pages/Auth';
-import NewQuote from './quotes/pages/NewQuote';
-import UpdateQuote from './quotes/pages/UpdateQuote';
-import SearchQuote from './quotes/pages/SearchQuote';
-import MainNavigation from './shared/components/Navigation/MainNavigation';
-import DisplayQuotes from './quotes/pages/DisplayQuotes';
+
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
+// import { LoadingSpinner } from './shared/components/UIElements/LoadingSpinner'
 
+import MainNavigation from './shared/components/Navigation/MainNavigation';
+import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
+
+const Users = React.lazy(() => import('./users/pages/Users'));
+const Auth = React.lazy(() => import('./users/pages/Auth'));
+const NewQuote = React.lazy(() => import('./quotes/pages/NewQuote'));
+const UpdateQuote = React.lazy(() => import('./quotes/pages/UpdateQuote'));
+const SearchQuote = React.lazy(() => import('./quotes/pages/SearchQuote'));
+const DisplayQuotes = React.lazy(() => import('./quotes/pages/DisplayQuotes'));
 
 
 
@@ -82,9 +86,15 @@ const App = () => {
             <Router>
                 <MainNavigation />
                 <main>
-                    <Routes>
-                        {routes}
-                    </Routes>
+                    <Suspense fallback={
+                        <div className="center">
+                            <LoadingSpinner />
+                        </div>
+                    }>
+                        <Routes>
+                            {routes}
+                        </Routes>
+                    </Suspense>
                 </main>
                 {/* <Footer /> */}
             </Router>

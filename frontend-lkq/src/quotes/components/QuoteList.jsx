@@ -29,7 +29,7 @@ const QuoteList = props => {
         };
         fetchParam();
         } else {
-            setTitleParam(props.paramId)
+            setTitleParam(paramId)
         }
     }, [sendRequest, paramType, paramId]);
 
