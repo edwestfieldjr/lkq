@@ -1,4 +1,4 @@
-import React, { Suspense, Fragment } from 'react';
+import React, { /* Suspense,  */Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthContext } from './shared/context/AuthContext';
@@ -6,14 +6,14 @@ import { useAuth } from './shared/hooks/AuthHook';
 
 import Users from './users/pages/Users';
 import Auth from './users/pages/Auth';
+import NewQuote from'./quotes/pages/NewQuote';
+import UpdateQuote from'./quotes/pages/UpdateQuote';
+import SearchQuote from'./quotes/pages/SearchQuote';
+import DisplayQuotes from'./quotes/pages/DisplayQuotes';
 
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
-const NewQuote = React.lazy(() => import('./quotes/pages/NewQuote'));
-const UpdateQuote = React.lazy(() => import('./quotes/pages/UpdateQuote'));
-const SearchQuote = React.lazy(() => import('./quotes/pages/SearchQuote'));
-const DisplayQuotes = React.lazy(() => import('./quotes/pages/DisplayQuotes'));
 
 
 
@@ -86,15 +86,15 @@ const App = () => {
             <Router>
                 <MainNavigation />
                 <main>
-                    <Suspense fallback={
+                    {/* <Suspense fallback={
                         <div className="center">
                             <LoadingSpinner />
                         </div>
-                    }>
+                    }> */}
                         <Routes>
                             {routes}
                         </Routes>
-                    </Suspense>
+                    {/* </Suspense> */}
                 </main>
                 {/* <Footer /> */}
             </Router>
