@@ -68,7 +68,9 @@ const SearchQuote = () => {
     // const
 
     return (
-        <Fragment>
+        <Fragment>            
+            <h2 className="center">Search</h2>
+
             <ErrorModal error={clientError} onClear={clearClientError} />
             <form className="quote-form" onSubmit={searchSubmitHandler}>
                 {isLoading && <LoadingSpinner asOverlay />}
@@ -82,7 +84,7 @@ const SearchQuote = () => {
                     noResize
                 />
                 <Button type="submit" disabled={!formState.inputs.text.isValid}> Search </Button>
-                <Button dangerinverse type="button" onClick={() => { navigate(`/quotes/user/${currentAuth.userId}` || `/quotes`) }} >Cancel</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(-1) }} >Cancel</Button>
 
             </form>
         </Fragment>

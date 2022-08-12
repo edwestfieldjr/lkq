@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useEffect, Fragment} from 'react';
 import Card from '../../shared/components/UIElements/Card';
+import { useHttpClient } from '../../shared/hooks/HttpClientHook';
 
 import "./QuoteList.css"
 import QuoteItem from './QuoteItem';
@@ -11,6 +12,27 @@ const QuoteList = props => {
 
     const currentAuth = useContext(AuthContext);
 
+    const paramType = (props.paramType || '').toLowerCase();
+    const paramId = props.paramId || '';
+    const [titleParam, setTitleParam] = useState('');
+    const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
+
+
+    useEffect(() => {
+        if (["author","tag","user"].includes(paramType)) {
+        const fetchParam = async () => {
+            const url = `http://${window.location.hostname}:${process.env.PORT||5000}/api/quotes/getparam/${paramType}/${paramId}`
+            try {
+                const responseData = await sendRequest(url);
+                setTitleParam(responseData.result);
+            } catch (error) { };
+        };
+        fetchParam();
+        } else {
+            setTitleParam(props.paramId)
+        }
+    }, [sendRequest, paramType, paramId]);
+
     if (props.items.length <= 0) {
         return (
             <div className='quote-list center'> 
@@ -21,7 +43,10 @@ const QuoteList = props => {
             </div>
         );
     } else {
-        return (
+        return (<Fragment>
+            {(props.paramId && paramType !== "quote") ? <h2 className='center'>Quotes {paramType === "user" && "posted by"} {["tag", "search"].includes(paramType) && "with the"} {paramType !== "author" ? paramType + 
+            `${paramType ==='search' ? ' term' :''}`
+            + ":" : "by"} {["tag", "search"].includes(paramType) && "“"}{titleParam}{["tag", "search"].includes(paramType) && "”"}</h2> : <h2 className='center'>{paramType !== "quote" ? "All Quotes" : ''} &nbsp;</h2>}
             <ul className="quote-list">
                 {props.items.map(quote => ( 
                         (currentAuth.isAdmin || currentAuth.userId === quote.creator.id || quote.isPublic) && <QuoteItem 
@@ -42,7 +67,7 @@ const QuoteList = props => {
                     )
                 )}
             </ul>
-        );
+            </Fragment>);
     }
 }
 

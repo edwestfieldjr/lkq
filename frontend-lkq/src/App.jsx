@@ -6,7 +6,7 @@ import NewQuote from './quotes/pages/NewQuote';
 import UpdateQuote from './quotes/pages/UpdateQuote';
 import SearchQuote from './quotes/pages/SearchQuote';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-import AllQuotes from './quotes/pages/AllQuotes';
+import DisplayQuotes from './quotes/pages/DisplayQuotes';
 import { AuthContext } from './shared/context/AuthContext';
 import { useAuth } from './shared/hooks/AuthHook';
 
@@ -25,12 +25,12 @@ const App = () => {
             
                 <Route exact path="/" element={<Navigate replace to="/quotes" />} />
                 <Route exact path="/users" element={<Users />} />
-                <Route exact path="/quotes" element={<AllQuotes />} />
-                <Route exact path="/quotes/:paramId" element={<AllQuotes paramType="quote" />} />
-                <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
-                <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
-                <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
-                <Route exact path="/quotes/search/:paramId" element={<AllQuotes paramType="search" />} />
+                <Route exact path="/quotes" element={<DisplayQuotes />} />
+                <Route exact path="/quotes/quote/:paramId" element={<DisplayQuotes paramType="quote" />} />
+                <Route exact path="/quotes/user/:paramId" element={<DisplayQuotes paramType="user" />} />
+                <Route exact path="/quotes/author/:paramId" element={<DisplayQuotes paramType="author" />} />
+                <Route exact path="/quotes/tag/:paramId" element={<DisplayQuotes paramType="tag" />} />
+                <Route exact path="/quotes/search/:paramId" element={<DisplayQuotes paramType="search" />} />
                 <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/quotes/new" element={<NewQuote />} />
                 <Route exact path="/quotes/edit/:quoteId" element={<UpdateQuote />} />
@@ -48,12 +48,12 @@ const App = () => {
             <Fragment>
                 <Route exact path="/" element={<Navigate replace to="/quotes" />} />
                 <Route exact path="/users" element={<Users />} />
-                <Route exact path="/quotes" element={<AllQuotes />} />
-                <Route exact path="/quotes/:paramId" element={<AllQuotes paramType="quote" />} />
-                <Route exact path="/quotes/user/:paramId" element={<AllQuotes paramType="user" />} />
-                <Route exact path="/quotes/author/:paramId" element={<AllQuotes paramType="author" />} />
-                <Route exact path="/quotes/tag/:paramId" element={<AllQuotes paramType="tag" />} />
-                <Route exact path="/quotes/search/:term" element={<AllQuotes paramType="search" />} />
+                <Route exact path="/quotes" element={<DisplayQuotes />} />
+                <Route exact path="/quotes/quote/:paramId" element={<DisplayQuotes paramType="quote" />} />
+                <Route exact path="/quotes/user/:paramId" element={<DisplayQuotes paramType="user" />} />
+                <Route exact path="/quotes/author/:paramId" element={<DisplayQuotes paramType="author" />} />
+                <Route exact path="/quotes/tag/:paramId" element={<DisplayQuotes paramType="tag" />} />
+                <Route exact path="/quotes/search/:term" element={<DisplayQuotes paramType="search" />} />
                 <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/auth" element={<Auth />} />
 

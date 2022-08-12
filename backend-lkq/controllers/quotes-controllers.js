@@ -207,7 +207,6 @@ const getQuotesByAuthorId = async (req, res, next) => {
 }
 
 const getQuotesBySearchTerm = async (req, res, next) => {
-    // console.log("trigger")
     // return res.json(req.params.term});
 
     let searchResults = []
@@ -232,7 +231,7 @@ const getQuotesBySearchTerm = async (req, res, next) => {
     }
 
     let authorAndTagSearchResults = [];
-    for (schema of [Author, Tag])
+    for (schema of [Author, Tag]) {
         try {
             authorAndTagSearchResults.push(await schema.find(
                 { "name": { "$regex": req.params.term, "$options": "i" } }
@@ -261,50 +260,6 @@ const getQuotesBySearchTerm = async (req, res, next) => {
         } catch (error) {
             return next(new HttpError(error));
         }
-
-    let tagSearchResults;
-    try {
-        tagSearchResults = await Tag.find(
-            { "name": { "$regex": req.params.term, "$options": "i" } }
-        ).populate([{
-            path: 'quotes',
-            model: 'Quote',
-            select: '_id text',
-            populate: [
-                {
-                    path: 'author',
-                    model: 'Author',
-                    select: '_id name ref_url ref_img'
-                },
-                {
-                    path: 'tags',
-                    model: 'Tag',
-                    select: '_id name'
-                },
-                {
-                    path: 'creator',
-                    model: 'User',
-                    select: '_id name'
-                }
-            ]
-        }]);
-    } catch (error) {
-        return next(new HttpError(error));
-    }
-
-    // // searchResults = searchResults
-    //     .concat(authorSearchResults ? Array(authorSearchResults.quotes)
-    //         // .map(quote => quote.toObject({ getters: true }))
-    //          : []) 
-    //     .concat(authorSearchResults ? Array(tagSearchResults.quotes)
-    //         // .map(quote => quote.toObject({ getters: true })) 
-    //         : [])
-
-    console.log(searchResults)
-    try { 
-        console.log("313", authorAndTagSearchResults.flat().map(records => records.quotes) )
-    } catch (error) { 
-        console.log(error.message) 
     }
 
     try {
@@ -322,6 +277,33 @@ const getQuotesBySearchTerm = async (req, res, next) => {
     }
 
 };
+
+const getParamName = async (req, res, next) => {
+    const { paramtype, paramid } = req.params;  
+    const schema = {
+        "user": User,
+        "author": Author,
+        "tag": Tag
+    };
+
+    let result;
+    try {
+        result = await schema[paramtype].findById(paramid);
+    } catch (error) {
+        return next(new HttpError(error));
+    }
+
+    if (!result) {
+        return next(new HttpError('couldn’t find this quote', 404))
+    } else {
+        try {
+            return res.json({ result: result.toObject({ getters: true }).name });
+        } catch (error) {
+            return next(new HttpError(error));
+        }
+    }
+}
+
 
 
 const constructQuote = async (req, res, next) => {
@@ -577,7 +559,6 @@ const deleteQuote = async (req, res, next) => {
     }
 
     try {
-        console.log(quoteId, typeof (quoteId))
         await Quote.findByIdAndDelete(quoteId);
     } catch (error) {
         return next(new HttpError(error));
@@ -629,6 +610,7 @@ module.exports = {
     getQuotesByTagId,
     getQuotesByAuthorId,
     getQuotesBySearchTerm,
+    getParamName,
     constructQuote,
     deleteQuote
 };

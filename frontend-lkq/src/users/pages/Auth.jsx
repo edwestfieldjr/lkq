@@ -92,7 +92,7 @@ const Auth = () => {
 
     return (
         <Fragment>
-            <h2 className="authentication__header"> Login/Signup Page</h2>
+            <h2 className="authentication__header"> Login/Signup</h2>
             <ErrorModal error={clientError} onClear={clearClientError} />
             <Card className="authentication">
                 {isLoading && <LoadingSpinner asOverlay />}

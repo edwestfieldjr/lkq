@@ -8,6 +8,7 @@ const {
     getQuotesByTagId,
     getQuotesByAuthorId, 
     getQuotesBySearchTerm, 
+    getParamName,
     constructQuote, 
     deleteQuote 
 } = require('../controllers/quotes-controllers')
@@ -29,6 +30,8 @@ router.get("/tag/:tid", getQuotesByTagId);
 router.get("/author/:aid", getQuotesByAuthorId);
 
 router.get("/search/:term", getQuotesBySearchTerm);
+
+router.get("/getparam/:paramtype/:paramid", getParamName);
 
 router.use(checkAuth); 
 

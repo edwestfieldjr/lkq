@@ -6,24 +6,24 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 
-const UserQuotes = () => {
+const DisplayQuotes = props => {
 
+    const paramType = props.paramType;
+    const paramId = useParams().paramId;
+    const paramElements = (paramType ? ((paramType !== 'quote' ? '/'+paramType : '') + ('/'+paramId) ) : '')
     const [loadedQuotes, setLoadedQuotes] = useState(undefined);
-
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
-
-    const userId = useParams().userId || null;
 
     useEffect(() => {
         const fetchQuotes = async () => {
+            const url = `http://${window.location.hostname}:${process.env.PORT||5000}/api/quotes${paramElements||''}`
             try {
-                const responseData = await sendRequest(`http://${window.location.hostname}:5000/api/quotes/user/${userId}`);
-
-                setLoadedQuotes(responseData.quotes);
-            } catch (error) {};
+                const responseData = await sendRequest(url);
+                setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
+            } catch (error) { };
         };
         fetchQuotes();
-    }, [sendRequest, userId]);
+    }, [sendRequest, paramType, paramElements]);
 
     const quoteDeletedHandler = deletedQuoteId => {
         setLoadedQuotes(prev => prev.filter(quote => quote.id !== deletedQuoteId))
@@ -33,9 +33,10 @@ const UserQuotes = () => {
         <Fragment>
             <ErrorModal error={clientError} onClear={clearClientError} />
             {isLoading && <LoadingSpinner asOverlay />}
-            {!isLoading && loadedQuotes && <QuoteList items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
+
+            {!isLoading && loadedQuotes && <QuoteList paramType={paramType} paramId={paramId} items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
         </Fragment>
     );
 }
 
-export default UserQuotes;
+export default DisplayQuotes;

@@ -58,13 +58,9 @@
   margin: 0.5rem;
 }
 
-.map-container {
-  height: 20rem;
-  width: 100%;
-}
 
 @media (min-width: 768px) {
   .quote-item__image {
-    height: 20rem;
+    height: 30rem;
   } 
 }

@@ -6,6 +6,7 @@ import "./UsersList.css"
 const UsersList = props => {
     if (props.items.length > 0) {
         return (
+            
             <ul className="users-list">
                 {props.items.map( 
                     user => {   
@@ -13,8 +14,9 @@ const UsersList = props => {
                             <UserItem 
                                 key={user.id} 
                                 name={user.name} 
+                                isAdmin={user.isAdmin} 
                                 id={user.id} 
-                                image={user.image}
+                                // image={user.image}
                                 quoteCount={user.quotes.length}
                             />
                         )

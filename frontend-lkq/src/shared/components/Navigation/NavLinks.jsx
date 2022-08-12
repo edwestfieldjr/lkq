@@ -7,7 +7,7 @@ const NavLinks = props => {
     const currentAuth = useContext(AuthContext);
     return (
         <ul className="nav-links">
-            <li>
+            <li className="nav-info">
                 {!currentAuth.isLoggedIn ? <span>Not l</span> : <span>L</span>}ogged in {currentAuth.isLoggedIn && <span>as <strong>{currentAuth.name}</strong> ({!currentAuth.isAdmin ? 'Non-a' : 'A'}dmin)</span> } 
 
             </li>

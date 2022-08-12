@@ -45,8 +45,6 @@ const QuoteItem = props => {
         ["tranquil", "calm", "restful", "pleasant", "quiet", "still", "relaxing", "soothing", "undisturbed"]
     ]; // three indexes
     let photoSearchSynonymsString = photoSearchSynonyms.map(e => e[Math.floor(Math.random() * e.length)]).join(',');
-    console.log(photoSearchSynonyms.map(e => e[Math.floor(Math.random() * e.length)]).join(','));
-    console.log("====")
 
     return (
         <Fragment>
@@ -62,7 +60,7 @@ const QuoteItem = props => {
             </Modal>
 
             <li className="quote-item" >
-                <Card className="quote-item__content" /* style={{  
+            <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/quotes/quote/${props.id}`}><Card className="quote-item__content" /* style={{  
                     backgroundImage: `url("https://source.unsplash.com/random/1920x1080/?inspiration,landscape,peaceful${(props.tags).map(e => e.name).join(',')}")`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
@@ -74,7 +72,7 @@ const QuoteItem = props => {
                     </div>
                     <div className="quote-item__info">
                         <h2>“{props.text}”</h2>
-                        <h3><a target='new' href={`/quotes/author/${props.authorId}`}>{props.author_name}</a></h3>
+                        <h3><a href={`/quotes/author/${props.authorId}`}>{props.author_name}</a></h3>
                         {props.author_ref_img && <Avatar image={props.author_ref_img} alt={props.author_name} width="100px" />}
                         {props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
                         <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)}</p>
@@ -91,7 +89,7 @@ const QuoteItem = props => {
                             </Fragment>
                         }
                     </div>
-                </Card>
+                </Card></a>
             </li>
 
         </Fragment>

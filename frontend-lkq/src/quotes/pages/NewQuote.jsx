@@ -66,7 +66,7 @@ const NewQuote = () => {
             console.log(response.quote._id)
             try {
                 exitId = response.quote._id;
-                exitRoute =`/quotes/${exitId}`;
+                exitRoute =`/quotes/quote/${exitId}`;
             } catch (error) {
                 exitRoute = `/quotes/user/${currentAuth.userId}` || `/quotes`;
                 throw (error);
@@ -124,7 +124,7 @@ const NewQuote = () => {
                     noResize
                 />
                 <Button type="submit" disabled={!formState.inputs.text.isValid}> Add new quote </Button>
-                <Button dangerinverse type="button" onClick={() => { navigate(`/quotes/user/${currentAuth.userId}` || `/quotes`) }} >Cancel</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(-1) }} >Cancel</Button>
 
             </form>
         </Fragment>

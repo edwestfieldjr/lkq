@@ -24,6 +24,7 @@ const Users = () => {
     return (<Fragment>
         <ErrorModal error={clientError} onClear={clearClientError} />
         {isLoading && <div className="center"><LoadingSpinner asOverlay /></div>}
+        <h2 className="center">Registered Users</h2>
         {!isLoading && loadedUsers && <UsersList items={loadedUsers}/>}
     </Fragment>);
 };

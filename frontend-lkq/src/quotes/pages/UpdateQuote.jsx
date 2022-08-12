@@ -117,7 +117,7 @@ const UpdateQuote = () => {
             );
             console.log(quoteId.toString())
             console.log("loadedQuote.isPublic: " + loadedQuote.isPublic + " - " + typeof(loadedQuote.isPublic))
-            navigate(`/quotes/${quoteId.toString()}`)
+            navigate(`/quotes/quote/${quoteId.toString()}`)
         } catch (error) {
             console.error(error);
             throw(error);
@@ -177,7 +177,7 @@ const UpdateQuote = () => {
                     noResize
                 />
                 <Button type="submit" disabled={!loadedQuote}>Update</Button>
-                <Button dangerinverse type="button" onClick={() => { navigate(`/quotes/${quoteId.toString()}`) }} >Cancel</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(-1) }} >Cancel</Button>
             </form>}
         </Fragment>
 
