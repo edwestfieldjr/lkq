@@ -102,7 +102,7 @@ const UpdateQuote = () => {
                 isPublic: formState.inputs.isPublic.value.toString()
             }))
             await sendRequest(
-                `http://${window.location.hostname}:5000/api/quotes/${quoteId}`,
+                `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${quoteId}`,
                 'PATCH',
                 JSON.stringify({
                     text: formState.inputs.text.value,
