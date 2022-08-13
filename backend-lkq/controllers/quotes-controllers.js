@@ -24,14 +24,6 @@ const getAdminIds = async () => {
 
 
 const getAllQuotes = async (req, res, next) => {
-    console.log("hi")
-    try {
-        console.log(res.userData.userId)
-    } catch (error) {
-        console.log("error: " + error)
-    } finally { 
-        console.log("res.userData.userId" + " NON EXISTENT")
-    } 
 
     let allQuotes;
     try {
