@@ -6,13 +6,17 @@
   background: #7A9EB1 ;
   color: white;
   cursor: pointer;
-  margin-right: 1rem;
+  margin: 2px;
   text-decoration: none;
   display: inline-block;
 }
 
 .button:focus {
   outline: none;
+}
+
+.button:visited {
+  color: white ;
 }
 
 .button:hover,
@@ -36,6 +40,7 @@
 .button--danger {
   background: #830000;
   border-color: #830000;
+  color: white;
 }
 
 .button--danger:hover,
@@ -67,8 +72,14 @@
   cursor: not-allowed;
 }
 
+.button--tag {
+  text-transform: uppercase;
+}
+
 .button--small {
   font-size: 0.8rem;
+  padding: 0.125rem .5rem;
+  margin: 1px;
 }
 
 .button--big {

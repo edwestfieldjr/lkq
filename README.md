@@ -14,7 +14,7 @@ My CS50x final project is a full-stack **M**ongo-**E**xpres-**R**eact-**N**ode (
 
 ### What features does it have? 
 
-In this App A user can sign up for an account, and once logged-in they create a new quotation input the following:
+In this App A user can sign up for an account with an name, email, address and password (which gets encrypted), and once logged-in they create a new quotation input the following:
 
 - Quotation or saying
 - Author/person attributed with the quote
@@ -30,9 +30,9 @@ The app has full "CRUD" (Create, Read, Update, and Delete) functionality user ha
 
 ### How (and Why) did I learn to make this?
 
-After sitting through the CS50x course earluer this yeet, I knew that I wanted to build a full stack website from the ground up. MERN full-stacks developer skills seem to be very popular and currenly in-demand. so researched and studied how to do it. 
+After taking all the CS50x classes, and already building a Python-Jinja-SQL full-stack ap earlier this year, I wanted to switch to the other end of the spectrum and build a MERN full-stack website, which seem to be popular and currently in-demand. So researched further and taught myself how to do it. 
 
-This meant brushing up on both “vanilla” JavaScript as well as the '.jsx" syntax of React. I studied how to build and Express.js server and how it interacts with the react front-end in how to route and authenticate information. I brushed up on my html and css. For the database end, I learned more about MongoDB, which unlike SQL is non-relational, and thus, is more scalable and malleable database. I learned about Mongoose, the JavaScript library that creates an relational-like connection between MongoDB and the node backend, and I learned more about the difference between one-to-one and one-to-many relationships, and how to set them up in proper database schemas. 
+This meant brushing up on both “vanilla” JavaScript as well as learning the '.jsx" syntax of React. I studied how to build an Express.js server, how it interacts with the react front-end in routing and authenticating information. I brushed up on my html and css. For the database end, I learned more about MongoDB, which unlike SQL is non-relational, and thus, is more scalable and malleable database. I learned about Mongoose, the JavaScript library that creates an relational-like connection between MongoDB and the node backend, and I learned more about the difference between one-to-one and one-to-many relationships, and how to set them up in proper database schemas. 
 
 ###  How does this app run/execute?
 
@@ -40,7 +40,7 @@ A full-stack MERN application is essentially two Node.js servers running side-by
 
 ## Specifications
 ### Software Packages, 
-#### Dependencies & API's Installed, Employed or Deployed in this App (*selected list*):
+#### Packages Dependencies & API's Installed, Employed or Deployed in this App (*selected list*):
 
 - Node.js 
 - Express.js
@@ -50,7 +50,7 @@ A full-stack MERN application is essentially two Node.js servers running side-by
 - create-react-app
 - wikijs
 - bCrypt
-- unsplash.com API 
+- [unspalsh.com](https://unsplash.com/) API 
 
 #### Languages:
 

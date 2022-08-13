@@ -51,8 +51,8 @@ const Input = props => {
     const InputElement = props.type === "textarea" ? "textarea" : "input";
 
     return (
-        <div className={`form-control ${(!inputState.isValid && inputState.isTouched) && 'form-control--invalid'} `}>
-            <label htmlFor={props.id}>{props.label}</label>
+        <div className={`form-control ${(props.type === "checkbox") ? 'checkbox' : ''} ${(!inputState.isValid && inputState.isTouched) && 'form-control--invalid'} `}>
+            {props.type !== "checkbox" && <label htmlFor={props.id}>{props.label}</label>}
             <InputElement
                 id={props.id}
                 name={props.name}
@@ -64,7 +64,10 @@ const Input = props => {
                 value={inputState.value}
                 defaultChecked={props.defaultChecked}
                 style={props.noResize && {resize: 'none'}}
+
             />
+            {props.type === "checkbox" && <label htmlFor={props.id}>{props.label}</label>}
+
             {(inputState.errorMsgs && inputState.isTouched) && <ul style={{textAlign: 'left'}}>{errorMsgs.map((errMsg, idx) => <li key={idx}className='form-control--invalid'>{errMsg}</li>)}</ul>}
         </div>
     );

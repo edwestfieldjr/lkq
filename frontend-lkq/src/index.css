@@ -1,15 +1,31 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap');
 
 * {
   box-sizing: border-box;
 }
 
+a {
+  color: #415865;
+}
+
+a:visited {
+  color: #545454;
+}
+
+a:hover {
+  color: #7A9EB1;
+}
+
+a:active {
+  color: #FFE1B6;
+}
+
+
 
 body {
   font-family: 'Open Sans', sans-serif !important;
   margin: 0;
-  background: #F9F8EB !important; 
+  background: #F9F8EB; 
 }
 
 .slide-in-right-enter {

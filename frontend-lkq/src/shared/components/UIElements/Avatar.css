@@ -9,6 +9,9 @@
 .avatar img {
   display: block;
   border-radius: 50%;
+  border-style: solid;
+  border-width: thin;
+  border-color: #7A9EB1;
   width: 100%;
   height: 100%;
   object-position: center top;

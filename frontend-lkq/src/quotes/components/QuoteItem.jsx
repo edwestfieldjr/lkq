@@ -71,13 +71,13 @@ const QuoteItem = props => {
                         <h3><a href={`/quotes/author/${props.authorId}`}>{props.author_name}</a></h3>
                         {props.author_ref_img && <Avatar image={props.author_ref_img} alt={props.author_name} width="100px" />}
                         {props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
-                        <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a href={`/quotes/tag/${e.id}`}>{e.name}</a>, </span>)}</p>
-                        <p>posted by: <a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
+                        {props.tags.length ? <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a className="button button--small button--tag" href={`/quotes/tag/${e.id}`}>{e.name}</a></span>)}</p> : ''}
                     </div>
 
 
                     <div className="quote-item__actions">
-                        <div><p>Visible to {props.isPublic ? <span> Everyone </span> : <span> User and Admin </span>}</p></div>
+                        <p>posted by: <a href={`/quotes/user/${props.creatorId}`}>{props.creatorName}</a></p>
+                        <p>Visible to {props.isPublic ? <span> Everyone </span> : <span> User and Admin </span>}</p>
                         {(currentAuth.userId === props.creatorId || currentAuth.isAdmin) &&
                             <Fragment>
                                 <Button to={`/quotes/edit/${props.id}`}>Edit</Button>

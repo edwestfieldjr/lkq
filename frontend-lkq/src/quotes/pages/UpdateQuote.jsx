@@ -167,8 +167,10 @@ const UpdateQuote = () => {
                     defaultChecked={loadedQuote.isPublic}
                     noResize
                 />
+                <div>
                 <Button type="submit" disabled={!loadedQuote}>Update</Button>
                 <Button dangerinverse type="button" onClick={() => { navigate(-1) }} >Cancel</Button>
+                </div>
             </form>}
         </Fragment>
 

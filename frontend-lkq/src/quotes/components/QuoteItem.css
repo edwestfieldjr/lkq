@@ -11,7 +11,7 @@
 .quote-item__info {
   padding: 1rem;
   text-align: center;
-  background-color: #ffffff88;
+  background-color: white;
 }
 
 .quote-item__image {
@@ -36,8 +36,9 @@
 .quote-item__actions {
   padding: 1rem;
   text-align: center;
-  border-top: 1px solid #ccc;
-  background-color: #ffffff88;
+  border-top: 1px solid #7A9EB166;
+  background-color: #ffffff;
+  color: black;
 
 }
 

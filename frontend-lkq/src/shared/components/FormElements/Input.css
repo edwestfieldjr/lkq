@@ -8,10 +8,20 @@
     display: block;
 }
 
-.form-control label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+.form-control .checkboxx label{
+    color: purple
 }
+
+.form-control label {
+    color: black;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.form-control .button label{
+    color: purple
+}
+
 
 .form-control input,
 .form-control textarea {
@@ -25,22 +35,33 @@
 .form-control input:focus,
 .form-control textarea:focus {
     outline: none;
-    background: #ebebeb;
-    border-color: #510077;
+    background: #F9F8EB;
+    border-color: #415865;
 }
 
 .form-control--invalid {
-    color: red;
+    color: #f34343;
 }
 .form-control--invalid li{
     font-size: 0.75rem;
     font-style: italic;
 }
 
-
-
 .form-control--invalid input,
 .form-control--invalid textarea {
-    border-color: red !important;
-    background: #ffd1d1;
+    border-color: #f34343 !important;
+    background: #ffdfd9;
+}
+
+.form-control .checkbox,
+.checkbox,
+.checkbox div {
+    display: inline-flex;
+    margin-left: 2px;
+    margin-right: 5px;
+    text-align: left;
+}
+
+.checkbox input{
+    margin: 5px;
 }
