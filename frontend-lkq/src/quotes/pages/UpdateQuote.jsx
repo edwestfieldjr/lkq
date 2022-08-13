@@ -131,7 +131,7 @@ const UpdateQuote = () => {
                     id="text"
                     type="textarea"
                     label="Quotation"
-                    placeholder="type here..."
+                    placeholder="type here/do not include enclosing quotation marks..."
                     validators={[VALIDATOR_REQUIRE()]}
                     value={loadedQuote.text}
                     onInput={inputHandler}
@@ -152,6 +152,7 @@ const UpdateQuote = () => {
                     id="tags"
                     type="text"
                     label="Categories/Tags"
+                    placeholder="type keyword/keyphrase tags, separated by commas..."
                     validators={[]}
                     onInput={inputHandler}
                     value={loadedQuote.tags}

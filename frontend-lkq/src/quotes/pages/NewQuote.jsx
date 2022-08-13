@@ -86,7 +86,7 @@ const NewQuote = () => {
                     id="text"
                     type="textarea"
                     label="Quotation"
-                    placeholder="type here..."
+                    placeholder="type here/do not include enclosing quotation marks..."
                     validators={[VALIDATOR_REQUIRE()]}
                     onInput={inputHandler}
                     rows={5}
@@ -105,6 +105,7 @@ const NewQuote = () => {
                     id="tags"
                     type="text"
                     label="Categories/Tags"
+                    placeholder="type keyword/keyphrase tags, separated by commas..."
                     validators={[]}
                     onInput={inputHandler}
                     noResize
