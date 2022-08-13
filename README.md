@@ -1,51 +1,47 @@
 # LKQ: Your Favorite Quotes
-#### CS50x Final Project  
-#### ©2022 **Edward Francis Westfield Jr.**<br/>East Lansing, Michigan &#127482;&#127480; USA<br/>ed.westfield.jr@gmail.com
+#### CS50x Final Project 
+### ©2022 **Edward Francis Westfield Jr.**
+#### East Lansing, Michigan &#127482;&#127480; USA<br/>ed.westfield.jr@gmail.com • [edwestfieldjr.com](https://www.edwestfieldjr.com/)
 ---
 #### Video Demo:  <URL HERE>
+---
 #### Live Test Deployment:  https://lkq-fe-cs50x-2022.web.app/
+#### GitHub Repository:  https://github.com/edwestfieldjr/lkq
 ---
 ## Description 
 
-### What is this software? What does it do? 
+My CS50x final project, entitled **“[LKQ: Your Favorite Quotes](https://lkq-fe-cs50x-2022.web.app/)”**, is a full-stack **M**ongo-**E**xpres-**R**eact-**N**ode ("**MERN**") web application for the saving and display of one’s favorite quotations and saying from notable figures or anyone. 
 
-My CS50x final project is a full-stack **M**ongo-**E**xpres-**R**eact-**N**ode ("**MERN**") web application to save and display favorite and inspiring quotations from notable figures or anyone. 
+In this app, a user can sign up for an account (with a username, email address, and encrypted password). Once logged-in, users can create new quotation articles by inputting the following:
 
-### What features does it have? 
+- A quotation or saying
+- The author/person attributed with the quote
+- Keyword/keyphrase tags (comma-separated) to help categorize, sort and display the quotes
 
-In this App, a user can sign up for an account with a name, email, address and password (which gets encrypted). Once logged-in, they can d create a new quotation by inputting the following:
+The application then saves the quote, the author’s name, and the tags (as comma-separated keyword/keyphrases), to the MongoDB database. In addition, the 'getWiki' utility (which employs the [wikijs](https://www.npmjs.com/package/wikijs) Node package) retrieves links to the author's public-domain Wikipedia page and photo (if available). This is used when displaying the quote on screen.
 
-- Quotation or saying
-- Author/person attributed with the quote
-- Keyword "categories/tags" to help sort and display the quotes
+The Mongoose schemas for the quote, author, tags, and the user, then save the database information in separate collections, so that the api can serve and sort the content based upon each collection. Thus, the web app allows the quotes be grouped and sorted by the author and the keyword tags that are saved with each quote. In this version, you simply click on either the authors name, the users name, or one of the tag buttons, and the api will serve quote articles relevant to that data. There is also a simple keyword search feature that returns quote results with an exact partial string match of either authors, quotes or tags (whatever matches that text). 
 
-The application saves the quote, the author’s name, and the tags (comma separated keyword/keyphrases), to the MongoDB database. In addition, the 'getWiki' utility (which employs the [wikijs](https://www.npmjs.com/package/wikijs) Node package) retrieves links to the author's public-domain Wikipedia page and photo (if available, otherwise an a default anonymous avatar and avatar are saved). This is used when displaying the quote on screen.
+The app has full "CRUD" (Create, Read, Update, and Delete) functionality with the user having the ability to edit and delete the quotes they have posted, and can also select whether their quote articles are publicly visible to anyone with access to the site, or just privately viewable only to them while logged in. There is one administrator account with has access to the entire app (currently, this is set in the environment variables upon deployment).
 
-The quote is displayed with the author info (name, photo, wikipedia link), the keys tags, the user who posted, and a background photo. The UX/UI look and feel is made to resemble inspirational posters and greeting cards. 
-
-the mongoose schemas for the quote, author, tags, the user, save the info in separate collections and the api has the ability to serve and sort the content based upon each collection. also allow the quotes to also be grouped and sorted by the author and the keyword tags that are saved with each quote. simply click on the authors name, the users name, or a tag button, and the api will serve pages relevant to that tag. 
-
-There is also a simple keyword search fuction that returns quote results with an exact partial sting match of either authors, quotes or tags. 
-
-The [unsplssh.com](https://unsplash.com/) royalty-free stock photo random photo function also provides background image using the quotes tags as search terms for finding an appropriate/relevant image. 
-
-The app has full "CRUD" (Create, Read, Update, and Delete) functionality user has the ability to edit and delete the quotes they have posted, and also whether they are publicly visible to anyone with access to the site, or just privately a viewable only to them (There is one administrator account that has access to the while site.)
-
-### How (and Why) did I learn to make this?
-
-After taking all the CS50x classes, and already building a Python-Jinja-SQL full-stack ap earlier this year, I wanted to switch to the other end of the spectrum and build a MERN full-stack website, which seem to be popular and currently in-demand. So researched further and taught myself how to do it. 
-
-This meant brushing up on both “vanilla” JavaScript as well as learning the '.jsx" syntax of React. I studied how to build an Express.js server, how it interacts with the react front-end in routing and authenticating information. I brushed up on my html and css. For the database end, I learned more about MongoDB, which unlike SQL is non-relational, and thus, is more scalable and malleable database. I learned about Mongoose, the JavaScript library that creates an relational-like connection between MongoDB and the node backend, and I learned more about the difference between one-to-one and one-to-many relationships, and how to set them up in proper database schemas. 
-
-"LKQ" stands for "Lesser Known Quotes", a working title for this project. 
+The quote is displayed with the author's information (name, photo, wikipedia link), the keys tags, the user who posted it, and a background photo. The UX/UI look and feel is made to resemble inspirational posters and greeting cards. If no wikipedia info is available, a default anonymous link and avatar are saved. If not author is entered at all, it defaults to "Anonymous". The [unsplash.com](https://unsplash.com/) stock photo random photo search feature also provides background image using the quote's tags as additional search terms for finding an appropriate/relevant image (serving up a different background image on each reload). 
+ 
+“LKQ” stands for “Lesser Known Quotes”, a working title for this project. 
 
 ###  How does this app run/execute?
 
-A full-stack MERN application is essentially two Node.js servers running side-by-side, with the backend API running Express.js and communicating with the Mongo database server. The "frontend" sends requests and receives the from the backend and constructs the web content as inputted and requested by the user.  
+A full-stack MERN application is essentially two Node.js servers running side-by-side, with the backend API running Express and communicating with the Mongo database server. The React frontend sends requests and receives data from the backend to construct the web content the user ultimately sees.  
 
+---
 ## Specifications
-### Software Packages, 
-#### Packages Dependencies & API's Installed, Employed or Deployed in this App (*selected list*):
+
+This project was written in the following languages: 
+
+- JavaScript
+- HTML
+- CSS
+
+Packages Dependencies & API's Installed, Employed or Deployed in this App (*selected list*)
 
 - [Node.js](https://nodejs.org/) 
 - [Express](https://expressjs.com/)
@@ -54,39 +50,58 @@ A full-stack MERN application is essentially two Node.js servers running side-by
 - [React](https://express.com/)
 - [create-react-app](https://create-react-app.dev/)
 - [bCrypt](https://www.npmjs.com/package/bcrypt)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [wikijs](https://www.npmjs.com/package/wikijs)
 - [unsplash.com](https://unsplash.com/) (non-api random image service)
 
-#### Languages:
-
-- JavaScript
-- HTML
-- CSS
-
-#### Other Features:
+### Other Features
 - Form field authentication
 - Mobile-optimized view
 
-### What else I have learned / The Takeaways ... 
+### Live Test Deployment
+https://lkq-fe-cs50x-2022.web.app/  
+Hosted on:
+- [Google Firebase](https://firebase.google.com/) (frontend)
+- [Heroku](https://dashboard.heroku.com/) (backend)
+- [MongoDB Atlas](https://www.mongodb.com/atlas) (database)
 
-Aside from the technical knowledge I acquired in building this web application,   
+### Environment  variables
+If pulling from [GitHub](https://github.com/edwestfieldjr/lkq) for separate deployment, each directory requires an `.env` file containing the following. 
+- frontend-lkq/`
+    - `REACT_APP_BACKEND_API_ADDRESS`
+- backend-lkq/
+    - `DB_URL` (MongoDB URL)
+    - `SECRET` (for use with [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken))
+    - `ADMIN_EMAIL_ADDR` (currently only way to set the admin user in the DB)
+#### 
+---
+## Takeaways
 
-#### Division of Labor/Specialization 
-(Building a modern full stack application by oneself is a daunting task, but achievable with proper planning and know-how. It is understandable and perhaps  advisable that developers and engineers would want to focus on frontend, backend, database, or some other aspect of web and software development. Still, knowing how the whole thing is made start to finish in an important asset to have.  
+I have learned that building a modern full-stack application one’s own can seem daunting, but it is achievable. It is understandable, and perhaps advisable, that developers and engineers would focus their careers on frontend, backend, database, or some other specific aspect of web and software development. Still, knowing how the whole thing is made start to finish in an important learning experience.  
 
-#### Possible improvements:
+### Possible improvements:
 
-- Have an interface for more interactivity between users and the ability to set more permissions as needed.abs
-- search functionality to find specific content (eg, employ autocomplete, muitltiple terms, natural language etc.)
-- Better UI/ON the front end: make it look less like a traditional web interface and more like a 'e-card' 
-- Have a way for teacher to upload videos to explain the assignment
-- Notificaitons to email about new homeworks or submissions
-- Better API secuirity and user management
+- Better UI/UX on the frontend allowing users to customize their viewing experience
+- Better search functionality to find specific content (autocomplete, multiple search terms, natural language, etc.)
+- Improve or overhaul the getWiki function so that it is more accurate in retrieving an autho’s biographical data
+- Better user functionality (permissions, user management, authentication/OAuth, messaging, ‘social-media’ functionality, etc.) 
+- Separate git repositories for frontend and backend since a single git caused minor bugs in deployment (The fixed did work, but this may be a case where breaking the project up into two repositories is the simpler solution)
+- Better encryption and security (see below)
 
-## Security Notices
+---
+### Security Concerns
 
-- with the execption of encrypted stored passwords and user-specific create/update/delete permissions, the backend mongo/express api is open and otherwise not secure. Please do not  
-- an email address is needed to log in, but does not get authenticated. You do not need to use a real email address, so long as it conforms to an email address format. 
-- user accounts cannot be deleted. If you want your user information scrubbed from the database, please email me at ed.westfield.jr@gmail.com
-- Do not store any sensitive or ptivate data on the live site
+- With the exception of encrypted stored passwords and user-specific create/update/delete permissions, the backend mongo/express api is open and otherwise not secure.   
+- An email address is needed to log in, but does not get authenticated. You do not need to use a real email address, so long as it conforms to an email address format. 
+- User accounts cannot be deleted. If you want your user information scrubbed from the database, please email met a ed.westfield.jr@gmail.com
+- More curated and better assortment of background photos, either by 
+- **Do not store any sensitive or private data on the live site**
 - the deployed live site and backend api will be taken offline sometime in late 2022/early 2023.
+
+---
+
+## Thank you.
+©2022 [Edward Francis Westfield Jr.](https://www.edwestfieldjr.com/) ([Standard MIT License](https://opensource.org/licenses/MIT))
+
+---
+`date submitted: 2022-08-13` 
