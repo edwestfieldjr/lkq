@@ -12,19 +12,19 @@
 
 My CS50x final project is a full-stack **M**ongo-**E**xpres-**R**eact-**N**ode ("**MERN**") web application to save and display favorite and inspiring quotations from notable figures. 
 
-### What features will it have? 
+### What features does it have? 
 
-A user can sign up for an account, and once logged-in they create a new quotation input the following:
+In this App A user can sign up for an account, and once logged-in they create a new quotation input the following:
 
 - Quotation or saying
 - Author/person attributed with the quote
 - Keyword "categories/tags" to help sort and display the quotes
 
-The application saves the quote, author, and tags, to the MongoDB. in addition, the 'getWiki' utility (which employs the [wikijs](https://www.npmjs.com/package/wikijs) Node package) retrieves links to the author's public-domain Wikipedia page and photo. This is used when displaying the quote on screen.
+The application saves the quote, the author’s name, and tags, to the MongoDB. in addition, the 'getWiki' utility (which employs the [wikijs](https://www.npmjs.com/package/wikijs) Node package) retrieves links to the author's public-domain Wikipedia page and photo (if available, otherwise an a default anonymous avatar and avatar are saved). This is used when displaying the quote on screen.
 
 The quote is displayed with the author info (name, photo, wikipedia link), the keys tags, the user who posted, and a background photo. The UX/UI look and feel is made to resemble inspirational posters and greeting cards. 
 
-the mongoose schemas also allow the quotes to be groups and sorted by the author and the keyword tags that ar saved with each quote. the [unspalsh.com](https://unsplash.com/) royalty-free stock photo API also provide background image using the quotes tags as search terms for finding an appropriate/relavant image. 
+the mongoose schemas for the quote, author, tags, the user, save the info in separate collections and the api has the ability to serve and sort the content based upon each collection. also allow the quotes to be groups and sorted by the author and the keyword tags that ar saved with each quote. the [unspalsh.com](https://unsplash.com/) royalty-free stock photo API also provide background image using the quotes tags as search terms for finding an appropriate/relavant image. 
 
 The app has full "CRUD" (Create, Read, Update, and Delete) functionality user has the ability to edit and delete the quotes they have posted, and also whether they are publicly visible to anyone with access to the site, or just privately a viewable only to them (There is one administrator account that has access to the while site.)
 
@@ -60,10 +60,10 @@ A full-stack MERN application is essentially two Node.js servers running side-by
 
 ### What else I have learned / The Takeaways ... 
 
-Aside from the technical knowledge I acquired in building this web application,  iste 
+Aside from the technical knowledge I acquired in building this web application,   
 
 #### Division of Labor/Specialization 
-(Building a modern full stack application by oneself is a daunting task, but acheivavle with proper planning and know-how. It is understandable and perhaps  advisable that developers and engineers would want to focus on frontend, backend, db, or some ather aspect of development. Still knowing how the whole thing is made start to finish in an important asset to have.  
+(Building a modern full stack application by oneself is a daunting task, but achievable with proper planning and know-how. It is understandable and perhaps  advisable that developers and engineers would want to focus on frontend, backend, database, or some other aspect of web and software development. Still, knowing how the whole thing is made start to finish in an important asset to have.  
 
 #### Possible improvements:
 
@@ -72,8 +72,9 @@ Aside from the technical knowledge I acquired in building this web application, 
 - Better UI/ON the front end: make it look less like a traditional web interface and more like a 'e-card' 
 - Have a way for teacher to upload videos to explain the assignment
 - Notificaitons to email about new homeworks or submissions
+- Better API secuity
 
-## How to launch / use 
+## Securiy Notices
 
-### pull from github
-### sign up  or browse the heroku
+- with the execption of stored passwords and user create/update/delete permissions, backend api is open and otherwise not secure. 
+- an email adress is needded
