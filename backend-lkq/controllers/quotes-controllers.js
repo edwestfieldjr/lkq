@@ -90,7 +90,7 @@ const getQuotesByUserId = async (req, res, next) => {
         userWithQuotes = await User.findById(userId).select('-password').populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text',
+            select: '_id text isPublic',
             populate: [
                 {
                     path: 'author',
