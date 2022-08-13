@@ -62,7 +62,6 @@ const NewQuote = () => {
                 }
             );
             let exitRoute, exitId;
-            console.log(response.quote._id)
             try {
                 exitId = response.quote._id;
                 exitRoute =`/quotes/quote/${exitId}`;

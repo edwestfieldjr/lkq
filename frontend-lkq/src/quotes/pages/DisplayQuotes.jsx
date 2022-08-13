@@ -14,12 +14,12 @@ const DisplayQuotes = props => {
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
 
     useEffect(() => {
-        console.log(process.env.REACT_APP_BACKEND_API_ADDRESS)
         const fetchQuotes = async () => {
             const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes${paramElements||''}`
-            console.log(url);
             try {
-                const responseData = await sendRequest(url);
+                const responseData = await sendRequest(
+                    url
+                );
                 setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
             } catch (error) { };
         };

@@ -33,7 +33,6 @@ const SearchQuote = () => {
         event.preventDefault();
         try {
             const searchRoute = `/quotes/search/${formState.inputs.text.value}` || `/quotes`;
-            console.log(searchRoute)
             navigate(searchRoute);;
         } catch (error) {
             throw (error);

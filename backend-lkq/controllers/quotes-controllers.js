@@ -8,7 +8,6 @@ const Quote = require('../models/quote');
 const User = require('../models/user');
 const Author = require('../models/author');
 const Tag = require('../models/tag');
-const { countDocuments } = require('../models/quote');
 
 
 const getAdminIds = async () => {
@@ -25,6 +24,15 @@ const getAdminIds = async () => {
 
 
 const getAllQuotes = async (req, res, next) => {
+    console.log("hi")
+    try {
+        console.log(res.userData.userId)
+    } catch (error) {
+        console.log("error: " + error)
+    } finally { 
+        console.log("res.userData.userId" + " NON EXISTENT")
+    } 
+
     let allQuotes;
     try {
         allQuotes = await Quote.find().populate([{

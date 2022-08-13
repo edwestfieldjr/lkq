@@ -9,7 +9,7 @@ import Button from '../../shared/components/FormElements/Button';
 import Card from '../../shared/components/UIElements/Card';
 import { 
     VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH, 
+    // VALIDATOR_MINLENGTH, 
 } from '../../shared/util/validators';
 import { AuthContext } from '../../shared/context/AuthContext';
 import './QuoteForm.css'
@@ -45,7 +45,6 @@ const UpdateQuote = () => {
     
     
     useEffect(() => {
-        console.log('useEffect--TRIGGERED');
 
         const fetchQuote = async () => {
             try {
@@ -84,7 +83,7 @@ const UpdateQuote = () => {
         };
         fetchQuote();
 
-    }, [sendRequest, quoteId]);
+    }, [sendRequest, quoteId] );
 
 
     const navigate = useNavigate();
@@ -95,12 +94,6 @@ const UpdateQuote = () => {
         event.preventDefault();
         let tagsString = String(formState.inputs.tags.value.length > 0 ? formState.inputs.tags.value : '');
         try {
-            console.log(JSON.stringify({
-                text: formState.inputs.text.value,
-                author: formState.inputs.author.value,
-                tags: tagsString,
-                isPublic: formState.inputs.isPublic.value.toString()
-            }))
             await sendRequest(
                 `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${quoteId}`,
                 'PATCH',
@@ -115,8 +108,6 @@ const UpdateQuote = () => {
                     Authorization: `Bearer ${currentAuth.token}` 
                 }
             );
-            console.log(quoteId.toString())
-            console.log("loadedQuote.isPublic: " + loadedQuote.isPublic + " - " + typeof(loadedQuote.isPublic))
             navigate(`/quotes/quote/${quoteId.toString()}`)
         } catch (error) {
             console.error(error);
