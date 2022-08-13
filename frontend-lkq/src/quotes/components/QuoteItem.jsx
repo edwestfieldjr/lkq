@@ -71,7 +71,7 @@ const QuoteItem = props => {
                         <h3><a href={`/quotes/author/${props.authorId}`}>{props.author_name}</a></h3>
                         {props.author_ref_img && <Avatar image={props.author_ref_img} alt={props.author_name} width="100px" />}
                         {props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
-                        {props.tags.length ? <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a className="button button--small button--tag" href={`/quotes/tag/${e.id}`}>{e.name}</a></span>)}</p> : ''}
+                        {props.tags.length ? <p>categories/tags: {(props.tags).map(e => <span key={e._id.toString()}><a className="button button--small button--tag" href={`/quotes/tag/${e.id}`}>{e.name}</a></span>)}</p> : ''}
                     </div>
 
 

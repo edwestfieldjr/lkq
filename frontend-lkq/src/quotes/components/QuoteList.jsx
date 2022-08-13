@@ -50,7 +50,7 @@ const QuoteList = props => {
             <ul className="quote-list">
                 {props.items.map(quote => ( 
                         (currentAuth.isAdmin || currentAuth.userId === quote.creator.id || quote.isPublic) && <QuoteItem 
-                            key={quote.id} 
+                            key={quote._id.toString()} 
                             id={quote.id} 
                             text={quote.text} 
                             authorId={quote.author.id}

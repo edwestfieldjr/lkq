@@ -129,7 +129,7 @@ const getQuotesByTagId = async (req, res, next) => {
         tagWithQuotes = await Tag.findById(tagId).populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text',
+            select: '_id text isPublic',
             populate: [
                 {
                     path: 'author',
@@ -171,7 +171,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
         authorWithQuotes = await Author.findById(authorId)/*.populate('name')*/.populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text',
+            select: '_id text isPublic',
             populate: [
                 {
                     path: 'author',
@@ -238,7 +238,7 @@ const getQuotesBySearchTerm = async (req, res, next) => {
             ).populate({
                 path: 'quotes',
                 model: 'Quote',
-                select: '_id text',
+                select: '_id text isPublic',
                 populate: [
                     {
                         path: 'author',
