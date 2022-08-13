@@ -3,12 +3,12 @@
 #### ©2022 **Edward Francis Westfield Jr.**<br/>East Lansing, Michigan &#127482;&#127480; USA<br/>ed.westfield.jr@gmail.com
 ---
 #### Video Demo:  <URL HERE>
-#### Live Test Site:  <URL HERE>
+#### Live Test Deployment:  https://lkq-fe-cs50x-2022.web.app/
 ---
 ## Description: 
 
 
-### What id this software? What does it do? 
+### What is this software? What does it do? 
 
 My CS50x final project is a full-stack **M**ongo-**E**xpres-**R**eact-**N**ode ("**MERN**") web application to save and display favorite and inspiring quotations from notable figures. 
 
@@ -22,11 +22,11 @@ A user can sign up for an account, and once logged-in they create a new quotatio
 
 The application saves the quote, author, and tags, to the MongoDB. in addition, the 'getWiki' utility (which employs the [wikijs](https://www.npmjs.com/package/wikijs) Node package) retrieves links to the author's public-domain Wikipedia page and photo. This is used when displaying the quote on screen.
 
-The quote is displayed with the author info (name, photo, wikipedia link), the keys tags, the user who posted, and a background photo. The UX/UI look and feel is to resemble inspirational cards and posters. 
+The quote is displayed with the author info (name, photo, wikipedia link), the keys tags, the user who posted, and a background photo. The UX/UI look and feel is made to resemble inspirational posters and greeting cards. 
 
 the mongoose schemas also allow the quotes to be groups and sorted by the author and the keyword tags that ar saved with each quote. the [unspalsh.com](https://unsplash.com/) royalty-free stock photo API also provide background image using the quotes tags as search terms for finding an appropriate/relavant image. 
 
-The user has the ability to edit and delete the quotes they have posted, and also whether they are publicly to anyone with access to the site, or just privately acceble only to them (There is one administrator account that has access to the while site.)
+The app has full "CRUD" (Create, Read, Update, and Delete) functionality user has the ability to edit and delete the quotes they have posted, and also whether they are publicly visible to anyone with access to the site, or just privately a viewable only to them (There is one administrator account that has access to the while site.)
 
 ### How (and Why) did I learn to make this?
 
