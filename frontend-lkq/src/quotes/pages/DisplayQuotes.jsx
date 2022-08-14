@@ -7,20 +7,17 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 
 const DisplayQuotes = props => {
-    const paramType = props.paramType;
-    const paramId = useParams().paramId;
-    const paramElements = (paramType ? ((paramType !== 'quote' ? '/'+paramType : '') + ('/'+paramId) ) : '')
+    const paramType = String(props.paramType);
+    const paramId = String(useParams().paramId);
+    const paramElements = (!!paramType ? ((paramType !== 'quote' ? '/'+paramType : '') + ('/'+paramId) ) : '')
     const [loadedQuotes, setLoadedQuotes] = useState(undefined);
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
 
     useEffect(() => {
         const fetchQuotes = async () => {
             const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes${paramElements}`
-            console.log(url)
             try {
-                const responseData = await sendRequest(
-                    url
-                );
+                const responseData = await sendRequest(url);
                 setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
             } catch (error) { };
         };

@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect, Fragment} from 'react';
 import Card from '../../shared/components/UIElements/Card';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 import "./QuoteList.css"
 import QuoteItem from './QuoteItem';
@@ -44,6 +46,9 @@ const QuoteList = props => {
         );
     } else {
         return (<Fragment>
+            <ErrorModal error={clientError + " QuoteListJSX"} onClear={clearClientError} />
+            {isLoading && <LoadingSpinner asOverlay />}
+
             {(props.paramId && paramType !== "quote") ? <h2 className='center'>Quotes {paramType === "user" && "posted by"} {["tag", "search"].includes(paramType) && "with the"} {paramType !== "author" ? paramType + 
             `${paramType ==='search' ? ' term' :''}`
             + ":" : "by"} {["tag", "search"].includes(paramType) && "“"}{titleParam}{["tag", "search"].includes(paramType) && "”"}</h2> : <h2 className='center'>{paramType !== "quote" ? "All Quotes" : ''} &nbsp;</h2>}

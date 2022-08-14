@@ -12,7 +12,7 @@ import SearchQuote from'./quotes/pages/SearchQuote';
 import DisplayQuotes from'./quotes/pages/DisplayQuotes';
 
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
+// import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 
 

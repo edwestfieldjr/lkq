@@ -265,20 +265,13 @@ const getQuotesBySearchTerm = async (req, res, next) => {
                 searchResults = searchResults.concat(el.quotes);
             }
         }
-        console.log(Object(schemaSearchResults).length)
-
     }
 
     try {
         if (!searchResults.length) {
             return next(new HttpError("No quotes found", 404))
         } else {
-
-            return res.json({
-                quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : [])
-                    // .concat((authorAndTagSearchResults.length)
-                    //     ? authorAndTagSearchResults/* .flat() */[0].map(records => records.quotes.toObject({ getters: true, minimize: false })) : []).flat()
-            })
+            return res.json({ quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : []) })
         };
     } catch (error) {
         return next(new HttpError(error));
