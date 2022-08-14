@@ -31,7 +31,7 @@ The quote is displayed with the author's information (name, photo, Wikipedia  li
 
 ###  How does this app run/execute?
 
-A full-stack MERN application is essentially two Node.js servers running side-by-side, with the frontend service the React application, and the backend API running Express and communicating with the Mongo database server. The React frontend sends requests and receives data from the backend to construct the web content the user ultimately sees.  
+A full-stack MERN application is essentially two Node.js servers running side-by-side, with the frontend serving the React build, and the backend API running Express and communicating with the Mongo database server. The React frontend sends requests and receives data from the backend to construct the web content the user ultimately sees.  
 
 ---
 ## Specifications
@@ -81,7 +81,7 @@ If pulling from [GitHub](https://github.com/edwestfieldjr/lkq) for separate depl
 ---
 ## Takeaways
 
-I have learned that building a modern full-stack application one’s own can seem daunting, but it is achievable. It is understandable, and perhaps advisable, that developers and engineers would focus their careers on frontend, backend, database, or some other specific aspect of web and software development. Still, knowing how the whole thing is made start to finish in an important learning experience.  
+***I have learned*** that building a modern full-stack application one’s own can seem daunting, but it is achievable. It is understandable, and perhaps advisable, that developers and engineers would focus their careers on frontend, backend, database, or some other specific aspect of web and software development. Still, knowing how the whole thing is made start to finish in an important learning experience.  
 
 ### Possible improvements:
 
@@ -89,7 +89,10 @@ I have learned that building a modern full-stack application one’s own can see
 - Better search functionality to find specific content (autocomplete, multiple search terms, spell-checker, natural language , etc.)
 - Improve or overhaul the getWiki function so that it is more accurate in retrieving an author’s biographical data
 - Better user functionality (permissions, user management, authentication/OAuth, messaging, ‘social-media’ functionality, etc.) 
-- Separate git repositories for frontend and backend since a single git caused minor bugs in deployment (The fixed did work, but this may be a case where breaking the project up into two repositories is the simpler solution)
+- Periodic database purging of author and tag records no longer associated with any quote article.  
+- Separate git repositories for frontend and backend servers. 
+    - Single git caused Heroku deployment failure, since Heroku requires package.json must be in the top level directory. This Issue was fixed by employing [subdir-heroku-buildpack](https://github.com/timanovsky/subdir-heroku-buildpack) 
+    - Breaking the project up into two repositories would simplify workflows and  reduce the amounts of unnecessary commits.
 - Better encryption and security (see below)
 
 ---
@@ -101,12 +104,12 @@ I have learned that building a modern full-stack application one’s own can see
 - A unique email address is needed to sign-up and to log in, but it is not authenticated. You do not need to use a real email address to use the system, so long as it conforms to an email address format. 
 - User accounts cannot be deleted. If you want your account and user information deleted from the from the database, please email me at: ed.westfield.jr@gmail.com
 - More curated and better assortment of background photos, either by 
-- the deployed live site, backend API, and thedatabase will be taken offline sometime in late 2022/early 2023. 
+- the deployed live site, backend API, and the database will be taken offline sometime in late 2022/early 2023. 
 
 ---
 
-## Thank you.
+## Thank you!
 ©2022 [**Edward Francis Westfield Jr.**](https://www.edwestfieldjr.com/) ([Standard MIT License](https://opensource.org/licenses/MIT))
 
 ---
-`date submitted: 2022-08-13` 
+`date submitted: 2022-08-14` 
