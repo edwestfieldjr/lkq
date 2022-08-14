@@ -1,8 +1,5 @@
-import React, { useState, useContext, useEffect, Fragment} from 'react';
+import React, { useContext, Fragment} from 'react';
 import Card from '../../shared/components/UIElements/Card';
-import { useHttpClient } from '../../shared/hooks/HttpClientHook';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 import "./QuoteList.css"
 import QuoteItem from './QuoteItem';
