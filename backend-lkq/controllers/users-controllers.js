@@ -10,7 +10,7 @@ const JSONWebToken = require('jsonwebtoken')
 const getUsers = async (req, res, next) => {
     let users;
     try {
-        users = await User.find({}, '-password');
+        users = await User.find({}, '-password -email');
     } catch (error) {
         return next(new HttpError(error));
     }

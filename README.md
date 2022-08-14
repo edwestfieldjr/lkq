@@ -83,21 +83,20 @@ I have learned that building a modern full-stack application one’s own can see
 ### Possible improvements:
 
 - Better UI/UX on the frontend allowing users to customize their viewing experience
-- Better search functionality to find specific content (autocomplete, multiple search terms, natural language, etc.)
+- Better search functionality to find specific content (autocomplete, multiple search terms, spell-checker, natural language , etc.)
 - Improve or overhaul the getWiki function so that it is more accurate in retrieving an author’s biographical data
 - Better user functionality (permissions, user management, authentication/OAuth, messaging, ‘social-media’ functionality, etc.) 
 - Separate git repositories for frontend and backend since a single git caused minor bugs in deployment (The fixed did work, but this may be a case where breaking the project up into two repositories is the simpler solution)
 - Better encryption and security (see below)
 
 ---
-### Security Concerns
+### Security 
 
-- With the exception of encrypted stored passwords and user-specific create/update/delete permissions, the backend mongo/express API is open and otherwise not secure.   
-- An email address is needed to log in, but does not get authenticated. You do not need to use a real email address, so long as it conforms to an email address format. 
-- Quotes not marked 'Public' are still publicly accessible on the API backend, they are just not visible on the frontend (still working on a security patch for that)
+- **Do not store any sensitive or private data or text on the live site.**
+- All 'GET' requests the backend mongo/express API are open and not secure; quote articles are still publicly accessible directly from the API (the "Public" checkbox on the form only designates whether it publishes to the frontend-- working on a security patch to address this)
+- An email address is needed to log in, but it is not authenticated. You do not need to use a real email address to use the system, so long as it conforms to an email address format. 
 - User accounts cannot be deleted. If you want your user information scrubbed from the database, please email met a ed.westfield.jr@gmail.com
 - More curated and better assortment of background photos, either by 
-- **Do not store any sensitive or private data on the live site**
 - the deployed live site and backend API will be taken offline sometime in late 2022/early 2023.
 
 ---
