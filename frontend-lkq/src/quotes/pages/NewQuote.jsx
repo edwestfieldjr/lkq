@@ -69,7 +69,7 @@ const NewQuote = () => {
                 exitRoute = `/quotes/user/${currentAuth.userId}` || `/quotes`;
                 throw (error);
             } finally {
-                navigate(exitRoute);;
+                navigate(exitRoute);
             }
         } catch (error) {
             throw (error);

@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+
 
 let logoutTimer;
 
@@ -9,6 +10,7 @@ export const useAuth = () => {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
+
 
     const login = useCallback((username, emailAddr, uid, adminStatus, token, expirationDate) => {
         setToken(token);
