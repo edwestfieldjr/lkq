@@ -111,7 +111,7 @@ const getQuotesByUserId = async (req, res, next) => {
         return next(new HttpError(error));
     }
     if (!userWithQuotes || userWithQuotes.quotes.length <= 0) {
-        return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
+        return next(new HttpError(`No quotations associated with user: ${userWithQuotes.name} `, 404));
     } else {
         try {
             return res.json({ header: `Quotes posted by user: ${userWithQuotes.name}`, quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
