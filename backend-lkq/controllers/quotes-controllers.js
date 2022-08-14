@@ -90,7 +90,7 @@ const getQuotesByUserId = async (req, res, next) => {
         userWithQuotes = await User.findById(userId).select('-password').populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text isPublic',
+            select: '_id text isPublic __v id',
             populate: [
                 {
                     path: 'author',
@@ -129,7 +129,7 @@ const getQuotesByTagId = async (req, res, next) => {
         tagWithQuotes = await Tag.findById(tagId).populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text isPublic',
+            select: '_id text isPublic __v id',
             populate: [
                 {
                     path: 'author',
@@ -171,7 +171,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
         authorWithQuotes = await Author.findById(authorId)/*.populate('name')*/.populate([{
             path: 'quotes',
             model: 'Quote',
-            select: '_id text isPublic',
+            select: '_id text isPublic __v id',
             populate: [
                 {
                     path: 'author',
@@ -216,60 +216,68 @@ const getQuotesBySearchTerm = async (req, res, next) => {
         ).populate([{
             path: 'author',
             model: 'Author',
-            select: 'name ref_url ref_img'
+            select: '_id name ref_url ref_img'
         }, {
             path: 'tags',
             model: 'Tag',
-            select: 'name'
+            select: '_id name'
         }, {
             path: 'creator',
             model: 'User',
-            select: 'name'
+            select: '_id name'
         }]);
     } catch (error) {
         return next(new HttpError(error));
     }
 
-    let authorAndTagSearchResults = [];
-    for (schema of [Author, Tag]) {
+    let schemaSearchResults
+    for (let schemaFind of [Author, Tag]) {
         try {
-            authorAndTagSearchResults.push(await schema.find(
+            schemaSearchResults = await schemaFind.find(
                 { "name": { "$regex": req.params.term, "$options": "i" } }
             ).populate({
                 path: 'quotes',
                 model: 'Quote',
-                select: '_id text isPublic',
+                select: '_id text isPublic __v id',
                 populate: [
                     {
                         path: 'author',
                         model: 'Author',
-                        select: 'name ref_url ref_img'
+                        select: '_id name ref_url ref_img'
                     },
                     {
-                        path: 'tags',
+                        path: 'tags', 
                         model: 'Tag',
-                        select: 'name'
+                        select: '_id name'
                     },
                     {
                         path: 'creator',
                         model: 'User',
-                        select: 'name'
+                        select: '_id name'
                     }
                 ]
-            }));
+            }) || [];
         } catch (error) {
             return next(new HttpError(error));
         }
+        if (schemaSearchResults.length > 0) {
+            for (el of schemaSearchResults) {
+                searchResults = searchResults.concat(el.quotes);
+            }
+        }
+        console.log(Object(schemaSearchResults).length)
+
     }
 
     try {
-        if (!searchResults.length && !authorAndTagSearchResults.length) {
+        if (!searchResults.length) {
             return next(new HttpError("No quotes found", 404))
         } else {
+
             return res.json({
                 quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : [])
-                    .concat((authorAndTagSearchResults.length)
-                        ? authorAndTagSearchResults.flat().map(records => records.quotes.toObject({ getters: true })).flat() : []).flat()
+                    // .concat((authorAndTagSearchResults.length)
+                    //     ? authorAndTagSearchResults/* .flat() */[0].map(records => records.quotes.toObject({ getters: true, minimize: false })) : []).flat()
             })
         };
     } catch (error) {

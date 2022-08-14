@@ -57,7 +57,7 @@ const App = () => {
                 <Route exact path="/quotes/user/:paramId" element={<DisplayQuotes paramType="user" />} />
                 <Route exact path="/quotes/author/:paramId" element={<DisplayQuotes paramType="author" />} />
                 <Route exact path="/quotes/tag/:paramId" element={<DisplayQuotes paramType="tag" />} />
-                <Route exact path="/quotes/search/:term" element={<DisplayQuotes paramType="search" />} />
+                <Route exact path="/quotes/search/:paramId" element={<DisplayQuotes paramType="search" />} />
                 <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/auth" element={<Auth />} />
 

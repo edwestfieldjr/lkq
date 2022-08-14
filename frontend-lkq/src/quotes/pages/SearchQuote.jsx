@@ -32,7 +32,7 @@ const SearchQuote = () => {
     const searchSubmitHandler = async event => {
         event.preventDefault();
         try {
-            const searchRoute = `/quotes/search/${formState.inputs.text.value}` || `/quotes`;
+            const searchRoute =  formState.inputs.text.value ? `/quotes/search/${formState.inputs.text.value}` : `/quotes`;
             navigate(searchRoute);;
         } catch (error) {
             throw (error);
