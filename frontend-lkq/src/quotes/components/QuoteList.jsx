@@ -14,27 +14,6 @@ const QuoteList = props => {
 
     const currentAuth = useContext(AuthContext);
 
-    // const paramType = (props.paramType || '').toLowerCase();
-    // const paramId = props.paramId || '';
-    // const [titleParam, setTitleParam] = useState('');
-    // const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
-
-
-    // useEffect(() => {
-    //     if (["author","tag","user"].includes(paramType)) {
-    //     const fetchParam = async () => {
-    //         const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/getparam/${paramType}/${paramId}`
-    //         try {
-    //             const responseData = await sendRequest(url);
-    //             setTitleParam(responseData.result);
-    //         } catch (error) { };
-    //     };
-    //     fetchParam();
-    //     } else {
-    //         setTitleParam(paramId)
-    //     }
-    // }, [sendRequest, paramType, paramId]);
-
     if (props.items.length <= 0) {
         return (
             <div className='quote-list center'> 

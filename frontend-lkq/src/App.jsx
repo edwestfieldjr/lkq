@@ -1,4 +1,4 @@
-import React, { /* Suspense,  */Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthContext } from './shared/context/AuthContext';
@@ -12,7 +12,6 @@ import SearchQuote from'./quotes/pages/SearchQuote';
 import DisplayQuotes from'./quotes/pages/DisplayQuotes';
 
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-// import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 
 
@@ -39,7 +38,6 @@ const App = () => {
                 <Route exact path="/quotes/new" element={<NewQuote />} />
                 <Route exact path="/quotes/edit/:quoteId" element={<UpdateQuote />} />
 
-                {/* REDIRECT ROUTE */}
                 <Route
                     path="*"
                     element={<Navigate replace to="/" />}
@@ -61,7 +59,6 @@ const App = () => {
                 <Route exact path="/quotes/newsearch" element={<SearchQuote />} />
                 <Route exact path="/auth" element={<Auth />} />
 
-                {/* REDIRECT ROUTE */}
                 <Route
                     path="*"
                     element={
@@ -86,17 +83,10 @@ const App = () => {
             <Router>
                 <MainNavigation />
                 <main>
-                    {/* <Suspense fallback={
-                        <div className="center">
-                            <LoadingSpinner />
-                        </div>
-                    }> */}
                         <Routes>
                             {routes}
                         </Routes>
-                    {/* </Suspense> */}
                 </main>
-                {/* <Footer /> */}
             </Router>
         </AuthContext.Provider>
     );

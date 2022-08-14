@@ -14,7 +14,6 @@ const getAdminIds = async () => {
     let adminUser;
     try {
         adminUser = await User.find({ 'isAdmin': 'true' })
-        // adminUser = await User.findOne({ email: normalizeEmail(process.env.ADMIN_EMAIL_ADDR) })
     } catch (error) {
         return error;
     }
@@ -80,7 +79,6 @@ const getQuoteById = async (req, res, next) => {
             return next(new HttpError(error));
         }
     }
-    // };
 };
 
 const getQuotesByUserId = async (req, res, next) => {
@@ -199,7 +197,6 @@ const getQuotesByAuthorId = async (req, res, next) => {
         try {
             return res.json({ header: `Quotations by: ${authorWithQuotes.name}` , quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
 
-            // return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {
             return next(new HttpError(error));
         }
@@ -207,8 +204,6 @@ const getQuotesByAuthorId = async (req, res, next) => {
 }
 
 const getQuotesBySearchTerm = async (req, res, next) => {
-    // return res.json(req.params.term});
-
     let searchResults = []
     try {
         searchResults = await Quote.find(
@@ -278,33 +273,6 @@ const getQuotesBySearchTerm = async (req, res, next) => {
     }
 
 };
-
-// const getParamName = async (req, res, next) => {
-//     const { paramtype, paramid } = req.params;  
-//     const schema = {
-//         "user": User,
-//         "author": Author,
-//         "tag": Tag
-//     };
-
-//     let result;
-//     try {
-//         result = await schema[paramtype].findById(paramid);
-//     } catch (error) {
-//         return next(new HttpError(error));
-//     }
-
-//     if (!result) {
-//         return next(new HttpError('couldn’t find this quote', 404))
-//     } else {
-//         try {
-//             return res.json({ result: result.toObject({ getters: true }).name });
-//         } catch (error) {
-//             return next(new HttpError(error));
-//         }
-//     }
-// }
-
 
 
 const constructQuote = async (req, res, next) => {
@@ -479,7 +447,6 @@ const constructQuote = async (req, res, next) => {
         }
     }
 
-    /* Remove 'quote._id' references from the appropriate author and tag records */
     if (req.params.qid !== undefined) {
         previousAuthorId = previousAuthor._id.toString() !== authorExisting._id.toString() ? previousAuthor._id : null;
         previousTagsIds = previousTags.map(e => e._id).filter(f => !(quoteConstructedNewTags.map(g => g.toString()).includes(f.toString())));
@@ -611,7 +578,6 @@ module.exports = {
     getQuotesByTagId,
     getQuotesByAuthorId,
     getQuotesBySearchTerm,
-    getParamName,
     constructQuote,
     deleteQuote
 };

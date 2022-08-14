@@ -11,7 +11,7 @@ const authorSchema = new Schema({
     ref_img: { 
         type: String, 
         required: false , 
-        default: 'https://images.unsplash.com/photo-1534294668821-28a3054f4256' /* Photo by Jeremy Bishop on Unsplash - https://unsplash.com/photos/KFIjzXYg1RM */},
+        default: 'https://images.unsplash.com/photo-1534294668821-28a3054f4256' /* Photo by Jeremy Bishop, courtesy Unsplash - https://unsplash.com/photos/KFIjzXYg1RM */},
     quotes: [{         
         type: mongoose.Types.ObjectId,
         required: false,

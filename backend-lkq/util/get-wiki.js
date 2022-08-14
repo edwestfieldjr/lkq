@@ -16,7 +16,6 @@ async function getWiki(terms) {
                 )
             ;
 
-            // return await "result(terms).obj"
             if (result) {
                 return await result(terms)
             } else { return 0; }
