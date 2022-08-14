@@ -116,7 +116,7 @@ const getQuotesByUserId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
     } else {
         try {
-            return res.json({ header: userWithQuotes.name, quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: `Quotes posted by user: ${userWithQuotes.name}`, quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {
             return next(new HttpError(error));
         }
@@ -156,7 +156,7 @@ const getQuotesByTagId = async (req, res, next) => {
         if (!tagWithQuotes || tagWithQuotes.quotes.length <= 0) {
             return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
         } else {
-            return res.json({ header: tagWithQuotes.name, quotes: tagWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: `Quotes with the tag: “${tagWithQuotes.name}”`, quotes: tagWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
         }
     } catch (error) {
         return next(new HttpError(error));
@@ -197,7 +197,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with author id ‘${authorId}’ `, 404));
     } else {
         try {
-            return res.json({ header: authorWithQuotes.name , quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: `Quotations by: ${authorWithQuotes.name}` , quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
 
             // return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, useEffect, useCallback, useContext, Fragment } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from '../../shared/hooks/FormHook';
 import { useHttpClient } from '../../shared/hooks/HttpClientHook';
@@ -44,7 +44,48 @@ const UpdateQuote = () => {
     }, true);
     
     
+    const fetchQuote = useCallback(async fetchedQuoteId =>  {
+        console.log("function")
+        try {
+            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${fetchedQuoteId}`);
+            setLoadedQuote({
+                userId: responseData.quote.creator.id,
+                text: responseData.quote.text,
+                author: responseData.quote.author.name,
+                tags: responseData.quote.tags.map((e,i) => (i > 0 ? ' ' : '') + e.name).toString(),
+                isPublic: responseData.quote.isPublic
+            });
+            setFormData(
+                {
+                    text: {
+                        value: !!loadedQuote ? loadedQuote.text.toString() : '',
+                        isValid: true
+                    },
+                    author: {
+                        value: !!loadedQuote ? loadedQuote.author.toString() : '',
+                        isValid: true
+                    },      
+                    tags: {
+                        value: !!loadedQuote ? loadedQuote.tags.toString() : '',
+                        isValid: true
+                    },
+                    isPublic: {
+                        value: !!loadedQuote ? loadedQuote.isPublic : false,
+                        isValid: true
+                    }  
+                }, 
+            true);
+        } catch (error) {
+            throw(error)
+        }
+    }, [sendRequest, setFormData]);
+
     useEffect(() => {
+        fetchQuote(quoteId);
+    }, [fetchQuote, quoteId] );
+/*
+
+useEffect(() => {
 
         const fetchQuote = async () => {
             try {
@@ -59,25 +100,24 @@ const UpdateQuote = () => {
                 setFormData(
                     {
                         text: {
-                            value: loadedQuote.text.toString(),
+                            value: !!loadedQuote ? loadedQuote.text.toString() : '',
                             isValid: true
                         },
                         author: {
-                            value: loadedQuote.author.toString(),
+                            value: !!loadedQuote ? loadedQuote.author.toString() : '',
                             isValid: true
                         },      
                         tags: {
-                            value: loadedQuote.tags.toString(),
+                            value: !!loadedQuote ? loadedQuote.tags.toString() : '',
                             isValid: true
                         },
                         isPublic: {
-                            value: loadedQuote.isPublic,
+                            value: !!loadedQuote ? loadedQuote.isPublic : false,
                             isValid: true
                         }  
                     }, 
                 true);
             } catch (error) {
-                console.error(error);
                 throw(error)
             }
         };
@@ -85,6 +125,7 @@ const UpdateQuote = () => {
 
     }, [sendRequest, quoteId] );
 
+*/
 
     const navigate = useNavigate();
 

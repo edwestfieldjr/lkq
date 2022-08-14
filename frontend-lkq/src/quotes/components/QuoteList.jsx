@@ -46,7 +46,7 @@ const QuoteList = props => {
         );
     } else {
         return (<Fragment>
-            <h2 className='center'>{props.header}</h2>
+            <h3 className='center'>{props.header}</h3>
             <ul className="quote-list">
                 {props.items.map(quote => ( 
                         (currentAuth.isAdmin || currentAuth.userId === quote.creator.id || quote.isPublic) && <QuoteItem 
