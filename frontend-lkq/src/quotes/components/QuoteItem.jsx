@@ -67,10 +67,10 @@ const QuoteItem = props => {
                         </a>
                     </div>
                     <div className="quote-item__info">
-                        <h2>“{props.text}”</h2>
+                        <h2><a style={{ textDecoration: 'none', color: 'inherit' }} href={`/quotes/quote/${props.id}`}>“{props.text}”</a></h2>
                         <h3><a href={`/quotes/author/${props.authorId}`}>{props.author_name}</a></h3>
-                        {props.author_ref_img && <Avatar image={props.author_ref_img} alt={props.author_name} width="100px" />}
-                        {props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
+                        {!!props.author_ref_img && <a style={{ textDecoration: 'none', color: 'inherit' }} href={`/quotes/author/${props.authorId}`}><Avatar image={props.author_ref_img} alt={props.author_name} width="100px" /></a>}
+                        {!!props.author_ref_url && <p><a target='new' href={props.author_ref_url}>Wikipedia Bio</a></p>}
                         {!!props.tags.length && <p>categories/tags: {(props.tags).map(e => <span key={e.id}><a className='button button--small button--tag' href={`/quotes/tag/${e.id}`}>{e.name}</a></span>)}</p>}
                     </div>
 

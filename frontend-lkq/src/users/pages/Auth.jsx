@@ -1,4 +1,6 @@
 import React, { useState, useContext, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
@@ -12,6 +14,7 @@ import { AuthContext } from '../../shared/context/AuthContext';
 import './Auth.css';
 
 const Auth = () => {
+    const navigate = useNavigate();
     const PW_MIN_LENGTH = 8;
     const auth = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
@@ -93,6 +96,7 @@ const Auth = () => {
             <h2 className="authentication__header"> Login/Signup</h2>
             <ErrorModal error={clientError} onClear={clearClientError} />
             <Card className="authentication">
+                <Button inverse onClick={switchModeHandler}>Switch to {isLoginMode ? "Sign-Up" : "Login"}</Button>
                 {isLoading && <LoadingSpinner asOverlay />}
                 <h2> {!isLoginMode ? "Signup" : "Login"} Required</h2>
                 <form onSubmit={authSubmitHandler}>
@@ -143,7 +147,8 @@ const Auth = () => {
 
                     <Button type="submit" disabled={!formState.isValid}>{!isLoginMode ? "Sign-Up" : "Login"}</Button>
                 </form>
-                <Button inverse onClick={switchModeHandler}>Switch to {isLoginMode ? "Sign-Up" : "Login"}</Button>
+                <Button dangerinverse type="button" onClick={() => { navigate(-1) }} >Cancel</Button>
+
             </Card>
         </Fragment>
     );
