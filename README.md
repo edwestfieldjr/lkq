@@ -60,8 +60,11 @@ Software, Packages, Dependencies & API's Installed, Employed or Deployed in this
 - Mobile-optimized view
 
 ### Live Test Deployment
+You can visit and use this app at the test site: 
+
 https://lkq-fe-cs50x-2022.web.app/  
-Hosted on:
+
+The test site is hosted on the following services==:
 - [Google Firebase](https://firebase.google.com/) (frontend)
 - [Heroku](https://dashboard.heroku.com/) (backend)
 - [MongoDB Atlas](https://www.mongodb.com/atlas) (database)
@@ -90,14 +93,15 @@ I have learned that building a modern full-stack application one’s own can see
 - Better encryption and security (see below)
 
 ---
-### Security 
+### Security Advisories
 
 - **Do not store any sensitive or private data or text on the live site.**
 - All 'GET' requests the backend mongo/express API are open and not secure; quote articles are still publicly accessible directly from the API (the "Public" checkbox on the form only designates whether it publishes to the frontend-- working on a security patch to address this)
-- An email address is needed to log in, but it is not authenticated. You do not need to use a real email address to use the system, so long as it conforms to an email address format. 
-- User accounts cannot be deleted. If you want your user information scrubbed from the database, please email met a ed.westfield.jr@gmail.com
+- Your unique username will also also publicly accessible on the backend API, however email addresses and encrypted passwords are not accessible in that way. 
+- A unique email address is needed to sign-up and to log in, but it is not authenticated. You do not need to use a real email address to use the system, so long as it conforms to an email address format. 
+- User accounts cannot be deleted. If you want your account and user information deleted from the from the database, please email me at: ed.westfield.jr@gmail.com
 - More curated and better assortment of background photos, either by 
-- the deployed live site and backend API will be taken offline sometime in late 2022/early 2023.
+- the deployed live site, backend API, and thedatabase will be taken offline sometime in late 2022/early 2023. 
 
 ---
 
