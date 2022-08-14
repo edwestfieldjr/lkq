@@ -271,7 +271,7 @@ const getQuotesBySearchTerm = async (req, res, next) => {
         if (!searchResults.length) {
             return next(new HttpError("No quotes found", 404))
         } else {
-            return res.json({ header: `results of serach term: “${req.params.term.toString()}”`, quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : []) })
+            return res.json({ header: `Results of search term: “${req.params.term.toString()}”`, quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : []) })
         };
     } catch (error) {
         return next(new HttpError(error));
@@ -279,31 +279,31 @@ const getQuotesBySearchTerm = async (req, res, next) => {
 
 };
 
-const getParamName = async (req, res, next) => {
-    const { paramtype, paramid } = req.params;  
-    const schema = {
-        "user": User,
-        "author": Author,
-        "tag": Tag
-    };
+// const getParamName = async (req, res, next) => {
+//     const { paramtype, paramid } = req.params;  
+//     const schema = {
+//         "user": User,
+//         "author": Author,
+//         "tag": Tag
+//     };
 
-    let result;
-    try {
-        result = await schema[paramtype].findById(paramid);
-    } catch (error) {
-        return next(new HttpError(error));
-    }
+//     let result;
+//     try {
+//         result = await schema[paramtype].findById(paramid);
+//     } catch (error) {
+//         return next(new HttpError(error));
+//     }
 
-    if (!result) {
-        return next(new HttpError('couldn’t find this quote', 404))
-    } else {
-        try {
-            return res.json({ result: result.toObject({ getters: true }).name });
-        } catch (error) {
-            return next(new HttpError(error));
-        }
-    }
-}
+//     if (!result) {
+//         return next(new HttpError('couldn’t find this quote', 404))
+//     } else {
+//         try {
+//             return res.json({ result: result.toObject({ getters: true }).name });
+//         } catch (error) {
+//             return next(new HttpError(error));
+//         }
+//     }
+// }
 
 
 
