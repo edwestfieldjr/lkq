@@ -5,6 +5,7 @@ module.exports = (req, res, next) => {
     if (req.method === 'OPTIONS') {
         return next(); 
     }
+    console.log("cehca", req.headers.authorization)
     try {
         const token = req.headers.authorization.split(' ')[1]; 
         if (!token) {

@@ -13,9 +13,19 @@ const {
     deleteQuote 
 } = require('../controllers/quotes-controllers')
 
-const checkAuth = require('../middleware/check-auth');
+// ROUTER INIT
 
 const router = express.Router();
+
+// middleware config: 
+
+const checkAuth = require('../middleware/check-auth');
+
+const inputValidator = [
+    check('text')
+        .not()
+        .isEmpty(), 
+];
 
 // 'GET' route(s)
 
@@ -33,25 +43,17 @@ router.get("/search/:term", getQuotesBySearchTerm);
 
 router.get("/getparam/:paramtype/:paramid", getParamName);
 
-router.use(checkAuth); 
-
-const userAuth = [
-    check('text')
-        .not()
-        .isEmpty(), 
-];
-
 // 'POST' route(s)
 
-router.post("/", userAuth, constructQuote);
+router.post("/", checkAuth, inputValidator, constructQuote);
 
 // 'PATCH' route(s)
 
-router.patch("/:qid", userAuth, constructQuote);
+router.patch("/:qid", checkAuth, inputValidator, constructQuote);
 
 // 'DELETE' route(s)
 
-router.delete("/:qid", deleteQuote);
+router.delete("/:qid", checkAuth, deleteQuote);
 
 
 

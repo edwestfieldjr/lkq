@@ -47,7 +47,7 @@ const getAllQuotes = async (req, res, next) => {
     if (!allQuotes) {
         return next(new HttpError("No quotes found", 404))
     };
-    return res.json({ quotes: allQuotes.map(quote => quote.toObject({ getters: true })) });
+    return res.json({ header: "All Quotes", quotes: allQuotes.map(quote => quote.toObject({ getters: true })) });
 };
 
 const getQuoteById = async (req, res, next) => {
@@ -75,7 +75,7 @@ const getQuoteById = async (req, res, next) => {
         return next(new HttpError('couldn’t find this quote', 404))
     } else {
         try {
-            return res.json({ quote: quote.toObject({ getters: true }) });
+            return res.json({ header: null, quote: quote.toObject({ getters: true }) });
         } catch (error) {
             return next(new HttpError(error));
         }
@@ -116,7 +116,7 @@ const getQuotesByUserId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
     } else {
         try {
-            return res.json({ quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: userWithQuotes.name, quotes: userWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {
             return next(new HttpError(error));
         }
@@ -156,7 +156,7 @@ const getQuotesByTagId = async (req, res, next) => {
         if (!tagWithQuotes || tagWithQuotes.quotes.length <= 0) {
             return next(new HttpError(`No documents associated with user id ‘${userId}’ `, 404));
         } else {
-            return res.json({ quotes: tagWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: tagWithQuotes.name, quotes: tagWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
         }
     } catch (error) {
         return next(new HttpError(error));
@@ -197,7 +197,7 @@ const getQuotesByAuthorId = async (req, res, next) => {
         return next(new HttpError(`No documents associated with author id ‘${authorId}’ `, 404));
     } else {
         try {
-            return res.json({ quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
+            return res.json({ header: authorWithQuotes.name , quotes: authorWithQuotes.quotes.map(quote => quote.toObject({ getters: true })) });
 
             // return res.json({ author: authorWithQuotes })//.quotes.map(quote => quote.toObject({ getters: true })) });
         } catch (error) {
@@ -271,7 +271,7 @@ const getQuotesBySearchTerm = async (req, res, next) => {
         if (!searchResults.length) {
             return next(new HttpError("No quotes found", 404))
         } else {
-            return res.json({ quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : []) })
+            return res.json({ header: `results of serach term: “${req.params.term.toString()}”`, quotes: (searchResults.length ? searchResults.map(quote => quote.toObject({ getters: true })) : []) })
         };
     } catch (error) {
         return next(new HttpError(error));

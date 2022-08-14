@@ -14,26 +14,26 @@ const QuoteList = props => {
 
     const currentAuth = useContext(AuthContext);
 
-    const paramType = (props.paramType || '').toLowerCase();
-    const paramId = props.paramId || '';
-    const [titleParam, setTitleParam] = useState('');
-    const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
+    // const paramType = (props.paramType || '').toLowerCase();
+    // const paramId = props.paramId || '';
+    // const [titleParam, setTitleParam] = useState('');
+    // const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
 
 
-    useEffect(() => {
-        if (["author","tag","user"].includes(paramType)) {
-        const fetchParam = async () => {
-            const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/getparam/${paramType}/${paramId}`
-            try {
-                const responseData = await sendRequest(url);
-                setTitleParam(responseData.result);
-            } catch (error) { };
-        };
-        fetchParam();
-        } else {
-            setTitleParam(paramId)
-        }
-    }, [sendRequest, paramType, paramId]);
+    // useEffect(() => {
+    //     if (["author","tag","user"].includes(paramType)) {
+    //     const fetchParam = async () => {
+    //         const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/getparam/${paramType}/${paramId}`
+    //         try {
+    //             const responseData = await sendRequest(url);
+    //             setTitleParam(responseData.result);
+    //         } catch (error) { };
+    //     };
+    //     fetchParam();
+    //     } else {
+    //         setTitleParam(paramId)
+    //     }
+    // }, [sendRequest, paramType, paramId]);
 
     if (props.items.length <= 0) {
         return (
@@ -46,12 +46,7 @@ const QuoteList = props => {
         );
     } else {
         return (<Fragment>
-            <ErrorModal error={clientError + " QuoteListJSX"} onClear={clearClientError} />
-            {isLoading && <LoadingSpinner asOverlay />}
-
-            {(props.paramId && paramType !== "quote") ? <h2 className='center'>Quotes {paramType === "user" && "posted by"} {["tag", "search"].includes(paramType) && "with the"} {paramType !== "author" ? paramType + 
-            `${paramType ==='search' ? ' term' :''}`
-            + ":" : "by"} {["tag", "search"].includes(paramType) && "“"}{titleParam}{["tag", "search"].includes(paramType) && "”"}</h2> : <h2 className='center'>{paramType !== "quote" ? "All Quotes" : ''} &nbsp;</h2>}
+            <h2 className='center'>{props.header}</h2>
             <ul className="quote-list">
                 {props.items.map(quote => ( 
                         (currentAuth.isAdmin || currentAuth.userId === quote.creator.id || quote.isPublic) && <QuoteItem 

@@ -7,18 +7,21 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 
 const DisplayQuotes = props => {
-    const paramType = String(props.paramType);
-    const paramId = String(useParams().paramId);
+    const paramType = props.paramType;
+    const paramId = useParams().paramId;
     const paramElements = (!!paramType ? ((paramType !== 'quote' ? '/'+paramType : '') + ('/'+paramId) ) : '')
     const [loadedQuotes, setLoadedQuotes] = useState(undefined);
+    const [receivedHeader, setReceivedHeader] = useState('');
     const {isLoading, clientError, sendRequest, clearClientError} = useHttpClient();
 
     useEffect(() => {
         const fetchQuotes = async () => {
             const url = `${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes${paramElements}`
+            console.log(url)
             try {
                 const responseData = await sendRequest(url);
                 setLoadedQuotes(paramType !== "quote" ? responseData.quotes : [responseData.quote]);
+                setReceivedHeader(responseData.header)
             } catch (error) { };
         };
         fetchQuotes();
@@ -33,7 +36,7 @@ const DisplayQuotes = props => {
             <ErrorModal error={clientError} onClear={clearClientError} />
             {isLoading && <LoadingSpinner asOverlay />}
 
-            {!isLoading && loadedQuotes && <QuoteList paramType={paramType} paramId={paramId} items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
+            {!isLoading && loadedQuotes && <QuoteList paramType={paramType} paramId={paramId} header={receivedHeader} items={loadedQuotes} onDeleteQuote={quoteDeletedHandler} />}
         </Fragment>
     );
 }
