@@ -45,7 +45,6 @@ const UpdateQuote = () => {
     
     
     const fetchQuote = useCallback(async fetchedQuoteId =>  {
-        console.log("function")
         try {
             const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/api/quotes/${fetchedQuoteId}`);
             setLoadedQuote({
