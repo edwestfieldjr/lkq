@@ -40,13 +40,17 @@
 */.env.production
 **/.env.production
 
-.firebase*.*
-*/.firebase*.*
-**/.firebase*.*
+/.firebase/
+*/.firebase/
+**/.firebase/
 
-/firebase/
-*/firebase/
-**/firebase/
+.firebaserc
+*/.firebaserc
+**/.firebaserc
+
+firebase.json
+*/firebase.json
+**/firebase.json
 
 
 
