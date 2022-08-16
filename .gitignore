@@ -19,11 +19,14 @@
 
 .DS_Store
 ._.DS_Store
+*/.DS_Store
+*/._.DS_Store
 **/.DS_Store
 **/._.DS_Store
 
 
 .env
+*/.env
 **/.env
 .env.local
 .env.development.local
