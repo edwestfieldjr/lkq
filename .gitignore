@@ -4,7 +4,7 @@
 
 # dependencies
 /node_modules
-**/node_modules
+**/node_modules/
 /.pnp
 .pnp.js
 
@@ -13,7 +13,7 @@
 
 # production
 /build
-**/build
+**/build/
 
 # misc
 
@@ -24,6 +24,7 @@
 
 
 .env
+**/.env
 .env.local
 .env.development.local
 .env.test.local
